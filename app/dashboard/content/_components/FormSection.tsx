@@ -5,13 +5,15 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Loader2Icon } from "lucide-react";
 
 interface PROPS {
   selectedTemplate?: TEMPLATE;
-  userFormInput: any
+  userFormInput: any;
+  loading: boolean;
 }
 
-function FormSection({ selectedTemplate, userFormInput}: PROPS) {
+function FormSection({ selectedTemplate, userFormInput, loading }: PROPS) {
   const [formData, setFormData] = useState<any>();
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
@@ -49,7 +51,8 @@ function FormSection({ selectedTemplate, userFormInput}: PROPS) {
             ) : null}
           </div>
         ))}
-        <Button type="submit" className="w-full py-6">
+        <Button disabled={loading} type="submit" className="w-full py-6">
+          {loading && <Loader2Icon className="animate-spin" />}
           Generate Resume
         </Button>
       </form>
