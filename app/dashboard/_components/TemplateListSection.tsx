@@ -15,6 +15,7 @@ export interface TEMPLATE {
 export interface FORM {
   label: string;
   field: string;
+  name: string;
   required?: boolean;
 }
 
