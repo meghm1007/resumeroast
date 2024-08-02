@@ -4,7 +4,7 @@ import React from "react";
 function SearchSection({ onSearchInput }: any) {
   return (
     <div
-      className="p-10 bg-gradient-to-br from-purple-500 via-purple-700 to-blue-600
+      className="p-10 bg-gradient-to-br from-primary  to-amber-600
     flex flex-col justify-center items-center text-white"
     >
       <h2 className="text-3xl font-bold">Browse All Template Here</h2>
