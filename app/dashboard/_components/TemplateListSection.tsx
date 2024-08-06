@@ -19,6 +19,7 @@ export interface FORM {
   label: string;
   field: string;
   name: string;
+  placeholder?: string;
   aiButton?: boolean;
   required?: boolean;
 }

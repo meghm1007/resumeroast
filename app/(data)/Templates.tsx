@@ -12,6 +12,7 @@ export default [
         name: "firstName",
         aiButton: false,
         required: true,
+        placeholder: "John"
       },
       {
         label: "Last Name",
@@ -19,6 +20,7 @@ export default [
         name: "lastName",
         aiButton: false,
         required: true,
+        placeholder: "Doe"
       },
       {
         label: "Job Title",
@@ -26,6 +28,7 @@ export default [
         name: "jobTitle",
         aiButton: false,
         required: true,
+        placeholder: "Software Developer"
       },
       {
         label: "Address (optional)",
@@ -33,6 +36,7 @@ export default [
         name: "address",
         aiButton: false,
         required: true,
+        placeholder: "123, Main Street, New York"
       },
       {
         label: "Phone",
@@ -40,6 +44,7 @@ export default [
         name: "phone",
         aiButton: false,
         required: true,
+        placeholder: "1234567890"
       },
       {
         label: "Email",
@@ -47,6 +52,7 @@ export default [
         name: "email",
         aiButton: false,
         required: true,
+        placeholder: "name@gmail.com"
       },
       {
         label: "Summary✨",
@@ -54,6 +60,7 @@ export default [
         name: "summary",
         aiButton: true,
         required: true,
+        placeholder: "Input in this format: {problem solver, 5 years experience, ReactJS, Machine Learning}"
       },
       {
         label: "Experience 1✨",
@@ -61,6 +68,7 @@ export default [
         name: "experience",
         aiButton: true,
         required: true,
+        placeholder:"Input in this format: {Software Developer, Google, Feb 2019- May 2021, increased refresh rate, doodle team}"
       },
       {
         label: "Experience 2✨(optional)",
@@ -86,6 +94,7 @@ export default [
         name: " education",
         aiButton: true,
         required: true,
+        placeholder: "Input in this format: {Computer Science, Stanford University, 2015-2019, GPA: 3.9, robotics club, machine learning}"
       },
       {
         label: "Education 2✨ (optional)",
@@ -107,13 +116,16 @@ export default [
       },
     ],
     aiPrompt:
-      "This is the resume info given by the user in a form. It contains keywords of education experience and the time period. Generate me an entire resume based on the keyowrds given in the experience, education and skills section given by the user. Give the header for each section and the desciprtion in bullet points. This should be ATS friendly and give me result in rich text editor format",
+      "This is the resume info given by the user in a form. It contains keywords of education experience and the time period. Generate me an entire resume based on the keywords given in the experience, education, and skills section provided by the user. Structure the resume with clear sections: Summary, Experience, Education, and Skills. Ensure the content is detailed and achievement-oriented, using industry-specific keywords and action verbs. Make it ATS-friendly and present the result in rich text editor format, emphasizing quantifiable achievements and relevant skills.",
+
     experiencePrompt:
-      "These are the experience keywords given by the user for one of their experiences. Generate me a description for this experience in bullet points (not more than 3 points) including the details and include % growth revenue generated factors making it look good and ATS friendly. Give me result in rich text editor format",
+      "These are the experience keywords given by the user for one of their experiences. Generate me a description for this experience in bullet points (not more than 3 points) including key responsibilities and achievements. Include specific, quantifiable results (e.g., percentage improvements, revenue generated) and use strong action verbs. Ensure the description is ATS-friendly and present the result in rich text editor format, making it impressive for top-tier employers.",
+
     educationPrompt:
-      "These are the education keywords given by the user for one of their educations. Generate me a description for this education in bullet points including the details and the clubs, etc. the person was involved in making it look good for a big company interview and make it ATS friendly. Give me result in rich text editor format",
+      "These are the education keywords given by the user for one of their educations. Generate me a description for this education in bullet points, showcasing academic achievements, relevant coursework, and extracurricular activities. Highlight any leadership roles, research projects, or special recognitions. Include relevant technical skills or certifications, and mention any clubs or volunteer work. Ensure the description is ATS-friendly and present the result in rich text editor format, appealing to top employers.",
+
     summaryPrompt:
-      "This is the summary given by the user. Generate me a 2-3 line description for this summary about person. Include the technical and social skills required for. Use from the keywords the user inputted and you may add your own points as well. Make it suitable for a big company role and make it ATS friendly. Give me result in rich text editor format",
+      "This is the summary given by the user. Generate me a 2-3 line description for this summary about the person. Include the user's top 2-3 skills or areas of expertise relevant to their target role or industry, and mention their most impressive career achievement or unique value proposition. Use industry-specific keywords and phrases to align with the user's target job descriptions. Ensure the summary is ATS-friendly and present the result in rich text editor format, making it suitable for a big company role.",
   },
   {
     name: "AI Resume Maker",

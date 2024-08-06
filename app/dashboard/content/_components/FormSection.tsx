@@ -58,13 +58,15 @@ function FormSection({ selectedTemplate, userFormInput, loading }: PROPS) {
                   name={item.name}
                   required={item?.required}
                   onChange={handleInputChange}
+                  placeholder={item.placeholder?.toString()}
                 />
               ) : item.field == "textarea" && item.aiButton ? (
                 <div>
                   <Textarea
                     className="mb-2"
                     maxLength={500}
-                    placeholder="Input Keywords or entire sentences"
+                    rows={item.placeholder ? 5 : 0.5}
+                    placeholder={item.placeholder?.toString()}
                     name={item.name}
                     required={item.required}
                     onChange={handleInputChange}
