@@ -22,7 +22,9 @@ function OutputSection({ aiOutput }: props) {
         <h2 className="font-medium text-lg">Your Result</h2>
         <Button
           className="flex gap-2"
-          onClick={() => navigator.clipboard.writeText(aiOutput)}
+          onClick={() => {
+            navigator.clipboard.writeText(aiOutput);
+          }}
         >
           <Copy className="w-4 h-4" />
           Copy

@@ -9,6 +9,9 @@ export interface TEMPLATE {
   category: string;
   slug: string;
   aiPrompt: string;
+  experiencePrompt?: string;
+  educationPrompt?: string;
+  summaryPrompt?: string;
   form?: FORM[];
 }
 
@@ -16,6 +19,7 @@ export interface FORM {
   label: string;
   field: string;
   name: string;
+  aiButton?: boolean;
   required?: boolean;
 }
 

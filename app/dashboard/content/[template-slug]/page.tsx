@@ -27,15 +27,13 @@ function CreateNewContent(props: PROPS) {
   );
 
   const [loading, setLoading] = useState(false);
-
   const [aiOutput, setAiOutput] = useState<string>("");
 
   const { user } = useUser();
 
-  const GenerateAIContent = async (formData: any) => {
+  const GenerateAIContent = async (formData: any, prompt: string) => {
     setLoading(true);
-    const SelectedPrompt = selectedTemplate?.aiPrompt;
-    const FinalAIPrompt = JSON.stringify(formData) + ", " + SelectedPrompt;
+    const FinalAIPrompt = JSON.stringify(formData) + ", " + prompt;
     const result = await chatSession.sendMessage(FinalAIPrompt);
     console.log(result.response.text());
     setAiOutput(result?.response.text());
@@ -54,8 +52,6 @@ function CreateNewContent(props: PROPS) {
     console.log(result);
   };
 
-  
-
   return (
     <div className="p-10">
       <Link href={"/dashboard"}>
@@ -64,21 +60,19 @@ function CreateNewContent(props: PROPS) {
           <ArrowLeft /> Back
         </Button>
       </Link>
-   
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 py-5">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 py-2">
         {/* FormSection */}
         <FormSection
           selectedTemplate={selectedTemplate}
-          userFormInput={(v: any) => GenerateAIContent(v)}
+          userFormInput={(v: any, prompt: string) => GenerateAIContent(v, prompt)}
           loading={loading}
         />
         {/* OutputSection */}
         <div className="col-span-2">
           <OutputSection aiOutput={aiOutput} />
-          <ResumePreview/>
+          <ResumePreview />
         </div>
-        
       </div>
     </div>
   );

@@ -2,16 +2,17 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, LayoutGrid } from "lucide-react";
 import React, { useContext, useState } from "react";
+import PersonalInfo from "./PersonalInfo";
 
 function AIResumeInfo() {
   //   const [resumeInfo, setResumeInfo] = useContext(ResumeInfoContext);
 
-  const [activeFormIndex, setActiveFormIndex] = useState(3);
+  const [activeFormIndex, setActiveFormIndex] = useState(1);
 
   return (
     <div>
-        {/* Personal Details */}
-        
+      {/* Next and Back toggle buttons */}
+
       <div className="flex justify-between items-center">
         <Button className="flex gap-2" variant={"outline"} size="sm">
           <LayoutGrid /> Theme
@@ -37,10 +38,7 @@ function AIResumeInfo() {
       </div>
 
       {/* Personal Details */}
-      <div className="p-5 shadow-lgrounded-lg border-t-primary border-t-4 mt-10">
-        <h2 className="font-bold text-lg">Personal Details</h2>
-        <p className="">Get Started With Some Basic Information</p>
-      </div>
+      {activeFormIndex == 1 ? <PersonalInfo /> : null}
     </div>
   );
 }
