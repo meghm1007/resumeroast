@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import FormSection from "../_components/FormSection";
 import OutputSection from "../_components/OutputSection";
 import { TEMPLATE } from "../../_components/TemplateListSection";
@@ -12,6 +12,8 @@ import { useUser } from "@clerk/nextjs";
 import moment from "moment";
 import { db } from "@/utils/db";
 import { AIOutput } from "@/utils/schema";
+import { ResumeInfoContext } from "@/app/context/ResumeInfoContext";
+import ResumePreview from "../_components/ResumePreview";
 
 interface PROPS {
   params: {
@@ -52,6 +54,8 @@ function CreateNewContent(props: PROPS) {
     console.log(result);
   };
 
+  
+
   return (
     <div className="p-10">
       <Link href={"/dashboard"}>
@@ -60,6 +64,7 @@ function CreateNewContent(props: PROPS) {
           <ArrowLeft /> Back
         </Button>
       </Link>
+   
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10 py-5">
         {/* FormSection */}
@@ -71,7 +76,9 @@ function CreateNewContent(props: PROPS) {
         {/* OutputSection */}
         <div className="col-span-2">
           <OutputSection aiOutput={aiOutput} />
+          <ResumePreview/>
         </div>
+        
       </div>
     </div>
   );
