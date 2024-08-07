@@ -16,10 +16,11 @@ interface PROPS {
 
 function FormSection({ selectedTemplate, userFormInput, loadingFields, onFormChange, resumeData }: PROPS) {
   const [experienceCount, setExperienceCount] = useState(1);
+  const [educationCount, setEducationCount] = useState(1);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index?: number) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index?: number, section?: string) => {
     const { name, value } = event.target;
-    if (name.startsWith('experience-') && index !== undefined) {
+    if (section === 'experience' && index !== undefined) {
       const field = name.split('-')[2];
       const newExperience = [...(resumeData.experience || [])];
       newExperience[index] = { ...newExperience[index], [field]: value };
@@ -31,6 +32,18 @@ function FormSection({ selectedTemplate, userFormInput, loadingFields, onFormCha
       
       onFormChange({ experience: filteredExperience });
       setExperienceCount(filteredExperience.length);
+    } else if (section === 'education' && index !== undefined) {
+      const field = name.split('-')[2];
+      const newEducation = [...(resumeData.education || [])];
+      newEducation[index] = { ...newEducation[index], [field]: value };
+      
+      // Remove any empty education entries
+      const filteredEducation = newEducation.filter(edu => 
+        edu.universityName || edu.degree || edu.major || edu.startDate || edu.endDate || edu.description
+      );
+      
+      onFormChange({ education: filteredEducation });
+      setEducationCount(filteredEducation.length);
     } else {
       onFormChange({ [name]: value });
     }
@@ -41,6 +54,9 @@ function FormSection({ selectedTemplate, userFormInput, loadingFields, onFormCha
     if (fieldName.startsWith('experience-')) {
       const index = parseInt(fieldName.split('-')[1], 10);
       fieldData = resumeData.experience?.[index] || {};
+    } else if (fieldName.startsWith('education-')) {
+      const index = parseInt(fieldName.split('-')[1], 10);
+      fieldData = resumeData.education?.[index] || {};
     }
     
     const keywords = Object.values(fieldData).filter(Boolean).join(', ');
@@ -64,6 +80,13 @@ function FormSection({ selectedTemplate, userFormInput, loadingFields, onFormCha
     });
   };
 
+  const addEducation = () => {
+    setEducationCount(prev => prev + 1);
+    onFormChange({ 
+      education: [...(resumeData.education || []), {}]
+    });
+  };
+
   return (
     <div className="my-5">
       <hr className="mt-5 mb-5" />
@@ -83,42 +106,42 @@ function FormSection({ selectedTemplate, userFormInput, loadingFields, onFormCha
                   <Input
                     name={`experience-${expIndex}-title`}
                     required={item.required}
-                    onChange={(e) => handleInputChange(e, expIndex)}
+                    onChange={(e) => handleInputChange(e, expIndex, 'experience')}
                     placeholder="Job Title"
                     value={resumeData.experience?.[expIndex]?.title || ''}
                   />
                   <Input
                     name={`experience-${expIndex}-company`}
                     required={item.required}
-                    onChange={(e) => handleInputChange(e, expIndex)}
+                    onChange={(e) => handleInputChange(e, expIndex, 'experience')}
                     placeholder="Company Name"
                     value={resumeData.experience?.[expIndex]?.company || ''}
                   />
                   <Input
                     name={`experience-${expIndex}-city`}
                     required={item.required}
-                    onChange={(e) => handleInputChange(e, expIndex)}
+                    onChange={(e) => handleInputChange(e, expIndex, 'experience')}
                     placeholder="City"
                     value={resumeData.experience?.[expIndex]?.city || ''}
                   />
                   <Input
                     name={`experience-${expIndex}-state`}
                     required={item.required}
-                    onChange={(e) => handleInputChange(e, expIndex)}
+                    onChange={(e) => handleInputChange(e, expIndex, 'experience')}
                     placeholder="State"
                     value={resumeData.experience?.[expIndex]?.state || ''}
                   />
                   <Input
                     name={`experience-${expIndex}-startDate`}
                     required={item.required}
-                    onChange={(e) => handleInputChange(e, expIndex)}
+                    onChange={(e) => handleInputChange(e, expIndex, 'experience')}
                     placeholder="Start Date"
                     value={resumeData.experience?.[expIndex]?.startDate || ''}
                   />
                   <Input
                     name={`experience-${expIndex}-endDate`}
                     required={item.required}
-                    onChange={(e) => handleInputChange(e, expIndex)}
+                    onChange={(e) => handleInputChange(e, expIndex, 'experience')}
                     placeholder="End Date"
                     value={resumeData.experience?.[expIndex]?.endDate || ''}
                   />
@@ -129,7 +152,7 @@ function FormSection({ selectedTemplate, userFormInput, loadingFields, onFormCha
                     placeholder="Work Summary"
                     name={`experience-${expIndex}-workSummary`}
                     required={item.required}
-                    onChange={(e) => handleInputChange(e, expIndex)}
+                    onChange={(e) => handleInputChange(e, expIndex, 'experience')}
                     value={resumeData.experience?.[expIndex]?.workSummary || ''}
                   />
                   <Button
@@ -144,6 +167,71 @@ function FormSection({ selectedTemplate, userFormInput, loadingFields, onFormCha
                     }
                   >
                     {loadingFields[`experience-${expIndex}`] && <Loader2Icon className="animate-spin mr-2" />}
+                    AI Assist💫
+                  </Button>
+                </div>
+              ));
+            } else if (item.name === "education") {
+              return Array.from({ length: educationCount }).map((_, eduIndex) => (
+                <div key={eduIndex} className="my-2 flex flex-col gap-2 mb-7">
+                  <label className="font-bold">{`Education ${eduIndex + 1}`}</label>
+                  <Input
+                    name={`education-${eduIndex}-universityName`}
+                    required={item.required}
+                    onChange={(e) => handleInputChange(e, eduIndex, 'education')}
+                    placeholder="University Name"
+                    value={resumeData.education?.[eduIndex]?.universityName || ''}
+                  />
+                  <Input
+                    name={`education-${eduIndex}-degree`}
+                    required={item.required}
+                    onChange={(e) => handleInputChange(e, eduIndex, 'education')}
+                    placeholder="Degree"
+                    value={resumeData.education?.[eduIndex]?.degree || ''}
+                  />
+                  <Input
+                    name={`education-${eduIndex}-major`}
+                    required={item.required}
+                    onChange={(e) => handleInputChange(e, eduIndex, 'education')}
+                    placeholder="Major"
+                    value={resumeData.education?.[eduIndex]?.major || ''}
+                  />
+                  <Input
+                    name={`education-${eduIndex}-startDate`}
+                    required={item.required}
+                    onChange={(e) => handleInputChange(e, eduIndex, 'education')}
+                    placeholder="Start Date"
+                    value={resumeData.education?.[eduIndex]?.startDate || ''}
+                  />
+                  <Input
+                    name={`education-${eduIndex}-endDate`}
+                    required={item.required}
+                    onChange={(e) => handleInputChange(e, eduIndex, 'education')}
+                    placeholder="End Date"
+                    value={resumeData.education?.[eduIndex]?.endDate || ''}
+                  />
+                  <Textarea
+                    className="mb-2"
+                    maxLength={500}
+                    rows={item.placeholder ? 5 : 0.5}
+                    placeholder="Education Summary"
+                    name={`education-${eduIndex}-description`}
+                    required={item.required}
+                    onChange={(e) => handleInputChange(e, eduIndex, 'education')}
+                    value={resumeData.education?.[eduIndex]?.description || ''}
+                  />
+                  <Button
+                    disabled={loadingFields[`education-${eduIndex}`]}
+                    type="button"
+                    className="py-6"
+                    onClick={() =>
+                      handleAIButtonClick(
+                        `education-${eduIndex}`,
+                        selectedTemplate?.educationPrompt
+                      )
+                    }
+                  >
+                    {loadingFields[`education-${eduIndex}`] && <Loader2Icon className="animate-spin mr-2" />}
                     AI Assist💫
                   </Button>
                 </div>
@@ -181,8 +269,6 @@ function FormSection({ selectedTemplate, userFormInput, loadingFields, onFormCha
                             item.name,
                             item.name === "summary"
                               ? selectedTemplate?.summaryPrompt
-                              : item.name === "education"
-                              ? selectedTemplate?.educationPrompt
                               : undefined
                           )
                         }
@@ -196,8 +282,11 @@ function FormSection({ selectedTemplate, userFormInput, loadingFields, onFormCha
               );
             }
           })}
-          <Button type="button" onClick={addExperience} className="mb-4">
+          <Button type="button" onClick={addExperience} className="mb-4 mr-2">
             Add Experience
+          </Button>
+          <Button type="button" onClick={addEducation} className="mb-4">
+            Add Education
           </Button>
           <Button
             disabled={Object.values(loadingFields).some(Boolean)}

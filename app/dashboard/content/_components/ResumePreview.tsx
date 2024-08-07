@@ -79,10 +79,6 @@ function ResumePreview({ resumeInfo, onResumeInfoChange }: ResumePreviewProps) {
     });
   };
 
-  const handleSummaryChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    onResumeInfoChange({ summary: event.target.value });
-  };
-
   const isExperienceEmpty = (exp: Experience) => {
     return !exp?.title && !exp?.company && !exp?.city && !exp?.state && !exp?.workSummary;
   };
@@ -173,12 +169,9 @@ function ResumePreview({ resumeInfo, onResumeInfoChange }: ResumePreviewProps) {
           <h2 className="text-center font-bold text-sm mb-2" style={{ color: themeColor }}>
             Summary
           </h2>
-          <textarea
-            className="w-full p-2 text-xs border rounded"
-            value={resumeInfo.summary || ''}
-            onChange={handleSummaryChange}
-            rows={4}
-          />
+          <div className="text-xs">
+            {resumeInfo.summary}
+          </div>
         </div>
 
         {/* Professional Experience */}
@@ -248,7 +241,7 @@ function ResumePreview({ resumeInfo, onResumeInfoChange }: ResumePreviewProps) {
               <h2 className="text-xs flex justify-between">
                 {education?.degree} {education?.major && `in ${education.major}`}{" "}
                 <span>
-                  {education?.startDate}{education?.endDate && ` - ${education.endDate}`}
+                  {education?.startDate || 'Start Date'} - {education?.endDate || 'End Date'}
                 </span>
               </h2>
               <p className="text-xs my-2">{education?.description}</p>
