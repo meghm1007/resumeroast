@@ -1,7 +1,6 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import FormSection from "../_components/FormSection";
-import OutputSection from "../_components/OutputSection";
 import { TEMPLATE } from "../../_components/TemplateListSection";
 import Templates from "@/app/(data)/Templates";
 import { Button } from "@/components/ui/button";
@@ -12,8 +11,8 @@ import { useUser } from "@clerk/nextjs";
 import moment from "moment";
 import { db } from "@/utils/db";
 import { AIOutput } from "@/utils/schema";
-import { ResumeInfoContext } from "@/app/context/ResumeInfoContext";
 import ResumePreview from "../_components/ResumePreview";
+import dummyResume from "@/app/(data)/dummyResume";
 
 interface PROPS {
   params: {
@@ -21,24 +20,94 @@ interface PROPS {
   };
 }
 
+// Define the ResumeData type to match the one in ResumePreview.tsx
+interface Experience {
+  id?: number;
+  title?: string;
+  company?: string;
+  city?: string;
+  state?: string;
+  startDate?: string;
+  endDate?: string;
+  currentlyWorking?: boolean;
+  workSummary?: string;
+}
+
+interface Education {
+  id?: number;
+  universityName?: string;
+  degree?: string;
+  major?: string;
+  startDate?: string;
+  endDate?: string;
+  description?: string;
+}
+
+interface Skill {
+  id?: number;
+  name?: string;
+  rating?: number;
+}
+
+interface ResumeData {
+  firstName?: string;
+  lastName?: string;
+  jobTitle?: string;
+  address?: string;
+  phone?: string;
+  email?: string;
+  summary?: string;
+  themeColor?: string;
+  experience?: Experience[];
+  education?: Education[];
+  skills?: Skill[];
+}
+
 function CreateNewContent(props: PROPS) {
   const selectedTemplate: TEMPLATE | undefined = Templates?.find(
     (item) => item.slug == props.params["template-slug"]
   );
 
-  const [loading, setLoading] = useState(false);
-  const [aiOutput, setAiOutput] = useState<string>("");
+  const [loadingFields, setLoadingFields] = useState<{ [key: string]: boolean }>({});
+  const [resumeData, setResumeData] = useState<ResumeData>({
+    ...dummyResume,
+    experience: dummyResume.experience || [{}], // Initialize with at least one empty experience object
+  });
 
   const { user } = useUser();
 
-  const GenerateAIContent = async (formData: any, prompt: string) => {
-    setLoading(true);
+  const GenerateAIContent = async (formData: any, prompt: string, field: string) => {
+    setLoadingFields(prev => ({ ...prev, [field]: true }));
     const FinalAIPrompt = JSON.stringify(formData) + ", " + prompt;
     const result = await chatSession.sendMessage(FinalAIPrompt);
-    console.log(result.response.text());
-    setAiOutput(result?.response.text());
-    setLoading(false);
-    await SaveInDb(formData, selectedTemplate?.slug, result?.response.text());
+    const aiResponse = result.response.text();
+    console.log(aiResponse);
+
+    setResumeData((prevData) => {
+      if (field.startsWith('experience')) {
+        const index = parseInt(field.split('-')[1], 10);
+        const newExperience = [...(prevData.experience || [])];
+        newExperience[index] = { ...newExperience[index], workSummary: aiResponse };
+        return { ...prevData, experience: newExperience };
+      } else if (field.startsWith('education')) {
+        const index = parseInt(field.split('-')[1], 10);
+        const newEducation = [...(prevData.education || [])];
+        newEducation[index] = { ...newEducation[index], description: aiResponse };
+        return { ...prevData, education: newEducation };
+      } else {
+        return { ...prevData, [field]: aiResponse };
+      }
+    });
+
+    setLoadingFields(prev => ({ ...prev, [field]: false }));
+    await SaveInDb(formData, selectedTemplate?.slug, aiResponse);
+  };
+
+  const handleFormChange = (newData: Partial<ResumeData>) => {
+    setResumeData((prevData) => ({
+      ...prevData,
+      ...newData,
+    }));
   };
 
   const SaveInDb = async (formData: any, slug: any, aiResp: string) => {
@@ -56,22 +125,23 @@ function CreateNewContent(props: PROPS) {
     <div className="p-10">
       <Link href={"/dashboard"}>
         <Button className="">
-          {" "}
           <ArrowLeft /> Back
         </Button>
       </Link>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10 py-2">
-        {/* FormSection */}
         <FormSection
           selectedTemplate={selectedTemplate}
-          userFormInput={(v: any, prompt: string) => GenerateAIContent(v, prompt)}
-          loading={loading}
+          userFormInput={(v: any, prompt: string, field: string) => GenerateAIContent(v, prompt, field)}
+          loadingFields={loadingFields}
+          onFormChange={handleFormChange}
+          resumeData={resumeData}
         />
-        {/* OutputSection */}
         <div className="col-span-2">
-          <OutputSection aiOutput={aiOutput} />
-          <ResumePreview />
+          <ResumePreview 
+            resumeInfo={resumeData} 
+            onResumeInfoChange={handleFormChange} 
+          />
         </div>
       </div>
     </div>

@@ -1,19 +1,65 @@
-import dummyResume from "@/app/(data)/dummyResume";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-function ResumePreview() {
-  const [resumeInfo, setResumeInfo] = useState(dummyResume);
-  const [themeColor, setThemeColor] = useState(resumeInfo?.themeColor);
+interface Experience {
+  id?: number;
+  title?: string;
+  company?: string;
+  city?: string;
+  state?: string;
+  startDate?: string;
+  endDate?: string;
+  currentlyWorking?: boolean;
+  workSummary?: string;
+}
 
-  const handleColorChange = (event: any) => {
+interface Education {
+  id?: number;
+  universityName?: string;
+  degree?: string;
+  major?: string;
+  startDate?: string;
+  endDate?: string;
+  description?: string;
+}
+
+interface Skill {
+  id?: number;
+  name?: string;
+  rating?: number;
+}
+
+interface ResumeData {
+  firstName?: string;
+  lastName?: string;
+  jobTitle?: string;
+  address?: string;
+  phone?: string;
+  email?: string;
+  summary?: string;
+  themeColor?: string;
+  experience?: Experience[];
+  education?: Education[];
+  skills?: Skill[];
+}
+
+interface ResumePreviewProps {
+  resumeInfo: ResumeData;
+  onResumeInfoChange: (newData: Partial<ResumeData>) => void;
+}
+
+function ResumePreview({ resumeInfo, onResumeInfoChange }: ResumePreviewProps) {
+  const [themeColor, setThemeColor] = useState(resumeInfo.themeColor || "#000000");
+
+  useEffect(() => {
+    setThemeColor(resumeInfo.themeColor || "#000000");
+  }, [resumeInfo.themeColor]);
+
+  const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newColor = event.target.value;
     setThemeColor(newColor);
-    setResumeInfo((prevInfo) => ({
-      ...prevInfo,
-      themeColor: newColor,
-    }));
+    onResumeInfoChange({ themeColor: newColor });
   };
 
   const handleDownloadPDF = () => {
@@ -29,8 +75,24 @@ function ResumePreview() {
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save("my_resume_roast.pdf");
+      pdf.save("my_resume.pdf");
     });
+  };
+
+  const handleSummaryChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    onResumeInfoChange({ summary: event.target.value });
+  };
+
+  const isExperienceEmpty = (exp: Experience) => {
+    return !exp?.title && !exp?.company && !exp?.city && !exp?.state && !exp?.workSummary;
+  };
+
+  const formatText = (text: string) => {
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+               .replace(/\*(.*?)\*/g, '<em>$1</em>')
+               .split('\n').map((line, index) => 
+                 line.startsWith('* ') ? `<li key=${index}>${line.slice(2)}</li>` : `<p key=${index}>${line}</p>`
+               ).join('');
   };
 
   return (
@@ -56,7 +118,7 @@ function ResumePreview() {
         id="resume"
         className="mt-8 shadow-lg p-14 border-t-[20px]"
         style={{
-          borderColor: resumeInfo?.themeColor,
+          borderColor: themeColor,
         }}
       >
         {/* Personal Details */}
@@ -64,86 +126,96 @@ function ResumePreview() {
           <h2
             className="font-bold text-xl text-center"
             style={{
-              color: resumeInfo?.themeColor,
+              color: themeColor,
             }}
           >
-            {resumeInfo?.firstName} {resumeInfo?.lastName}
+            {resumeInfo.firstName} {resumeInfo.lastName}
           </h2>
           <h2 className="text-center text-sm font-medium">
-            {resumeInfo?.jobTitle}
+            {resumeInfo.jobTitle}
           </h2>
           <h2
             className="text-center font-normal text-xs"
             style={{
-              color: resumeInfo?.themeColor,
+              color: themeColor,
             }}
           >
-            {resumeInfo?.address}
+            {resumeInfo.address}
           </h2>
           <div className="flex justify-between">
             <h2
               className="font-normal text-xs"
               style={{
-                color: resumeInfo?.themeColor,
+                color: themeColor,
               }}
             >
-              {resumeInfo?.phone}
+              {resumeInfo.phone}
             </h2>
             <h2
               className="font-normal text-xs"
               style={{
-                color: resumeInfo?.themeColor,
+                color: themeColor,
               }}
             >
-              {resumeInfo?.email}
+              {resumeInfo.email}
             </h2>
           </div>
           <hr
             className="border-[1.5px] my-2"
             style={{
-              borderColor: resumeInfo?.themeColor,
+              borderColor: themeColor,
             }}
           />
         </div>
 
         {/* Summary */}
-        <p className="text-xs">{resumeInfo.summary}</p>
+        <div className="my-4">
+          <h2 className="text-center font-bold text-sm mb-2" style={{ color: themeColor }}>
+            Summary
+          </h2>
+          <textarea
+            className="w-full p-2 text-xs border rounded"
+            value={resumeInfo.summary || ''}
+            onChange={handleSummaryChange}
+            rows={4}
+          />
+        </div>
 
         {/* Professional Experience */}
         <div className="my-6">
           <h2
             className="text-center font-bold text-sm mb-2"
             style={{
-              color: resumeInfo?.themeColor,
+              color: themeColor,
             }}
           >
             Professional Experience
           </h2>
           <hr
             style={{
-              borderColor: resumeInfo?.themeColor,
+              borderColor: themeColor,
             }}
           />
-          {resumeInfo?.experience.map((experience, index) => (
+          {resumeInfo.experience?.filter(exp => !isExperienceEmpty(exp)).map((experience, index) => (
             <div key={index} className="my-5">
               <h2
                 className="text-sm font-bold"
                 style={{
-                  color: resumeInfo?.themeColor,
+                  color: themeColor,
                 }}
               >
-                {experience?.title}
+                {experience?.title || 'Position'}
               </h2>
               <h2 className="text-xs flex justify-between">
-                {experience?.company}, {experience.city}, {experience.state}{" "}
+                {experience?.company || 'Company'}, {experience?.city || 'City'}, {experience?.state || 'State'}{" "}
                 <span>
-                  {experience?.startDate}{" "}
-                  {experience?.currentlyWorking
-                    ? " - Present"
-                    : ` - ${experience?.endDate}`}
+                  {experience?.startDate || 'Start Date'} - {experience?.currentlyWorking ? "Present" : experience?.endDate || 'End Date'}
                 </span>
               </h2>
-              <p className="text-xs my-2">{experience.workSummary}</p>
+              <div 
+                className="text-xs my-2"
+                dangerouslySetInnerHTML={{ __html: formatText(experience?.workSummary || '') }}
+              />
             </div>
           ))}
         </div>
@@ -153,30 +225,30 @@ function ResumePreview() {
           <h2
             className="text-center font-bold text-sm mb-2"
             style={{
-              color: resumeInfo?.themeColor,
+              color: themeColor,
             }}
           >
             Education
           </h2>
           <hr
             style={{
-              borderColor: resumeInfo?.themeColor,
+              borderColor: themeColor,
             }}
           />
-          {resumeInfo?.education.map((education, index) => (
+          {resumeInfo.education?.map((education, index) => (
             <div key={index} className="my-5">
               <h2
                 className="text-sm font-bold"
                 style={{
-                  color: resumeInfo?.themeColor,
+                  color: themeColor,
                 }}
               >
-                {education.universityName}
+                {education?.universityName}
               </h2>
               <h2 className="text-xs flex justify-between">
-                {education?.degree} in {education?.major}{" "}
+                {education?.degree} {education?.major && `in ${education.major}`}{" "}
                 <span>
-                  {education?.startDate} - {education?.endDate}
+                  {education?.startDate}{education?.endDate && ` - ${education.endDate}`}
                 </span>
               </h2>
               <p className="text-xs my-2">{education?.description}</p>
@@ -189,26 +261,26 @@ function ResumePreview() {
           <h2
             className="text-center font-bold text-sm mb-2"
             style={{
-              color: resumeInfo?.themeColor,
+              color: themeColor,
             }}
           >
             Skills
           </h2>
           <hr
             style={{
-              borderColor: resumeInfo?.themeColor,
+              borderColor: themeColor,
             }}
           />
           <div className="grid grid-cols-2 gap-3 my-4">
-            {resumeInfo?.skills.map((skill, index) => (
+            {resumeInfo.skills?.map((skill, index) => (
               <div key={index} className="flex items-center justify-between">
-                <h2 className="text-xs">{skill.name}</h2>
+                <h2 className="text-xs">{skill?.name}</h2>
                 <div className="h-2 bg-gray-200 w-[120px]">
                   <div
                     className="h-2"
                     style={{
-                      backgroundColor: resumeInfo?.themeColor,
-                      width: skill?.rating + "%",
+                      backgroundColor: themeColor,
+                      width: `${skill?.rating || 0}%`,
                     }}
                   ></div>
                 </div>
