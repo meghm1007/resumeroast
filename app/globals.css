@@ -67,3 +67,10 @@
     @apply bg-background text-foreground;
   }
 }
+/* Add this CSS to your stylesheet */
+.resume-preview-container {
+  position: sticky;
+  top: 10px; /* Adjust this value as needed */
+  max-height: 90vh; /* Ensures the preview doesn't exceed the viewport height */
+  overflow-y: auto; /* Allows scrolling within the preview if content is too large */
+}

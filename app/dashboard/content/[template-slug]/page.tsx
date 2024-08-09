@@ -20,7 +20,6 @@ interface PROPS {
   };
 }
 
-// Define the ResumeData type to match the one in ResumePreview.tsx
 interface Experience {
   id?: number;
   title?: string;
@@ -68,38 +67,50 @@ function CreateNewContent(props: PROPS) {
     (item) => item.slug == props.params["template-slug"]
   );
 
-  const [loadingFields, setLoadingFields] = useState<{ [key: string]: boolean }>({});
+  const [loadingFields, setLoadingFields] = useState<{
+    [key: string]: boolean;
+  }>({});
   const [resumeData, setResumeData] = useState<ResumeData>({
     ...dummyResume,
-    experience: dummyResume.experience || [{}], // Initialize with at least one empty experience object
+    experience: dummyResume.experience || [{}],
   });
 
   const { user } = useUser();
 
-  const GenerateAIContent = async (formData: any, prompt: string, field: string) => {
-    setLoadingFields(prev => ({ ...prev, [field]: true }));
+  const GenerateAIContent = async (
+    formData: any,
+    prompt: string,
+    field: string
+  ) => {
+    setLoadingFields((prev) => ({ ...prev, [field]: true }));
     const FinalAIPrompt = JSON.stringify(formData) + ", " + prompt;
     const result = await chatSession.sendMessage(FinalAIPrompt);
     const aiResponse = result.response.text();
     console.log(aiResponse);
 
     setResumeData((prevData) => {
-      if (field.startsWith('experience')) {
-        const index = parseInt(field.split('-')[1], 10);
+      if (field.startsWith("experience")) {
+        const index = parseInt(field.split("-")[1], 10);
         const newExperience = [...(prevData.experience || [])];
-        newExperience[index] = { ...newExperience[index], workSummary: aiResponse };
+        newExperience[index] = {
+          ...newExperience[index],
+          workSummary: aiResponse,
+        };
         return { ...prevData, experience: newExperience };
-      } else if (field.startsWith('education')) {
-        const index = parseInt(field.split('-')[1], 10);
+      } else if (field.startsWith("education")) {
+        const index = parseInt(field.split("-")[1], 10);
         const newEducation = [...(prevData.education || [])];
-        newEducation[index] = { ...newEducation[index], description: aiResponse };
+        newEducation[index] = {
+          ...newEducation[index],
+          description: aiResponse,
+        };
         return { ...prevData, education: newEducation };
       } else {
         return { ...prevData, [field]: aiResponse };
       }
     });
 
-    setLoadingFields(prev => ({ ...prev, [field]: false }));
+    setLoadingFields((prev) => ({ ...prev, [field]: false }));
     await SaveInDb(formData, selectedTemplate?.slug, aiResponse);
   };
 
@@ -129,18 +140,22 @@ function CreateNewContent(props: PROPS) {
         </Button>
       </Link>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 py-2">
-        <FormSection
-          selectedTemplate={selectedTemplate}
-          userFormInput={(v: any, prompt: string, field: string) => GenerateAIContent(v, prompt, field)}
-          loadingFields={loadingFields}
-          onFormChange={handleFormChange}
-          resumeData={resumeData}
-        />
-        <div className="col-span-2">
-          <ResumePreview 
-            resumeInfo={resumeData} 
-            onResumeInfoChange={handleFormChange} 
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-2">
+        <div>
+          <FormSection
+            selectedTemplate={selectedTemplate}
+            userFormInput={(v: any, prompt: string, field: string) =>
+              GenerateAIContent(v, prompt, field)
+            }
+            loadingFields={loadingFields}
+            onFormChange={handleFormChange}
+            resumeData={resumeData}
+          />
+        </div>
+        <div className="resume-preview-container">
+          <ResumePreview
+            resumeInfo={resumeData}
+            onResumeInfoChange={handleFormChange}
           />
         </div>
       </div>

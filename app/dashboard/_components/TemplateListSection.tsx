@@ -12,6 +12,7 @@ export interface TEMPLATE {
   experiencePrompt?: string;
   educationPrompt?: string;
   summaryPrompt?: string;
+  projectPrompt?: string;
   form?: FORM[];
 }
 

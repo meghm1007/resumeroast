@@ -12,7 +12,7 @@ export default [
         name: "firstName",
         aiButton: false,
         required: true,
-        placeholder: "John"
+        placeholder: "John",
       },
       {
         label: "Last Name",
@@ -20,7 +20,7 @@ export default [
         name: "lastName",
         aiButton: false,
         required: true,
-        placeholder: "Doe"
+        placeholder: "Doe",
       },
       {
         label: "Job Title",
@@ -28,7 +28,7 @@ export default [
         name: "jobTitle",
         aiButton: false,
         required: true,
-        placeholder: "Software Developer"
+        placeholder: "Software Developer",
       },
       {
         label: "Address (optional)",
@@ -36,7 +36,7 @@ export default [
         name: "address",
         aiButton: false,
         required: true,
-        placeholder: "123, Main Street, New York"
+        placeholder: "123, Main Street, New York",
       },
       {
         label: "Phone",
@@ -44,7 +44,7 @@ export default [
         name: "phone",
         aiButton: false,
         required: true,
-        placeholder: "1234567890"
+        placeholder: "1234567890",
       },
       {
         label: "Email",
@@ -52,7 +52,7 @@ export default [
         name: "email",
         aiButton: false,
         required: true,
-        placeholder: "name@gmail.com"
+        placeholder: "name@gmail.com",
       },
       {
         label: "Summary✨",
@@ -60,7 +60,8 @@ export default [
         name: "summary",
         aiButton: true,
         required: true,
-        placeholder: "Input in this format: {problem solver, 5 years experience, ReactJS, Machine Learning}"
+        placeholder:
+          "Input in this format: {problem solver, 5 years experience, ReactJS, Machine Learning}",
       },
       {
         label: "Experience 1✨",
@@ -68,7 +69,8 @@ export default [
         name: "experience",
         aiButton: true,
         required: true,
-        placeholder:"Input in this format: {Software Developer, Google, Feb 2019- May 2021, increased refresh rate, doodle team}"
+        placeholder:
+          "Input in this format: {Software Developer, Google, Feb 2019- May 2021, increased refresh rate, doodle team}",
       },
       {
         label: "Experience 2✨(optional)",
@@ -94,7 +96,8 @@ export default [
         name: " education",
         aiButton: true,
         required: true,
-        placeholder: "Input in this format: {Computer Science, Stanford University, 2015-2019, GPA: 3.9, robotics club, machine learning}"
+        placeholder:
+          "Input in this format: {Computer Science, Stanford University, 2015-2019, GPA: 3.9, robotics club, machine learning}",
       },
       {
         label: "Education 2✨ (optional)",
@@ -125,6 +128,9 @@ export default [
       "These are the education keywords given by the user for one of their educations. Generate me a description for this education in bullet points, showcasing academic achievements, relevant coursework, and extracurricular activities. Highlight any leadership roles, research projects, or special recognitions. Include relevant technical skills or certifications, and mention any clubs or volunteer work. Ensure the description is ATS-friendly and present the result in rich text editor format, appealing to top employers.",
 
     summaryPrompt:
+      "This is the summary given by the user. Generate me a 2-3 line description for this summary about the person. Include the user's top 2-3 skills or areas of expertise relevant to their target role or industry, and mention their most impressive career achievement or unique value proposition. Use industry-specific keywords and phrases to align with the user's target job descriptions. Ensure the summary is in First person perspective and ATS-friendly and present the result in rich text editor format, making it suitable for a big company role.",
+
+    projectPrompt:
       "This is the summary given by the user. Generate me a 2-3 line description for this summary about the person. Include the user's top 2-3 skills or areas of expertise relevant to their target role or industry, and mention their most impressive career achievement or unique value proposition. Use industry-specific keywords and phrases to align with the user's target job descriptions. Ensure the summary is in First person perspective and ATS-friendly and present the result in rich text editor format, making it suitable for a big company role.",
   },
   {
