@@ -1,7 +1,30 @@
 export default [
   {
     name: "Basic Editor",
-    desc: "A Resume Editor that allows you to create your resume from scratch without you worrying about any formatting and editing",
+    desc: "Input each section of your resume and we handle the entire ATS friendly template for you",
+    category: "Basic Resume",
+    icon: "/airesume.png",
+    aiPrompt:
+      "Give me 5 resume ideas in bullet wise format only based on a given niche and outline and give me result in rich text editor format",
+    slug: "generate-blog-title",
+    form: [
+      {
+        label: "Enter your blog niche",
+        field: "input",
+        name: "niche",
+        required: true,
+      },
+      {
+        label: "Enter blog outline",
+        field: "textarea",
+        name: " outline",
+      },
+    ],
+  },
+
+  {
+    name: "AI Editor",
+    desc: "An AI Tool that generates each section of your resume based on your inputs taken as keywords",
     category: "Basic Resume",
     icon: "/resume.png",
     slug: "generate-blog-title",
@@ -133,55 +156,12 @@ export default [
     projectPrompt:
       "This is the summary given by the user. Generate me a 2-3 line description for this summary about the person. Include the user's top 2-3 skills or areas of expertise relevant to their target role or industry, and mention their most impressive career achievement or unique value proposition. Use industry-specific keywords and phrases to align with the user's target job descriptions. Ensure the summary is in First person perspective and ATS-friendly and present the result in rich text editor format, making it suitable for a big company role.",
   },
-  {
-    name: "AI Resume Maker",
-    desc: "An AI Tool that generates each section of your resume based on your inputs taken as keywords",
-    category: "Basic Resume",
-    icon: "/resume.png",
-    aiPrompt:
-      "Give me 5 resume ideas in bullet wise format only based on a given niche and outline and give me result in rich text editor format",
-    slug: "generate-blog-title",
-    form: [
-      {
-        label: "Enter your blog niche",
-        field: "input",
-        name: "niche",
-        required: true,
-      },
-      {
-        label: "Enter blog outline",
-        field: "textarea",
-        name: " outline",
-      },
-    ],
-  },
-  {
-    name: "AI Generator",
-    desc: "AI tools which generated an entire reusme in just one click based on your inputs",
-    category: "Basic Resume",
-    icon: "/resume.png",
-    aiPrompt:
-      "Give me 5 resume ideas in bullet wise format only based on a given niche and outline and give me result in rich text editor format",
-    slug: "generate-blog-title",
-    form: [
-      {
-        label: "Enter your blog niche",
-        field: "input",
-        name: "niche",
-        required: true,
-      },
-      {
-        label: "Enter blog outline",
-        field: "textarea",
-        name: " outline",
-      },
-    ],
-  },
+
   {
     name: "Resume Designer",
     desc: "A tool that enables you to create resumes to look like the company you're applying to",
     category: "Basic Resume",
-    icon: "/resume.png",
+    icon: "/designresume.png",
     aiPrompt:
       "Give me 5 resume ideas in bullet wise format only based on a given niche and outline and give me result in rich text editor format",
     slug: "generate-blog-title",

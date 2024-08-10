@@ -1,0 +1,12 @@
+First Launch Goals
+
+-Projects section AI Assist not working
+-Resume download not correctly formated
+-Clerk authentication reload should be on dashboard and not on landing page
+-Designing various Resume options - fully AI generated, Simple Editor, or tailored to specific companies
+
+Future Goals
+
+- saving all generated resumes by the user in the database
+- custom uri for each resume: resumeroast.ai/[resume_id]/view
+- public section for all the the created resumes. Let others roast resume (1-10 coffee roast)

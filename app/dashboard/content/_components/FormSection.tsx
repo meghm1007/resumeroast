@@ -116,7 +116,7 @@ function FormSection({
       newEducation.splice(index, 1);
       setEducationCount((prev) => prev - 1);
       onFormChange({ education: newEducation });
-    } else if (section === "project") {
+    } else if (section === "projects") {
       const newProjects = [...(resumeData.projects || [])];
       newProjects.splice(index, 1);
       setProjectCount((prev) => prev - 1);
