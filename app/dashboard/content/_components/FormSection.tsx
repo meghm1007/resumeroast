@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { TEMPLATE } from "../../_components/TemplateListSection";
-import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -14,6 +13,8 @@ interface PROPS {
   resumeData: any;
 }
 
+const sections = ["PersonalInfo", "Experience", "Education", "Projects"];
+
 function FormSection({
   selectedTemplate,
   userFormInput,
@@ -21,6 +22,7 @@ function FormSection({
   onFormChange,
   resumeData,
 }: PROPS) {
+  const [currentSection, setCurrentSection] = useState(0);
   const [experienceCount, setExperienceCount] = useState(3);
   const [educationCount, setEducationCount] = useState(2);
   const [projectCount, setProjectCount] = useState(2);
@@ -124,297 +126,353 @@ function FormSection({
     }
   };
 
-  return (
-    <form className="my-5" onSubmit={onSubmit}>
-      <hr className="mt-5 mb-5" />
-      <div className="p-5 shadow-md border rounded-lg bg-white">
-        {/* Personal Information Section */}
-        <h2 className="font-bold text-2xl mb-2 text-primary">
-          Personal Information
-        </h2>
-        <Input
-          name="firstName"
-          onChange={handleInputChange}
-          placeholder="First Name"
-          value={resumeData.firstName || ""}
-        />
-        <Input
-          name="lastName"
-          onChange={handleInputChange}
-          placeholder="Last Name"
-          value={resumeData.lastName || ""}
-        />
-        <Input
-          name="jobTitle"
-          onChange={handleInputChange}
-          placeholder="Job Title"
-          value={resumeData.jobTitle || ""}
-        />
-        <Input
-          name="address"
-          onChange={handleInputChange}
-          placeholder="Address"
-          value={resumeData.address || ""}
-        />
-        <Input
-          name="phone"
-          onChange={handleInputChange}
-          placeholder="Phone"
-          value={resumeData.phone || ""}
-        />
-        <Input
-          name="email"
-          onChange={handleInputChange}
-          placeholder="Email"
-          value={resumeData.email || ""}
-        />
-        <Textarea
-          className="mb-2"
-          maxLength={500}
-          rows={3}
-          placeholder="Summary"
-          name="summary"
-          onChange={handleInputChange}
-          value={resumeData.summary || ""}
-        />
-        <Button
-          disabled={loadingFields["summary"]}
-          type="button"
-          className="py-6"
-          onClick={() =>
-            handleAIButtonClick("summary", selectedTemplate?.summaryPrompt)
-          }
-        >
-          {loadingFields["summary"] && (
-            <Loader2Icon className="animate-spin mr-2" />
-          )}
-          AI Assist💫
-        </Button>
-
-        {/* Experience Section */}
-        <h2 className="font-bold text-2xl mb-2 text-primary">Experience</h2>
-        {Array.from({ length: experienceCount }).map((_, expIndex) => (
-          <div key={expIndex} className="my-2 flex flex-col gap-2 mb-7">
-            <label className="font-bold">{`Experience ${expIndex + 1}`}</label>
+  const renderSection = () => {
+    switch (sections[currentSection]) {
+      case "PersonalInfo":
+        return (
+          <div>
+            <h2 className="font-bold text-2xl mb-2 text-primary">
+              Personal Information
+            </h2>
             <Input
-              name={`experience-${expIndex}-title`}
-              onChange={(e) => handleInputChange(e, expIndex, "experience")}
+              name="firstName"
+              onChange={handleInputChange}
+              placeholder="First Name"
+              value={resumeData.firstName || ""}
+            />
+            <Input
+              name="lastName"
+              onChange={handleInputChange}
+              placeholder="Last Name"
+              value={resumeData.lastName || ""}
+            />
+            <Input
+              name="jobTitle"
+              onChange={handleInputChange}
               placeholder="Job Title"
-              value={resumeData.experience?.[expIndex]?.title || ""}
+              value={resumeData.jobTitle || ""}
             />
             <Input
-              name={`experience-${expIndex}-company`}
-              onChange={(e) => handleInputChange(e, expIndex, "experience")}
-              placeholder="Company Name"
-              value={resumeData.experience?.[expIndex]?.company || ""}
+              name="address"
+              onChange={handleInputChange}
+              placeholder="Address"
+              value={resumeData.address || ""}
             />
             <Input
-              name={`experience-${expIndex}-city`}
-              onChange={(e) => handleInputChange(e, expIndex, "experience")}
-              placeholder="City"
-              value={resumeData.experience?.[expIndex]?.city || ""}
+              name="phone"
+              onChange={handleInputChange}
+              placeholder="Phone"
+              value={resumeData.phone || ""}
             />
             <Input
-              name={`experience-${expIndex}-state`}
-              onChange={(e) => handleInputChange(e, expIndex, "experience")}
-              placeholder="State"
-              value={resumeData.experience?.[expIndex]?.state || ""}
-            />
-            <Input
-              name={`experience-${expIndex}-startDate`}
-              onChange={(e) => handleInputChange(e, expIndex, "experience")}
-              placeholder="Start Date"
-              value={resumeData.experience?.[expIndex]?.startDate || ""}
-            />
-            <Input
-              name={`experience-${expIndex}-endDate`}
-              onChange={(e) => handleInputChange(e, expIndex, "experience")}
-              placeholder="End Date"
-              value={resumeData.experience?.[expIndex]?.endDate || ""}
+              name="email"
+              onChange={handleInputChange}
+              placeholder="Email"
+              value={resumeData.email || ""}
             />
             <Textarea
               className="mb-2"
               maxLength={500}
-              rows={5}
-              placeholder="Work Summary"
-              name={`experience-${expIndex}-workSummary`}
-              onChange={(e) => handleInputChange(e, expIndex, "experience")}
-              value={resumeData.experience?.[expIndex]?.workSummary || ""}
+              rows={3}
+              placeholder="Summary"
+              name="summary"
+              onChange={handleInputChange}
+              value={resumeData.summary || ""}
             />
             <Button
-              disabled={loadingFields[`experience-${expIndex}`]}
+              disabled={loadingFields["summary"]}
               type="button"
               className="py-6"
               onClick={() =>
-                handleAIButtonClick(
-                  `experience-${expIndex}`,
-                  selectedTemplate?.experiencePrompt
-                )
+                handleAIButtonClick("summary", selectedTemplate?.summaryPrompt)
               }
             >
-              {loadingFields[`experience-${expIndex}`] && (
+              {loadingFields["summary"] && (
                 <Loader2Icon className="animate-spin mr-2" />
               )}
               AI Assist💫
             </Button>
-            <Button
-              type="button"
-              className="mt-2 text-white bg-red-500"
-              onClick={() => removeSection(expIndex, "experience")}
-            >
-              <Trash2 className="inline mr-2" /> Remove Experience
+          </div>
+        );
+      case "Experience":
+        return (
+          <div>
+            <h2 className="font-bold text-2xl mb-2 text-primary">Experience</h2>
+            {Array.from({ length: experienceCount }).map((_, expIndex) => (
+              <div key={expIndex} className="my-2 flex flex-col gap-2 mb-7">
+                <label className="font-bold">{`Experience ${
+                  expIndex + 1
+                }`}</label>
+                <Input
+                  name={`experience-${expIndex}-title`}
+                  onChange={(e) =>
+                    handleInputChange(e, expIndex, "experience")
+                  }
+                  placeholder="Job Title"
+                  value={resumeData.experience?.[expIndex]?.title || ""}
+                />
+                <Input
+                  name={`experience-${expIndex}-company`}
+                  onChange={(e) =>
+                    handleInputChange(e, expIndex, "experience")
+                  }
+                  placeholder="Company Name"
+                  value={resumeData.experience?.[expIndex]?.company || ""}
+                />
+                <Input
+                  name={`experience-${expIndex}-city`}
+                  onChange={(e) =>
+                    handleInputChange(e, expIndex, "experience")
+                  }
+                  placeholder="City"
+                  value={resumeData.experience?.[expIndex]?.city || ""}
+                />
+                <Input
+                  name={`experience-${expIndex}-state`}
+                  onChange={(e) =>
+                    handleInputChange(e, expIndex, "experience")
+                  }
+                  placeholder="State"
+                  value={resumeData.experience?.[expIndex]?.state || ""}
+                />
+                <Input
+                  name={`experience-${expIndex}-startDate`}
+                  onChange={(e) =>
+                    handleInputChange(e, expIndex, "experience")
+                  }
+                  placeholder="Start Date"
+                  value={resumeData.experience?.[expIndex]?.startDate || ""}
+                />
+                <Input
+                  name={`experience-${expIndex}-endDate`}
+                  onChange={(e) =>
+                    handleInputChange(e, expIndex, "experience")
+                  }
+                  placeholder="End Date"
+                  value={resumeData.experience?.[expIndex]?.endDate || ""}
+                />
+                <Textarea
+                  className="mb-2"
+                  maxLength={500}
+                  rows={3}
+                  placeholder="Description"
+                  name={`experience-${expIndex}-description`}
+                  onChange={(e) =>
+                    handleInputChange(e, expIndex, "experience")
+                  }
+                  value={resumeData.experience?.[expIndex]?.description || ""}
+                />
+                <Button
+                  disabled={loadingFields[`experience-${expIndex}-description`]}
+                  type="button"
+                  className="py-6"
+                  onClick={() =>
+                    handleAIButtonClick(
+                      `experience-${expIndex}-description`
+                    )
+                  }
+                >
+                  {loadingFields[`experience-${expIndex}-description`] && (
+                    <Loader2Icon className="animate-spin mr-2" />
+                  )}
+                  AI Assist💫
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => removeSection(expIndex, "experience")}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" /> Remove Experience
+                </Button>
+              </div>
+            ))}
+            <Button type="button" className="py-6" onClick={addExperience}>
+              + Add Another Experience
             </Button>
           </div>
-        ))}
-        <Button
-          type="button"
-          onClick={addExperience}
-          className="mb-4 mr-2 text-white bg-green-400"
-        >
-          Add Experience
-        </Button>
-
-        {/* Education Section */}
-        <h2 className="font-bold text-2xl mb-2 text-primary">Education</h2>
-        {Array.from({ length: educationCount }).map((_, eduIndex) => (
-          <div key={eduIndex} className="my-2 flex flex-col gap-2 mb-7">
-            <label className="font-bold">{`Education ${eduIndex + 1}`}</label>
-            <Input
-              name={`education-${eduIndex}-universityName`}
-              onChange={(e) => handleInputChange(e, eduIndex, "education")}
-              placeholder="University Name"
-              value={resumeData.education?.[eduIndex]?.universityName || ""}
-            />
-            <Input
-              name={`education-${eduIndex}-degree`}
-              onChange={(e) => handleInputChange(e, eduIndex, "education")}
-              placeholder="Degree"
-              value={resumeData.education?.[eduIndex]?.degree || ""}
-            />
-            <Input
-              name={`education-${eduIndex}-major`}
-              onChange={(e) => handleInputChange(e, eduIndex, "education")}
-              placeholder="Major"
-              value={resumeData.education?.[eduIndex]?.major || ""}
-            />
-            <Input
-              name={`education-${eduIndex}-startDate`}
-              onChange={(e) => handleInputChange(e, eduIndex, "education")}
-              placeholder="Start Date"
-              value={resumeData.education?.[eduIndex]?.startDate || ""}
-            />
-            <Input
-              name={`education-${eduIndex}-endDate`}
-              onChange={(e) => handleInputChange(e, eduIndex, "education")}
-              placeholder="End Date"
-              value={resumeData.education?.[eduIndex]?.endDate || ""}
-            />
-            <Textarea
-              className="mb-2"
-              maxLength={500}
-              rows={5}
-              placeholder="Education Summary"
-              name={`education-${eduIndex}-description`}
-              onChange={(e) => handleInputChange(e, eduIndex, "education")}
-              value={resumeData.education?.[eduIndex]?.description || ""}
-            />
-            <Button
-              disabled={loadingFields[`education-${eduIndex}`]}
-              type="button"
-              className="py-6"
-              onClick={() =>
-                handleAIButtonClick(
-                  `education-${eduIndex}`,
-                  selectedTemplate?.educationPrompt
-                )
-              }
-            >
-              {loadingFields[`education-${eduIndex}`] && (
-                <Loader2Icon className="animate-spin mr-2" />
-              )}
-              AI Assist💫
-            </Button>
-            <Button
-              type="button"
-              className="mt-2 text-white bg-red-500"
-              onClick={() => removeSection(eduIndex, "education")}
-            >
-              <Trash2 className="inline mr-2" /> Remove Education
-            </Button>
-          </div>
-        ))}
-        <Button
-          type="button"
-          onClick={addEducation}
-          className="mb-4 text-white bg-green-400"
-        >
-          Add Education
-        </Button>
-
-        {/* Project Section */}
-        <h2 className="font-bold text-2xl mb-2 text-primary">Projects</h2>
-        {Array.from({ length: projectCount }).map((_, projIndex) => (
-          <div key={projIndex} className="my-2 flex flex-col gap-2 mb-7">
-            <label className="font-bold">{`Project ${projIndex + 1}`}</label>
-            <Input
-              name={`project-${projIndex}-title`}
-              onChange={(e) => handleInputChange(e, projIndex, "project")}
-              placeholder="Project Title"
-              value={resumeData.projects?.[projIndex]?.title || ""}
-            />
-            <Textarea
-              className="mb-2"
-              maxLength={500}
-              rows={5}
-              placeholder="Project Description"
-              name={`project-${projIndex}-description`}
-              onChange={(e) => handleInputChange(e, projIndex, "project")}
-              value={resumeData.projects?.[projIndex]?.description || ""}
-            />
-            <Button
-              disabled={loadingFields[`project-${projIndex}`]}
-              type="button"
-              className="py-6"
-              onClick={() =>
-                handleAIButtonClick(
-                  `project-${projIndex}`,
-                  selectedTemplate?.projectPrompt
-                )
-              }
-            >
-              {loadingFields[`project-${projIndex}`] && (
-                <Loader2Icon className="animate-spin mr-2" />
-              )}
-              AI Assist💫
-            </Button>
-            <Button
-              type="button"
-              className="mt-2 text-white bg-red-500"
-              onClick={() => removeSection(projIndex, "project")}
-            >
-              <Trash2 className="inline mr-2" /> Remove Project
+        );
+      case "Education":
+        return (
+          <div>
+            <h2 className="font-bold text-2xl mb-2 text-primary">Education</h2>
+            {Array.from({ length: educationCount }).map((_, eduIndex) => (
+              <div key={eduIndex} className="my-2 flex flex-col gap-2 mb-7">
+                <label className="font-bold">{`Education ${eduIndex + 1}`}</label>
+                <Input
+                  name={`education-${eduIndex}-school`}
+                  onChange={(e) => handleInputChange(e, eduIndex, "education")}
+                  placeholder="School Name"
+                  value={resumeData.education?.[eduIndex]?.school || ""}
+                />
+                <Input
+                  name={`education-${eduIndex}-degree`}
+                  onChange={(e) => handleInputChange(e, eduIndex, "education")}
+                  placeholder="Degree"
+                  value={resumeData.education?.[eduIndex]?.degree || ""}
+                />
+                <Input
+                  name={`education-${eduIndex}-city`}
+                  onChange={(e) => handleInputChange(e, eduIndex, "education")}
+                  placeholder="City"
+                  value={resumeData.education?.[eduIndex]?.city || ""}
+                />
+                <Input
+                  name={`education-${eduIndex}-state`}
+                  onChange={(e) => handleInputChange(e, eduIndex, "education")}
+                  placeholder="State"
+                  value={resumeData.education?.[eduIndex]?.state || ""}
+                />
+                <Input
+                  name={`education-${eduIndex}-startDate`}
+                  onChange={(e) => handleInputChange(e, eduIndex, "education")}
+                  placeholder="Start Date"
+                  value={resumeData.education?.[eduIndex]?.startDate || ""}
+                />
+                <Input
+                  name={`education-${eduIndex}-endDate`}
+                  onChange={(e) => handleInputChange(e, eduIndex, "education")}
+                  placeholder="End Date"
+                  value={resumeData.education?.[eduIndex]?.endDate || ""}
+                />
+                <Textarea
+                  className="mb-2"
+                  maxLength={500}
+                  rows={3}
+                  placeholder="Description"
+                  name={`education-${eduIndex}-description`}
+                  onChange={(e) => handleInputChange(e, eduIndex, "education")}
+                  value={resumeData.education?.[eduIndex]?.description || ""}
+                />
+                <Button
+                  disabled={loadingFields[`education-${eduIndex}-description`]}
+                  type="button"
+                  className="py-6"
+                  onClick={() =>
+                    handleAIButtonClick(`education-${eduIndex}-description`)
+                  }
+                >
+                  {loadingFields[`education-${eduIndex}-description`] && (
+                    <Loader2Icon className="animate-spin mr-2" />
+                  )}
+                  AI Assist💫
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => removeSection(eduIndex, "education")}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" /> Remove Education
+                </Button>
+              </div>
+            ))}
+            <Button type="button" className="py-6" onClick={addEducation}>
+              + Add Another Education
             </Button>
           </div>
-        ))}
+        );
+      case "Projects":
+        return (
+          <div>
+            <h2 className="font-bold text-2xl mb-2 text-primary">Projects</h2>
+            {Array.from({ length: projectCount }).map((_, projIndex) => (
+              <div key={projIndex} className="my-2 flex flex-col gap-2 mb-7">
+                <label className="font-bold">{`Project ${projIndex + 1}`}</label>
+                <Input
+                  name={`project-${projIndex}-name`}
+                  onChange={(e) => handleInputChange(e, projIndex, "project")}
+                  placeholder="Project Name"
+                  value={resumeData.projects?.[projIndex]?.name || ""}
+                />
+                <Input
+                  name={`project-${projIndex}-role`}
+                  onChange={(e) => handleInputChange(e, projIndex, "project")}
+                  placeholder="Role"
+                  value={resumeData.projects?.[projIndex]?.role || ""}
+                />
+                <Input
+                  name={`project-${projIndex}-startDate`}
+                  onChange={(e) => handleInputChange(e, projIndex, "project")}
+                  placeholder="Start Date"
+                  value={resumeData.projects?.[projIndex]?.startDate || ""}
+                />
+                <Input
+                  name={`project-${projIndex}-endDate`}
+                  onChange={(e) => handleInputChange(e, projIndex, "project")}
+                  placeholder="End Date"
+                  value={resumeData.projects?.[projIndex]?.endDate || ""}
+                />
+                <Textarea
+                  className="mb-2"
+                  maxLength={500}
+                  rows={3}
+                  placeholder="Description"
+                  name={`project-${projIndex}-description`}
+                  onChange={(e) => handleInputChange(e, projIndex, "project")}
+                  value={resumeData.projects?.[projIndex]?.description || ""}
+                />
+                <Button
+                  disabled={loadingFields[`project-${projIndex}-description`]}
+                  type="button"
+                  className="py-6"
+                  onClick={() =>
+                    handleAIButtonClick(`project-${projIndex}-description`)
+                  }
+                >
+                  {loadingFields[`project-${projIndex}-description`] && (
+                    <Loader2Icon className="animate-spin mr-2" />
+                  )}
+                  AI Assist💫
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => removeSection(projIndex, "projects")}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" /> Remove Project
+                </Button>
+              </div>
+            ))}
+            <Button type="button" className="py-6" onClick={addProject}>
+              + Add Another Project
+            </Button>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const goToNextSection = () => {
+    setCurrentSection((prev) => (prev + 1) % sections.length);
+  };
+
+  const goToPreviousSection = () => {
+    setCurrentSection((prev) => (prev - 1 + sections.length) % sections.length);
+  };
+
+  return (
+    <form onSubmit={onSubmit}>
+      {renderSection()}
+
+      <div className="flex justify-between mt-6">
         <Button
           type="button"
-          onClick={addProject}
-          className="mb-4 text-white bg-green-400"
+          onClick={goToPreviousSection}
+          disabled={currentSection === 0}
         >
-          Add Project
+          Previous
         </Button>
-
         <Button
-          disabled={Object.values(loadingFields).some(Boolean)}
-          type="submit"
-          className="w-full font-bold bg-amber-600 py-6"
+          type="button"
+          onClick={goToNextSection}
+          disabled={currentSection === sections.length - 1}
         >
-          {Object.values(loadingFields).some(Boolean) && (
-            <Loader2Icon className="animate-spin mr-2" />
-          )}
-          GENERATE RESUME🤖
+          Next
         </Button>
       </div>
+
+      {currentSection === sections.length - 1 && (
+        <Button type="submit" className="mt-6 py-6">
+          Generate Resume
+        </Button>
+      )}
     </form>
   );
 }

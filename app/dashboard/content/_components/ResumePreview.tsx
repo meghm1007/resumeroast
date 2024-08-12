@@ -54,12 +54,11 @@ interface ResumeData {
 interface ResumePreviewProps {
   resumeInfo: ResumeData;
   onResumeInfoChange: (newData: Partial<ResumeData>) => void;
+  selectedTemplate: string; // Ensure selectedTemplate is included
 }
 
-function ResumePreview({ resumeInfo, onResumeInfoChange }: ResumePreviewProps) {
-  const [themeColor, setThemeColor] = useState(
-    resumeInfo.themeColor || "#000000"
-  );
+function ResumePreview({ resumeInfo, onResumeInfoChange, selectedTemplate }: ResumePreviewProps) {
+  const [themeColor, setThemeColor] = useState(resumeInfo.themeColor || "#000000");
 
   useEffect(() => {
     setThemeColor(resumeInfo.themeColor || "#000000");
@@ -77,7 +76,8 @@ function ResumePreview({ resumeInfo, onResumeInfoChange }: ResumePreviewProps) {
       console.error("Resume element not found");
       return;
     }
-    html2canvas(input).then((canvas) => {
+
+    html2canvas(input, { scrollY: -window.scrollY }).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF();
       const imgProps = pdf.getImageProperties(imgData);
@@ -89,13 +89,7 @@ function ResumePreview({ resumeInfo, onResumeInfoChange }: ResumePreviewProps) {
   };
 
   const isExperienceEmpty = (exp: Experience) => {
-    return (
-      !exp?.title &&
-      !exp?.company &&
-      !exp?.city &&
-      !exp?.state &&
-      !exp?.workSummary
-    );
+    return !exp?.title && !exp?.company && !exp?.city && !exp?.state && !exp?.workSummary;
   };
 
   const formatText = (text: string) => {
@@ -104,9 +98,7 @@ function ResumePreview({ resumeInfo, onResumeInfoChange }: ResumePreviewProps) {
       .replace(/\*(.*?)\*/g, "<em>$1</em>")
       .split("\n")
       .map((line, index) =>
-        line.startsWith("* ")
-          ? `<li key=${index}>${line.slice(2)}</li>`
-          : `<p key=${index}>${line}</p>`
+        line.startsWith("* ") ? `<li key=${index}>${line.slice(2)}</li>` : `<p key=${index}>${line}</p>`
       )
       .join("");
   };
@@ -192,7 +184,7 @@ function ResumePreview({ resumeInfo, onResumeInfoChange }: ResumePreviewProps) {
           >
             Summary
           </h2>
-          <div className="text-xs">{resumeInfo.summary}</div>
+          <div className="text-xs" dangerouslySetInnerHTML={{ __html: formatText(resumeInfo.summary || "") }} />
         </div>
 
         {/* Professional Experience */}
@@ -223,8 +215,7 @@ function ResumePreview({ resumeInfo, onResumeInfoChange }: ResumePreviewProps) {
                   {experience?.title || "Position"}
                 </h2>
                 <h2 className="text-xs flex justify-between">
-                  {experience?.company || "Company"},{" "}
-                  {experience?.city || "City"}, {experience?.state || "State"}{" "}
+                  {experience?.company || "Company"}, {experience?.city || "City"}, {experience?.state || "State"}{" "}
                   <span>
                     {experience?.startDate || "Start Date"} -{" "}
                     {experience?.currentlyWorking
@@ -268,11 +259,9 @@ function ResumePreview({ resumeInfo, onResumeInfoChange }: ResumePreviewProps) {
                 {education?.universityName}
               </h2>
               <h2 className="text-xs flex justify-between">
-                {education?.degree}{" "}
-                {education?.major && `in ${education.major}`}{" "}
+                {education?.degree} {education?.major && `in ${education.major}`}{" "}
                 <span>
-                  {education?.startDate || "Start Date"} -{" "}
-                  {education?.endDate || "End Date"}
+                  {education?.startDate || "Start Date"} - {education?.endDate || "End Date"}
                 </span>
               </h2>
               <div
@@ -318,39 +307,6 @@ function ResumePreview({ resumeInfo, onResumeInfoChange }: ResumePreviewProps) {
               />
             </div>
           ))}
-        </div>
-
-        {/* Skills */}
-        <div className="my-6">
-          <h2
-            className="text-center font-bold text-sm mb-2"
-            style={{
-              color: themeColor,
-            }}
-          >
-            Skills
-          </h2>
-          <hr
-            style={{
-              borderColor: themeColor,
-            }}
-          />
-          <div className="grid grid-cols-2 gap-3 my-4">
-            {resumeInfo.skills?.map((skill, index) => (
-              <div key={index} className="flex items-center justify-between">
-                <h2 className="text-xs">{skill?.name}</h2>
-                <div className="h-2 bg-gray-200 w-[120px]">
-                  <div
-                    className="h-2"
-                    style={{
-                      backgroundColor: themeColor,
-                      width: `${skill?.rating || 0}%`,
-                    }}
-                  ></div>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </div>

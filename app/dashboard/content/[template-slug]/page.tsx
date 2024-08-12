@@ -48,6 +48,14 @@ interface Skill {
   rating?: number;
 }
 
+interface Project {
+  id?: number;
+  title?: string;
+  description?: string;
+  startDate?: string;
+  endDate?: string;
+}
+
 interface ResumeData {
   firstName?: string;
   lastName?: string;
@@ -60,7 +68,9 @@ interface ResumeData {
   experience?: Experience[];
   education?: Education[];
   skills?: Skill[];
+  projects?: Project[];  // Add this line
 }
+
 
 function CreateNewContent(props: PROPS) {
   const selectedTemplate: TEMPLATE | undefined = Templates?.find(
@@ -73,6 +83,7 @@ function CreateNewContent(props: PROPS) {
   const [resumeData, setResumeData] = useState<ResumeData>({
     ...dummyResume,
     experience: dummyResume.experience || [{}],
+    projects: dummyResume.projects || [{}], // Ensure this line matches the updated ResumeData interface
   });
 
   const { user } = useUser();
@@ -105,6 +116,14 @@ function CreateNewContent(props: PROPS) {
           description: aiResponse,
         };
         return { ...prevData, education: newEducation };
+      } else if (field.startsWith("project")) {
+        const index = parseInt(field.split("-")[1], 10);
+        const newProjects = [...(prevData.projects || [])];
+        newProjects[index] = {
+          ...newProjects[index],
+          description: aiResponse,
+        };
+        return { ...prevData, projects: newProjects };
       } else {
         return { ...prevData, [field]: aiResponse };
       }
@@ -156,6 +175,7 @@ function CreateNewContent(props: PROPS) {
           <ResumePreview
             resumeInfo={resumeData}
             onResumeInfoChange={handleFormChange}
+            selectedTemplate={selectedTemplate?.slug || ""} // Provide a default value
           />
         </div>
       </div>

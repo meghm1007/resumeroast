@@ -73,4 +73,21 @@ export default {
       rating: 82,
     },
   ],
+  projects: [
+    // Add this field
+    {
+      id: 1,
+      title: "Project One",
+      description: "Description of project one",
+      startDate: "2022-01-01",
+      endDate: "2022-12-31",
+    },
+    {
+      id: 2,
+      title: "Project Two",
+      description: "Description of project two",
+      startDate: "2021-06-01",
+      endDate: "2021-12-31",
+    },
+  ],
 };
