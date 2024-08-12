@@ -1,0 +1,39 @@
+.text-highlight {
+    position: relative;
+    display: inline-block;
+    background-color: #2e2e2e; /* Dark gray background color */
+    color: #bc873c; /* Highlight text color */
+    padding: 0.1em 0.3em; /* Padding around text */
+    border-radius: 0.2em; /* Rounded corners for background */
+  }
+  
+  .fade-in {
+    animation: fadeInSlideUp 0.5s ease-in-out forwards;
+  }
+  
+  .fade-out {
+    animation: fadeOutSlideDown 0.5s ease-in-out forwards;
+  }
+  
+  @keyframes fadeInSlideUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeOutSlideDown {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
+  

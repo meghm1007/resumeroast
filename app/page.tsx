@@ -4,14 +4,15 @@ import Image from "next/image";
 import { FcGoogle } from "react-icons/fc";
 import { SiGooglegemini } from "react-icons/si";
 import { FaSquareXTwitter } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import "./DynamicHeading.css"; // Import the CSS file
 
 // FAQ data
 const faqs = [
   {
     question: "How does Resume Roast work?",
     answer:
-      "Resume Roast uses AI-powered tools to help you create, customize, and optimize your resume. Simply choose a template, input your information, and let our AI assist you in crafting the perfect resume.",
+      "Resume Roast uses AI-powered tools to help you create, customize, and optimize your resume with AI. Simply input your information, and let our AI assist you in crafting the perfect resume. You can also create Resume Designs tailored to your company. For example, your experience and education in movie like format and a red-black theme if you are applying to Netflix",
   },
   {
     question: "Is Resume Roast ATS-friendly?",
@@ -32,6 +33,28 @@ export default function Home() {
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
   };
+
+  const words = [
+    "Engineering",
+    "Software Engineering",
+    "Internship",
+    "Machine Learning",
+    "Artificial Intelligence",
+  ];
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [fadeClass, setFadeClass] = useState("fade-in");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFadeClass("fade-out");
+      setTimeout(() => {
+        setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
+        setFadeClass("fade-in");
+      }, 500); // Duration of the fade-out effect
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [words.length]);
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 font-sans">
@@ -66,14 +89,19 @@ export default function Home() {
 
       {/* Hero Section */}
       <main className="container mx-auto px-8 py-24 text-center">
-        <h1 className="text-8xl font-bold mb-6 text-[#965f14] font-serif">
-          Craft Your Perfect Resume In Seconds
+        <h1 className="text-7xl font-extrabold mb-6 font-sans text-[#3e2c1c]">
+          Craft Your Perfect <br />
+          <a className={`text-highlight ${fadeClass}`}>
+            {words[currentWordIndex]}
+          </a>{" "}
+          <br />
+          Resume In Seconds
         </h1>
         <p className="text-2xl mb-8 text-[#704c18] font-serif">
           Resume Templates, Custom AI Resume, ATS optimization
         </p>
-        <p className="flex justify-center items-center font-extrabold text-lg mb-8">
-          Powered by Google Gemini <FcGoogle className="ml-2 mr-1" />{" "}
+        <p className="flex justify-center items-center text-gray-700 font-bold text-lg mb-8">
+          Powered by Google Gemini <FcGoogle className="ml-2 mr-1 " />{" "}
           <SiGooglegemini />
         </p>
         <div className="space-x-4 mb-12">
@@ -95,28 +123,30 @@ export default function Home() {
         <div className="grid md:grid-cols-3 gap-8">
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-2xl font-bold text-[#965f14] mb-4">
-              Resume Templates
+              Resume Editor📝
             </h2>
             <p className="text-gray-700">
-              Choose from a variety of professionally designed resume templates
-              to make your resume stand out.
+              Input your experience, projects, education, skills, etc. and we
+              handle the ATS optimized resume template for you
             </p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-2xl font-bold text-[#965f14] mb-4">
-              Prompt To Fill
+              Prompt To Fill With AI🤖
             </h2>
             <p className="text-gray-700">
-              Create custom resumes tailored to your career goals and job
-              applications using AI. Just prompt keywords and let the AI make
-              your resume
+              Prompt Keywords and short phrases for specific sections of your
+              resume and AI crafts your resume for you
             </p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold text-[#965f14] mb-4">ATS</h2>
+            <h2 className="text-2xl font-bold text-[#965f14] mb-4">
+              Company Specific Designs🎨
+            </h2>
             <p className="text-gray-700">
-              Utilize AI-powered tools to optimize your resume for Applicant
-              Tracking Systems (ATS)
+              Choose from a variety of templates that are tailored to specific
+              companies and industries. Stand out from the crowd! Great for cold
+              emailing
             </p>
           </div>
         </div>

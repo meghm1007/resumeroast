@@ -6,7 +6,7 @@ export default [
     icon: "/airesume.png",
     aiPrompt:
       "Give me 5 resume ideas in bullet wise format only based on a given niche and outline and give me result in rich text editor format",
-    slug: "generate-blog-title",
+    slug: "basic-editor",
     form: [
       {
         label: "Enter your blog niche",
@@ -27,7 +27,7 @@ export default [
     desc: "An AI Tool that generates each section of your resume based on your inputs taken as keywords",
     category: "Basic Resume",
     icon: "/resume.png",
-    slug: "generate-blog-title",
+    slug: "ai-editor",
     form: [
       {
         label: "First Name",
@@ -164,7 +164,7 @@ export default [
     icon: "/designresume.png",
     aiPrompt:
       "Give me 5 resume ideas in bullet wise format only based on a given niche and outline and give me result in rich text editor format",
-    slug: "generate-blog-title",
+    slug: "resume-designer",
     form: [
       {
         label: "Enter your blog niche",
