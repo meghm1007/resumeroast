@@ -74,3 +74,4 @@
   max-height: 90vh; /* Ensures the preview doesn't exceed the viewport height */
   overflow-y: auto; /* Allows scrolling within the preview if content is too large */
 }
+

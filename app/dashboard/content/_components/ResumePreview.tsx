@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 
 interface Experience {
   id?: number;
@@ -54,11 +52,17 @@ interface ResumeData {
 interface ResumePreviewProps {
   resumeInfo: ResumeData;
   onResumeInfoChange: (newData: Partial<ResumeData>) => void;
-  selectedTemplate: string; // Ensure selectedTemplate is included
+  selectedTemplate: string;
 }
 
-function ResumePreview({ resumeInfo, onResumeInfoChange, selectedTemplate }: ResumePreviewProps) {
-  const [themeColor, setThemeColor] = useState(resumeInfo.themeColor || "#000000");
+function ResumePreview({
+  resumeInfo,
+  onResumeInfoChange,
+  selectedTemplate,
+}: ResumePreviewProps) {
+  const [themeColor, setThemeColor] = useState(
+    resumeInfo.themeColor || "#000000"
+  );
 
   useEffect(() => {
     setThemeColor(resumeInfo.themeColor || "#000000");
@@ -71,25 +75,27 @@ function ResumePreview({ resumeInfo, onResumeInfoChange, selectedTemplate }: Res
   };
 
   const handleDownloadPDF = () => {
-    const input = document.getElementById("resume");
-    if (!input) {
-      console.error("Resume element not found");
-      return;
-    }
+    const printContents = document.getElementById("resume")?.innerHTML;
+    const originalContents = document.body.innerHTML;
 
-    html2canvas(input, { scrollY: -window.scrollY }).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF();
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save("my_resume.pdf");
-    });
+    if (printContents) {
+      document.body.innerHTML = printContents;
+      window.print();
+      document.body.innerHTML = originalContents;
+      window.location.reload();
+    } else {
+      console.error("Resume element not found");
+    }
   };
 
   const isExperienceEmpty = (exp: Experience) => {
-    return !exp?.title && !exp?.company && !exp?.city && !exp?.state && !exp?.workSummary;
+    return (
+      !exp?.title &&
+      !exp?.company &&
+      !exp?.city &&
+      !exp?.state &&
+      !exp?.workSummary
+    );
   };
 
   const formatText = (text: string) => {
@@ -98,7 +104,9 @@ function ResumePreview({ resumeInfo, onResumeInfoChange, selectedTemplate }: Res
       .replace(/\*(.*?)\*/g, "<em>$1</em>")
       .split("\n")
       .map((line, index) =>
-        line.startsWith("* ") ? `<li key=${index}>${line.slice(2)}</li>` : `<p key=${index}>${line}</p>`
+        line.startsWith("* ")
+          ? `<li key=${index}>${line.slice(2)}</li>`
+          : `<p key=${index}>${line}</p>`
       )
       .join("");
   };
@@ -184,7 +192,12 @@ function ResumePreview({ resumeInfo, onResumeInfoChange, selectedTemplate }: Res
           >
             Summary
           </h2>
-          <div className="text-xs" dangerouslySetInnerHTML={{ __html: formatText(resumeInfo.summary || "") }} />
+          <div
+            className="text-xs"
+            dangerouslySetInnerHTML={{
+              __html: formatText(resumeInfo.summary || ""),
+            }}
+          />
         </div>
 
         {/* Professional Experience */}
@@ -215,7 +228,8 @@ function ResumePreview({ resumeInfo, onResumeInfoChange, selectedTemplate }: Res
                   {experience?.title || "Position"}
                 </h2>
                 <h2 className="text-xs flex justify-between">
-                  {experience?.company || "Company"}, {experience?.city || "City"}, {experience?.state || "State"}{" "}
+                  {experience?.company || "Company"},{" "}
+                  {experience?.city || "City"}, {experience?.state || "State"}{" "}
                   <span>
                     {experience?.startDate || "Start Date"} -{" "}
                     {experience?.currentlyWorking
@@ -259,9 +273,11 @@ function ResumePreview({ resumeInfo, onResumeInfoChange, selectedTemplate }: Res
                 {education?.universityName}
               </h2>
               <h2 className="text-xs flex justify-between">
-                {education?.degree} {education?.major && `in ${education.major}`}{" "}
+                {education?.degree}{" "}
+                {education?.major && `in ${education.major}`}{" "}
                 <span>
-                  {education?.startDate || "Start Date"} - {education?.endDate || "End Date"}
+                  {education?.startDate || "Start Date"} -{" "}
+                  {education?.endDate || "End Date"}
                 </span>
               </h2>
               <div

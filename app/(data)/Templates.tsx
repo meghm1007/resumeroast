@@ -154,7 +154,7 @@ export default [
       "This is the summary given by the user. Generate me a 2-3 line description for this summary about the person. Include the user's top 2-3 skills or areas of expertise relevant to their target role or industry, and mention their most impressive career achievement or unique value proposition. Use industry-specific keywords and phrases to align with the user's target job descriptions. Ensure the summary is in First person perspective and ATS-friendly and present the result in rich text editor format, making it suitable for a big company role.",
 
     projectPrompt:
-      "This is the summary given by the user. Generate me a 2-3 line description for this summary about the person. Include the user's top 2-3 skills or areas of expertise relevant to their target role or industry, and mention their most impressive career achievement or unique value proposition. Use industry-specific keywords and phrases to align with the user's target job descriptions. Ensure the summary is in First person perspective and ATS-friendly and present the result in rich text editor format, making it suitable for a big company role.",
+      "These are the keywords of their projects given by the user. Generate me a 2-3 line description in bullet points of the project including the technologies used to make it, the problem it solved, and the impact it had. Include specific, quantifiable results (e.g., percentage improvements, revenue generated) and use strong action verbs. Ensure the description is ATS-friendly and present the result in rich text editor format, making it impressive for top-tier employers.",
   },
 
   {
