@@ -208,7 +208,7 @@ function ResumePreview({
               color: themeColor,
             }}
           >
-            Professional Experience
+            Experience
           </h2>
           <hr
             style={{

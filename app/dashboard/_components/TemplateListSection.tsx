@@ -27,6 +27,7 @@ export interface FORM {
 
 function TemplateListSection({ userSearchInput }: any) {
   const [templateList, setTemplateList] = useState(Templates);
+  
   useEffect(() => {
     if (userSearchInput) {
       const filterData = Templates.filter((item) =>
@@ -37,8 +38,9 @@ function TemplateListSection({ userSearchInput }: any) {
       setTemplateList(Templates);
     }
   }, [userSearchInput]);
+
   return (
-    <div className="m-10 gap-9 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="m-10 mb-20 flex">
       {templateList.map((item: TEMPLATE, index: number) => (
         <TemplateCard key={index} {...item} />
       ))}

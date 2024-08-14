@@ -1,32 +1,9 @@
 export default [
   {
-    name: "Basic Editor",
-    desc: "Input each section of your resume and we handle the entire ATS friendly template for you",
+    name: "AI Editor🤖",
+    desc: "Create your entire resume with just a few keywords and AI will do the rest. No need to write long paragraphs or worry about formatting and templating",
     category: "Basic Resume",
     icon: "/airesume.png",
-    aiPrompt:
-      "Give me 5 resume ideas in bullet wise format only based on a given niche and outline and give me result in rich text editor format",
-    slug: "basic-editor",
-    form: [
-      {
-        label: "Enter your blog niche",
-        field: "input",
-        name: "niche",
-        required: true,
-      },
-      {
-        label: "Enter blog outline",
-        field: "textarea",
-        name: " outline",
-      },
-    ],
-  },
-
-  {
-    name: "AI Editor",
-    desc: "An AI Tool that generates each section of your resume based on your inputs taken as keywords",
-    category: "Basic Resume",
-    icon: "/resume.png",
     slug: "ai-editor",
     form: [
       {
@@ -158,8 +135,8 @@ export default [
   },
 
   {
-    name: "Resume Designer",
-    desc: "A tool that enables you to create resumes to look like the company you're applying to",
+    name: "Resume Designer⏱️",
+    desc: "A tool that enables you to create resumes to look like the company you're applying to. Stand out from the crowd with a resume that matches the company's style.",
     category: "Basic Resume",
     icon: "/designresume.png",
     aiPrompt:
