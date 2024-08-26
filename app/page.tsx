@@ -7,6 +7,8 @@ import { FaSquareXTwitter } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import "./DynamicHeading.css"; // Import the CSS file
 
+import { GiCoffeeCup } from "react-icons/gi";
+
 // FAQ data
 const faqs = [
   {
@@ -71,7 +73,17 @@ export default function Home() {
             Resume Roast
           </span>
         </Link>
-        <nav className="space-x-6">
+        <nav className="flex items-center space-x-6">
+          <Link
+            href="/roast"
+            className="text-gray-700 font-bold hover:text-[#965f14] transition flex items-center relative group"
+          >
+            <span className="mr-2 bg-gradient-to-r from-[#c18d49] to-[#4b3d2b] bg-clip-text text-transparent text-xl">
+              ROAST
+            </span>
+            <GiCoffeeCup className="text-[#965f14] text-xl" />
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-[#c18d49] to-[#4b3d2b] transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
+          </Link>
           <Link
             href="/blog"
             className="text-gray-700 hover:text-[#965f14] transition"

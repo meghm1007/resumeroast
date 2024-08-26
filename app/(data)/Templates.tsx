@@ -134,26 +134,26 @@ export default [
       "These are the keywords of their projects given by the user. Generate me a 2-3 line description in bullet points of the project including the technologies used to make it, the problem it solved, and the impact it had. Include specific, quantifiable results (e.g., percentage improvements, revenue generated) and use strong action verbs. Ensure the description is ATS-friendly and present the result in rich text editor format, making it impressive for top-tier employers.",
   },
 
-  {
-    name: "Resume Designer⏱️",
-    desc: "A tool that enables you to create resumes to look like the company you're applying to. Stand out from the crowd with a resume that matches the company's style.",
-    category: "Basic Resume",
-    icon: "/designresume.png",
-    aiPrompt:
-      "Give me 5 resume ideas in bullet wise format only based on a given niche and outline and give me result in rich text editor format",
-    slug: "resume-designer",
-    form: [
-      {
-        label: "Enter your blog niche",
-        field: "input",
-        name: "niche",
-        required: true,
-      },
-      {
-        label: "Enter blog outline",
-        field: "textarea",
-        name: " outline",
-      },
-    ],
-  },
+  // {
+  //   name: "Resume Designer⏱️",
+  //   desc: "A tool that enables you to create resumes to look like the company you're applying to. Stand out from the crowd with a resume that matches the company's style.",
+  //   category: "Basic Resume",
+  //   icon: "/designresume.png",
+  //   aiPrompt:
+  //     "Give me 5 resume ideas in bullet wise format only based on a given niche and outline and give me result in rich text editor format",
+  //   slug: "resume-designer",
+  //   form: [
+  //     {
+  //       label: "Enter your blog niche",
+  //       field: "input",
+  //       name: "niche",
+  //       required: true,
+  //     },
+  //     {
+  //       label: "Enter blog outline",
+  //       field: "textarea",
+  //       name: " outline",
+  //     },
+  //   ],
+  // },
 ];

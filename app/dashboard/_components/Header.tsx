@@ -17,7 +17,7 @@ function Header() {
 
         {/* Right side content */}
         <div className="flex flex-grid items-center gap-5">
-          <h2 className="text-xl font-mono">Hello, {user.firstName}👋🏻</h2>
+          <h2 className="text-xl font-mono">Hello {user.firstName}👋🏻</h2>
           <UserButton
             appearance={{
               elements: {
