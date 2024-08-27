@@ -79,23 +79,42 @@ function ResumePreview({
     return uuidv4();
   };
 
-  const handleDownloadPDF = () => {
+  const handleDownloadPDF = async () => {
     const printContents = document.getElementById("resume")?.innerHTML;
     const originalContents = document.body.innerHTML;
-    const uniqueId = generateUniqueId();
+    
+    const userName = `${resumeInfo.firstName}${resumeInfo.lastName}`.toLowerCase().replace(/\s+/g, '');
+    const uniqueId = `${userName}-${Date.now()}`;
   
     if (printContents) {
-      // Save the resume content to local storage or a state management solution
-      localStorage.setItem(`resume_${uniqueId}`, printContents);
+      try {
+        // Save the resume content to the database
+        const response = await fetch('/api/resumes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            uniqueId,
+            content: printContents,
+          }),
+        });
   
-      // Open the resume in a new tab
-      window.open(`/roast/${uniqueId}`, '_blank');
+        if (!response.ok) {
+          throw new Error('Failed to save resume');
+        }
   
-      // Download as PDF
-      document.body.innerHTML = printContents;
-      window.print();
-      document.body.innerHTML = originalContents;
-      window.location.reload();
+        // Open the resume in a new tab
+        window.open(`/roast/${uniqueId}`, '_blank');
+  
+        // Download as PDF
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+        window.location.reload();
+      } catch (error) {
+        console.error("Error saving resume:", error);
+      }
     } else {
       console.error("Resume element not found");
     }
