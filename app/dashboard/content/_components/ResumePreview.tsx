@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { v4 as uuidv4 } from 'uuid';
 
 interface Experience {
   id?: number;
@@ -74,11 +75,23 @@ function ResumePreview({
     onResumeInfoChange({ themeColor: newColor });
   };
 
+  const generateUniqueId = () => {
+    return uuidv4();
+  };
+
   const handleDownloadPDF = () => {
     const printContents = document.getElementById("resume")?.innerHTML;
     const originalContents = document.body.innerHTML;
-
+    const uniqueId = generateUniqueId();
+  
     if (printContents) {
+      // Save the resume content to local storage or a state management solution
+      localStorage.setItem(`resume_${uniqueId}`, printContents);
+  
+      // Open the resume in a new tab
+      window.open(`/roast/${uniqueId}`, '_blank');
+  
+      // Download as PDF
       document.body.innerHTML = printContents;
       window.print();
       document.body.innerHTML = originalContents;
