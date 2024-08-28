@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
+import { GiCoffeeCup } from "react-icons/gi";
+import { FaFileDownload } from "react-icons/fa";
 
 interface Experience {
   id?: number;
@@ -82,36 +84,50 @@ function ResumePreview({
   const handleDownloadPDF = async () => {
     const printContents = document.getElementById("resume")?.innerHTML;
     const originalContents = document.body.innerHTML;
-    
-    const userName = `${resumeInfo.firstName}${resumeInfo.lastName}`.toLowerCase().replace(/\s+/g, '');
+    if (printContents) {
+      try {
+        // Download as PDF
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+        window.location.reload();
+      } catch (error) {
+        console.error("Error saving resume:", error);
+      }
+    } else {
+      console.error("Resume element not found");
+    }
+  };
+
+  const handleSaveResumeToDatabase = async () => {
+    const printContents = document.getElementById("resume")?.innerHTML;
+    const originalContents = document.body.innerHTML;
+
+    const userName = `${resumeInfo.firstName}${resumeInfo.lastName}`
+      .toLowerCase()
+      .replace(/\s+/g, "");
     const uniqueId = `${userName}-${Date.now()}`;
-  
+
     if (printContents) {
       try {
         // Save the resume content to the database
-        const response = await fetch('/api/resumes', {
-          method: 'POST',
+        const response = await fetch("/api/resumes", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             uniqueId,
             content: printContents,
           }),
         });
-  
+
         if (!response.ok) {
-          throw new Error('Failed to save resume');
+          throw new Error("Failed to save resume");
         }
-  
+
         // Open the resume in a new tab
-        window.open(`/roast/${uniqueId}`, '_blank');
-  
-        // Download as PDF
-        document.body.innerHTML = printContents;
-        window.print();
-        document.body.innerHTML = originalContents;
-        window.location.reload();
+        window.open(`/roast/${uniqueId}`, "_blank");
       } catch (error) {
         console.error("Error saving resume:", error);
       }
@@ -145,6 +161,30 @@ function ResumePreview({
 
   return (
     <div>
+      <div className="flex grid-cols-2 gap-3">
+        <div className="flex justify-center my-4">
+          <button
+            onClick={handleDownloadPDF}
+            className="px-4 py-2 bg-green-500 text-white rounded"
+          >
+            <span className="flex grid-cols-2 items-center">
+              Download as PDF
+              <FaFileDownload className="text-xl" />
+            </span>
+          </button>
+        </div>
+        <div className="flex justify-center my-4">
+          <button
+            onClick={handleSaveResumeToDatabase}
+            className="px-4 py-2 bg-amber-600 text-white rounded"
+          >
+            <span className="flex grid-cols-2 items-center">
+              Let Others Roast It
+              <GiCoffeeCup className="text-xl" />
+            </span>
+          </button>
+        </div>
+      </div>
       <div className="flex justify-center my-4">
         <label className="mr-2 mt-5">Change Theme Color:</label>
         <input
@@ -153,14 +193,6 @@ function ResumePreview({
           onChange={handleColorChange}
           className="border rounded mt-5"
         />
-      </div>
-      <div className="flex justify-center my-4">
-        <button
-          onClick={handleDownloadPDF}
-          className="px-4 py-2 bg-blue-500 text-white rounded"
-        >
-          Download as PDF
-        </button>
       </div>
       <div
         id="resume"
