@@ -303,6 +303,18 @@ function FormSection({
                   placeholder="Degree"
                   value={resumeData.education?.[eduIndex]?.degree || ""}
                 />
+                <Input
+                  name={`education-${eduIndex}-startDate`}
+                  onChange={(e) => handleInputChange(e, eduIndex, "education")}
+                  placeholder="Start Date"
+                  value={resumeData.education?.[eduIndex]?.startDate || ""}
+                />
+                <Input
+                  name={`education-${eduIndex}-endDate`}
+                  onChange={(e) => handleInputChange(e, eduIndex, "education")}
+                  placeholder="End Date"
+                  value={resumeData.education?.[eduIndex]?.endDate || ""}
+                />
                 <Textarea
                   className="mb-2"
                   maxLength={500}
