@@ -1,13 +1,15 @@
 "use client";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { GiCoffeeCup } from "react-icons/gi";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Coffee, LayoutDashboard } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { SiGooglegemini } from "react-icons/si";
 import { FaSquareXTwitter } from "react-icons/fa6";
-import { useEffect, useState } from "react";
 import "./DynamicHeading.css"; // Import the CSS file
-
-import { GiCoffeeCup } from "react-icons/gi";
 
 // FAQ data
 const faqs = [
@@ -30,7 +32,10 @@ const faqs = [
 ];
 
 export default function Home() {
+  const router = useRouter();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [isRoasting, setIsRoasting] = useState(false);
+  const [isLoadingDashboard, setIsLoadingDashboard] = useState(false);
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -58,8 +63,40 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [words.length]);
 
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (isRoasting) {
+      timer = setTimeout(() => {
+        setIsRoasting(false);
+        router.push("/roast");
+      }, 3000);
+    }
+    return () => clearTimeout(timer);
+  }, [isRoasting, router]);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (isLoadingDashboard) {
+      timer = setTimeout(() => {
+        setIsLoadingDashboard(false);
+        router.push("/dashboard");
+      }, 3000);
+    }
+    return () => clearTimeout(timer);
+  }, [isLoadingDashboard, router]);
+
+  const handleRoastClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsRoasting(true);
+  };
+
+  const handleDashboardClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsLoadingDashboard(true);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900 font-sans">
+    <div className="min-h-screen bg-gray-100 text-gray-900 font-sans relative">
       {/* Header */}
       <header className="bg-white shadow-md py-6 px-8 flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-3">
@@ -77,6 +114,7 @@ export default function Home() {
           <Link
             href="/roast"
             className="text-gray-700 font-bold hover:text-[#965f14] transition flex items-center relative group"
+            onClick={handleRoastClick}
           >
             <span className="mr-2 bg-gradient-to-r from-[#c18d49] to-[#4b3d2b] bg-clip-text text-transparent text-xl">
               ROAST
@@ -93,6 +131,7 @@ export default function Home() {
           <Link
             href="/dashboard"
             className="bg-[#965f14] text-white hover:bg-[#7a4b12] px-4 py-2 rounded-md transition"
+            onClick={handleDashboardClick}
           >
             Dashboard
           </Link>
@@ -206,6 +245,26 @@ export default function Home() {
           </a>
         </div>
       </footer>
+
+      {isRoasting && (
+        <div className="fixed bottom-4 right-4 w-64">
+          <Alert>
+            <Coffee className="h-4 w-4" />
+            <AlertTitle>Roasting in progress</AlertTitle>
+            <AlertDescription>Roasting all the resumes...</AlertDescription>
+          </Alert>
+        </div>
+      )}
+
+      {isLoadingDashboard && (
+        <div className="fixed bottom-4 right-4 w-64">
+          <Alert>
+            <LayoutDashboard className="h-4 w-4" />
+            <AlertTitle>Loading Dashboard</AlertTitle>
+            <AlertDescription>Preparing your dashboard...</AlertDescription>
+          </Alert>
+        </div>
+      )}
     </div>
   );
 }

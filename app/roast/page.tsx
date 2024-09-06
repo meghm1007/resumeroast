@@ -6,8 +6,10 @@ import Link from "next/link";
 import { GiCoffeeCup } from "react-icons/gi";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/nextjs";
-
 import { FaArrowCircleLeft } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Coffee, ArrowLeft } from "lucide-react";
 
 interface Roast {
   userId: string;
@@ -29,7 +31,10 @@ function RoastResume() {
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [filteredResumes, setFilteredResumes] = useState<Resume[]>([]);
   const [activeFilter, setActiveFilter] = useState<string>("all");
+  const [loadingResumeId, setLoadingResumeId] = useState<string | null>(null);
+  const [isNavigatingBack, setIsNavigatingBack] = useState(false);
   const { user } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchResumes = async () => {
@@ -101,11 +106,29 @@ function RoastResume() {
     }
   };
 
+  const handleResumeClick = (e: React.MouseEvent, resumeId: string) => {
+    e.preventDefault();
+    setLoadingResumeId(resumeId);
+    setTimeout(() => {
+      setLoadingResumeId(null);
+      router.push(`/roast/${resumeId}`);
+    }, 3000);
+  };
+
+  const handleBackClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsNavigatingBack(true);
+    setTimeout(() => {
+      setIsNavigatingBack(false);
+      router.push("/dashboard");
+    }, 2000);
+  };
+
   return (
-    <div className="min-h-screen bg-amber-50">
+    <div className="min-h-screen bg-amber-50 relative">
       <div className="max-w-4xl mx-auto p-8">
         <div className="flex grid-cols-2 gap-5">
-          <Link href="/dashboard">
+          <Link href="/dashboard" onClick={handleBackClick}>
             <Button>
               <FaArrowCircleLeft />
               Back
@@ -154,7 +177,11 @@ function RoastResume() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredResumes.map((resume) => (
-            <Link href={`/roast/${resume.uniqueId}`} key={resume.uniqueId}>
+            <Link
+              href={`/roast/${resume.uniqueId}`}
+              key={resume.uniqueId}
+              onClick={(e) => handleResumeClick(e, resume.uniqueId)}
+            >
               <div
                 className={`bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-200 ease-in-out border-2 ${getBorderColor(
                   resume.roasts
@@ -189,6 +216,28 @@ function RoastResume() {
           ))}
         </div>
       </div>
+      {loadingResumeId && (
+        <div className="fixed bottom-4 right-4 w-64">
+          <Alert>
+            <Coffee className="h-4 w-4" />
+            <AlertTitle>Loading Resume</AlertTitle>
+            <AlertDescription>
+              Preparing the resume for roasting...
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
+      {isNavigatingBack && (
+        <div className="fixed bottom-4 right-4 w-64">
+          <Alert>
+            <ArrowLeft className="h-4 w-4" />
+            <AlertTitle>Dashboard</AlertTitle>
+            <AlertDescription>
+              Returning to your dashboard...
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
     </div>
   );
 }
