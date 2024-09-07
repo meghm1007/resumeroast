@@ -23,9 +23,9 @@ function FormSection({
   resumeData,
 }: PROPS) {
   const [currentSection, setCurrentSection] = useState(0);
-  const [experienceCount, setExperienceCount] = useState(3);
-  const [educationCount, setEducationCount] = useState(2);
-  const [projectCount, setProjectCount] = useState(2);
+  const [experienceCount, setExperienceCount] = useState(1);
+  const [educationCount, setEducationCount] = useState(1);
+  const [projectCount, setProjectCount] = useState(1);
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -87,24 +87,30 @@ function FormSection({
   };
 
   const addExperience = () => {
-    setExperienceCount((prev) => prev + 1);
-    onFormChange({
-      experience: [...(resumeData.experience || []), {}],
-    });
+    if (experienceCount < 4) {
+      setExperienceCount((prev) => prev + 1);
+      onFormChange({
+        experience: [...(resumeData.experience || []), {}],
+      });
+    }
   };
 
   const addEducation = () => {
-    setEducationCount((prev) => prev + 1);
-    onFormChange({
-      education: [...(resumeData.education || []), {}],
-    });
+    if (educationCount < 4) {
+      setEducationCount((prev) => prev + 1);
+      onFormChange({
+        education: [...(resumeData.education || []), {}],
+      });
+    }
   };
 
   const addProject = () => {
-    setProjectCount((prev) => prev + 1);
-    onFormChange({
-      projects: [...(resumeData.projects || []), {}],
-    });
+    if (projectCount < 4) {
+      setProjectCount((prev) => prev + 1);
+      onFormChange({
+        projects: [...(resumeData.projects || []), {}],
+      });
+    }
   };
 
   const removeSection = (index: number, section: string) => {
@@ -198,6 +204,7 @@ function FormSection({
         return (
           <div>
             <h2 className="font-bold text-2xl mb-2 text-primary">Experience</h2>
+            <p className="text-sm text-gray-500 mb-4">(Add upto 4 experiences)</p>
             {Array.from({ length: experienceCount }).map((_, expIndex) => (
               <div key={expIndex} className="my-2 flex flex-col gap-2 mb-7">
                 <label className="font-bold">{`Experience ${
@@ -273,13 +280,15 @@ function FormSection({
                 </Button>
               </div>
             ))}
-            <Button
-              type="button"
-              className="py-6 text-white bg-green-600"
-              onClick={addExperience}
-            >
-              + Add Another Experience
-            </Button>
+            {experienceCount < 4 && (
+              <Button
+                type="button"
+                className="py-6 text-white bg-green-600"
+                onClick={addExperience}
+              >
+                + Add Another Experience
+              </Button>
+            )}
           </div>
         );
       case "Education":
@@ -349,13 +358,15 @@ function FormSection({
                 </Button>
               </div>
             ))}
-            <Button
-              type="button"
-              className="py-6 text-white bg-green-600"
-              onClick={addEducation}
-            >
-              + Add Another Education
-            </Button>
+            {educationCount < 4 && (
+              <Button
+                type="button"
+                className="py-6 text-white bg-green-600"
+                onClick={addEducation}
+              >
+                + Add Another Education
+              </Button>
+            )}
           </div>
         );
       case "Projects":
@@ -399,22 +410,24 @@ function FormSection({
                   )}
                   AI Assist💫
                 </Button>
-                <Button
+                <Button className="bg-red-600"
                   type="button"
                   onClick={() => removeSection(projIndex, "projects")}
                 >
-                  <Trash2 className="mr-2 h-4 w-4 text-white bg-red-600" />{" "}
+                  <Trash2 className="mr-2 h-4 w-4 text-white" />{" "}
                   Remove Project
                 </Button>
               </div>
             ))}
-            <Button
-              type="button"
-              className="py-6 text-white bg-green-600"
-              onClick={addProject}
-            >
-              + Add Another Project
-            </Button>
+            {projectCount < 4 && (
+              <Button
+                type="button"
+                className="py-6 text-white bg-green-600"
+                onClick={addProject}
+              >
+                + Add Another Project
+              </Button>
+            )}
           </div>
         );
       default:

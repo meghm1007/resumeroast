@@ -58,7 +58,7 @@ export default function Home() {
         setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
         setFadeClass("fade-in");
       }, 500); // Duration of the fade-out effect
-    }, 2000);
+    }, 6000);
 
     return () => clearInterval(interval);
   }, [words.length]);
@@ -69,7 +69,7 @@ export default function Home() {
       timer = setTimeout(() => {
         setIsRoasting(false);
         router.push("/roast");
-      }, 3000);
+      }, 6000);
     }
     return () => clearTimeout(timer);
   }, [isRoasting, router]);
@@ -80,7 +80,7 @@ export default function Home() {
       timer = setTimeout(() => {
         setIsLoadingDashboard(false);
         router.push("/dashboard");
-      }, 3000);
+      }, 6000);
     }
     return () => clearTimeout(timer);
   }, [isLoadingDashboard, router]);

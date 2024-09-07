@@ -18,11 +18,6 @@ function SideNav() {
       icon: Home,
       path: "/dashboard",
     },
-    // {
-    //   name: "History",
-    //   icon: FileClock,
-    //   path: "/dashboard/history",
-    // },
     {
       name: "Billing",
       icon: WalletCards,
@@ -55,10 +50,19 @@ function SideNav() {
     }
   };
 
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setLoadingAction('logo');
+    setTimeout(() => {
+      setLoadingAction(null);
+      router.push('/');
+    }, 9000);
+  };
+
   return (
     <div className="h-screen relative p-5 shadow-sm border bg-white">
       <div className="flex justify-center">
-        <Link href="/">
+        <Link href="/" onClick={handleLogoClick}>
           <Image src="/logo.svg" alt="logo" width={60} height={60} />
         </Link>
       </div>
@@ -85,23 +89,27 @@ function SideNav() {
         <UsageTrack />
       </div> */}
       {loadingAction && (
-        <div className="fixed bottom-4 right-4 w-64">
-          <Alert>
-            {loadingAction === "billing" ? (
-              <WalletCards className="h-4 w-4" />
-            ) : (
-              <Settings className="h-4 w-4" />
-            )}
-            <AlertTitle>
-              {loadingAction === "billing"
-                ? "Loading Billing"
-                : "Loading Settings"}
-            </AlertTitle>
-            <AlertDescription>
-              {loadingAction === "billing"
-                ? "Preparing your billing information..."
-                : "Preparing your settings page..."}
-            </AlertDescription>
+        <div className="fixed bottom-4 left-4 z-50">
+          <Alert className="bg-black text-white border-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2">
+            <div className="bg-white rounded-full p-1">
+              <Image src="/logo.svg" alt="Home" width={20} height={20} />
+            </div>
+            <div>
+              <AlertTitle className="text-sm font-medium">
+                {loadingAction === "billing"
+                  ? "Loading Billing"
+                  : loadingAction === "settings"
+                  ? "Loading Settings"
+                  : "Returning Home"}
+              </AlertTitle>
+              <AlertDescription className="text-xs">
+                {loadingAction === "billing"
+                  ? "Preparing your billing information..."
+                  : loadingAction === "settings"
+                  ? "Preparing your settings page..."
+                  : "Taking you back to the home page..."}
+              </AlertDescription>
+            </div>
           </Alert>
         </div>
       )}
