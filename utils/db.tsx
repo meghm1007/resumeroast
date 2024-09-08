@@ -1,21 +1,29 @@
-import { neon } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-http';
-import * as schema from './schema';
-import { eq } from 'drizzle-orm';
-import { userResume } from './schema';
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
+import * as schema from "./schema";
+import { eq } from "drizzle-orm";
+import { userResume } from "./schema";
 
 const sql = neon(process.env.NEXT_PUBLIC_DRIZZLE_DB_URL!);
 export const db = drizzle(sql, { schema });
 
-export async function saveResumeSection(email: string | undefined, data: any, section: string) {
+export async function saveResumeSection(
+  email: string | undefined,
+  data: any,
+  section: string
+) {
   if (!email) throw new Error("User email is required");
 
-  const existingUser = await db.select().from(userResume).where(eq(userResume.createdBy, email));
+  const existingUser = await db
+    .select()
+    .from(userResume)
+    .where(eq(userResume.createdBy, email));
 
   const sectionData = mapSectionDataToSchema(data, section);
 
   if (existingUser.length > 0) {
-    await db.update(userResume)
+    await db
+      .update(userResume)
       .set(sectionData)
       .where(eq(userResume.createdBy, email));
   } else {
@@ -57,7 +65,7 @@ function mapSectionDataToSchema(data: any, section: string) {
         startDate2: data.experience?.[1]?.startDate,
         endDate2: data.experience?.[1]?.endDate,
         description2: data.experience?.[1]?.workSummary,
-        
+
         designation3: data.experience?.[2]?.title,
         companyName3: data.experience?.[2]?.company,
         city3: data.experience?.[2]?.city,
@@ -120,4 +128,112 @@ function mapSectionDataToSchema(data: any, section: string) {
 
 function generateUniqueId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
+
+export async function getUserResumeData(email: string) {
+  const userData = await db
+    .select()
+    .from(userResume)
+    .where(eq(userResume.createdBy, email));
+
+  if (userData.length === 0) return null;
+
+  const user = userData[0];
+
+  return {
+    firstName: user.firstName,
+    lastName: user.lastName,
+    jobTitle: user.designation,
+    address: user.address,
+    email: user.email,
+    phone: user.phone,
+    summary: user.summary,
+    experience: [
+      {
+        title: user.designation1,
+        company: user.companyName1,
+        city: user.city1,
+        state: user.state1,
+        startDate: user.startDate1,
+        endDate: user.endDate1,
+        workSummary: user.description1,
+      },
+      {
+        title: user.designation1,
+        company: user.companyName1,
+        city: user.city1,
+        state: user.state1,
+        startDate: user.startDate1,
+        endDate: user.endDate1,
+        workSummary: user.description1,
+      },
+      {
+        title: user.designation1,
+        company: user.companyName1,
+        city: user.city1,
+        state: user.state1,
+        startDate: user.startDate1,
+        endDate: user.endDate1,
+        workSummary: user.description1,
+      },
+      {
+        title: user.designation1,
+        company: user.companyName1,
+        city: user.city1,
+        state: user.state1,
+        startDate: user.startDate1,
+        endDate: user.endDate1,
+        workSummary: user.description1,
+      },
+      // ... repeat for experience 2, 3, and 4
+    ],
+    education: [
+      {
+        universityName: user.schoolName1,
+        degree: user.degree1,
+        startDate: user.startDateEdu1,
+        endDate: user.endDateEdu1,
+        description: user.descriptionEdu1,
+      },
+      {
+        universityName: user.schoolName1,
+        degree: user.degree1,
+        startDate: user.startDateEdu1,
+        endDate: user.endDateEdu1,
+        description: user.descriptionEdu1,
+      },
+      {
+        universityName: user.schoolName1,
+        degree: user.degree1,
+        startDate: user.startDateEdu1,
+        endDate: user.endDateEdu1,
+        description: user.descriptionEdu1,
+      },
+      {
+        universityName: user.schoolName1,
+        degree: user.degree1,
+        startDate: user.startDateEdu1,
+        endDate: user.endDateEdu1,
+        description: user.descriptionEdu1,
+      },
+    ],
+    projects: [
+      {
+        title: user.projectName1,
+        description: user.projectDescription1,
+      },
+      {
+        title: user.projectName1,
+        description: user.projectDescription1,
+      },
+      {
+        title: user.projectName1,
+        description: user.projectDescription1,
+      },
+      {
+        title: user.projectName1,
+        description: user.projectDescription1,
+      },
+    ],
+  };
 }

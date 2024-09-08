@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TEMPLATE } from "../../_components/TemplateListSection";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Loader2Icon, Trash2 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
-import { saveResumeSection } from "@/utils/db"; // You'll need to create this function
+import { saveResumeSection, getUserResumeData } from "@/utils/db";
 
 interface PROPS {
   selectedTemplate?: TEMPLATE;
@@ -30,6 +30,30 @@ function FormSection({
   const [educationCount, setEducationCount] = useState(1);
   const [projectCount, setProjectCount] = useState(1);
   const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user?.primaryEmailAddress?.emailAddress) {
+        setIsLoading(true);
+        try {
+          const userData = await getUserResumeData(user.primaryEmailAddress.emailAddress);
+          if (userData) {
+            onFormChange(userData);
+            setExperienceCount(countNonEmptyEntries(userData.experience, 4));
+            setEducationCount(countNonEmptyEntries(userData.education, 4));
+            setProjectCount(countNonEmptyEntries(userData.projects, 4));
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [user]);
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -137,11 +161,11 @@ function FormSection({
   };
 
   const saveSection = async () => {
-    if (!user) return;
+    if (!user?.primaryEmailAddress?.emailAddress) return;
 
     setIsSaving(true);
     try {
-      await saveResumeSection(user.primaryEmailAddress?.emailAddress, resumeData, sections[currentSection]);
+      await saveResumeSection(user.primaryEmailAddress.emailAddress, resumeData, sections[currentSection]);
       // Show success message
     } catch (error) {
       console.error("Error saving section:", error);
@@ -493,6 +517,10 @@ function FormSection({
     setCurrentSection((prev) => (prev - 1 + sections.length) % sections.length);
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <form onSubmit={onSubmit}>
       {renderSection()}
@@ -525,6 +553,19 @@ function FormSection({
       )}
     </form>
   );
+}
+
+function countNonEmptyEntries(data: any[] | undefined, maxCount: number): number {
+  if (!data) return 1;
+  let count = 0;
+  for (let i = 0; i < maxCount; i++) {
+    if (data[i] && Object.values(data[i]).some(value => value !== "")) {
+      count++;
+    } else {
+      break;
+    }
+  }
+  return Math.max(count, 1);
 }
 
 export default FormSection;
