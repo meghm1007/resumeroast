@@ -4,6 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Loader2Icon, Trash2 } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
+import { saveResumeSection } from "@/utils/db"; // You'll need to create this function
 
 interface PROPS {
   selectedTemplate?: TEMPLATE;
@@ -22,10 +24,12 @@ function FormSection({
   onFormChange,
   resumeData,
 }: PROPS) {
+  const { user } = useUser();
   const [currentSection, setCurrentSection] = useState(0);
   const [experienceCount, setExperienceCount] = useState(1);
   const [educationCount, setEducationCount] = useState(1);
   const [projectCount, setProjectCount] = useState(1);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -132,6 +136,21 @@ function FormSection({
     }
   };
 
+  const saveSection = async () => {
+    if (!user) return;
+
+    setIsSaving(true);
+    try {
+      await saveResumeSection(user.primaryEmailAddress?.emailAddress, resumeData, sections[currentSection]);
+      // Show success message
+    } catch (error) {
+      console.error("Error saving section:", error);
+      // Show error message
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const renderSection = () => {
     switch (sections[currentSection]) {
       case "PersonalInfo":
@@ -198,13 +217,20 @@ function FormSection({
               )}
               AI Assist💫
             </Button>
+            <Button
+              type="button"
+              className="mt-4 py-6"
+              onClick={saveSection}
+              disabled={isSaving}
+            >
+              {isSaving ? "Saving..." : "Save Personal Info"}
+            </Button>
           </div>
         );
       case "Experience":
         return (
           <div>
             <h2 className="font-bold text-2xl mb-2 text-primary">Experience</h2>
-            <p className="text-sm text-gray-500 mb-4">(Add upto 4 experiences)</p>
             {Array.from({ length: experienceCount }).map((_, expIndex) => (
               <div key={expIndex} className="my-2 flex flex-col gap-2 mb-7">
                 <label className="font-bold">{`Experience ${
@@ -289,6 +315,14 @@ function FormSection({
                 + Add Another Experience
               </Button>
             )}
+            <Button
+              type="button"
+              className="mt-4 py-6"
+              onClick={saveSection}
+              disabled={isSaving}
+            >
+              {isSaving ? "Saving..." : "Save Experience"}
+            </Button>
           </div>
         );
       case "Education":
@@ -367,6 +401,14 @@ function FormSection({
                 + Add Another Education
               </Button>
             )}
+            <Button
+              type="button"
+              className="mt-4 py-6"
+              onClick={saveSection}
+              disabled={isSaving}
+            >
+              {isSaving ? "Saving..." : "Save Education"}
+            </Button>
           </div>
         );
       case "Projects":
@@ -410,12 +452,12 @@ function FormSection({
                   )}
                   AI Assist💫
                 </Button>
-                <Button className="bg-red-600"
+                <Button
+                  className="bg-red-600"
                   type="button"
                   onClick={() => removeSection(projIndex, "projects")}
                 >
-                  <Trash2 className="mr-2 h-4 w-4 text-white" />{" "}
-                  Remove Project
+                  <Trash2 className="mr-2 h-4 w-4 text-white" /> Remove Project
                 </Button>
               </div>
             ))}
@@ -428,6 +470,14 @@ function FormSection({
                 + Add Another Project
               </Button>
             )}
+            <Button
+              type="button"
+              className="mt-4 py-6"
+              onClick={saveSection}
+              disabled={isSaving}
+            >
+              {isSaving ? "Saving..." : "Save Projects"}
+            </Button>
           </div>
         );
       default:
