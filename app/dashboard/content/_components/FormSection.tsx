@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Loader2Icon, Trash2 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { saveResumeSection, getUserResumeData } from "@/utils/db";
+import { FaSave } from "react-icons/fa";
 
 interface PROPS {
   selectedTemplate?: TEMPLATE;
@@ -37,7 +38,9 @@ function FormSection({
       if (user?.primaryEmailAddress?.emailAddress) {
         setIsLoading(true);
         try {
-          const userData = await getUserResumeData(user.primaryEmailAddress.emailAddress);
+          const userData = await getUserResumeData(
+            user.primaryEmailAddress.emailAddress
+          );
           if (userData) {
             onFormChange(userData);
             setExperienceCount(countNonEmptyEntries(userData.experience, 4));
@@ -165,7 +168,11 @@ function FormSection({
 
     setIsSaving(true);
     try {
-      await saveResumeSection(user.primaryEmailAddress.emailAddress, resumeData, sections[currentSection]);
+      await saveResumeSection(
+        user.primaryEmailAddress.emailAddress,
+        resumeData,
+        sections[currentSection]
+      );
       // Show success message
     } catch (error) {
       console.error("Error saving section:", error);
@@ -180,9 +187,15 @@ function FormSection({
       case "PersonalInfo":
         return (
           <div>
-            <h2 className="font-bold text-2xl mb-2 text-primary">
-              Personal Information
-            </h2>
+            <div className="flex flex-col">
+              <h2 className="font-bold text-2xl mb-2 text-primary">
+                Personal Information
+              </h2>
+              <p className="font-medium text-gray-600 mb-5">
+                (Enter name, phone number, email, address and your summary here)
+              </p>
+            </div>
+
             <Input
               name="firstName"
               onChange={handleInputChange}
@@ -228,33 +241,43 @@ function FormSection({
               onChange={handleInputChange}
               value={resumeData.summary || ""}
             />
-            <Button
-              disabled={loadingFields["summary"]}
-              type="button"
-              className="py-6"
-              onClick={() =>
-                handleAIButtonClick("summary", selectedTemplate?.summaryPrompt)
-              }
-            >
-              {loadingFields["summary"] && (
-                <Loader2Icon className="animate-spin mr-2" />
-              )}
-              AI Assist💫
-            </Button>
-            <Button
-              type="button"
-              className="mt-4 py-6"
-              onClick={saveSection}
-              disabled={isSaving}
-            >
-              {isSaving ? "Saving..." : "Save Personal Info"}
-            </Button>
+            <div className="flex flex-col gap-4">
+              <Button
+                disabled={loadingFields["summary"]}
+                type="button"
+                className="py-6"
+                onClick={() =>
+                  handleAIButtonClick(
+                    "summary",
+                    selectedTemplate?.summaryPrompt
+                  )
+                }
+              >
+                {loadingFields["summary"] && (
+                  <Loader2Icon className="animate-spin mr-2" />
+                )}
+                AI Assist💫
+              </Button>
+              <Button
+                type="button"
+                className="mt-4 py-6 bg-green-600 hover:bg-green-700"
+                onClick={saveSection}
+                disabled={isSaving}
+              >
+                {isSaving ? "Saving..." : "Save Personal Info"}
+                <FaSave />
+              </Button>
+            </div>
           </div>
         );
       case "Experience":
         return (
           <div>
             <h2 className="font-bold text-2xl mb-2 text-primary">Experience</h2>
+            <p className="font-medium text-gray-600 mb-5">
+              (Enter your work experience here. At most 4 experiences can be
+              added. More that that look bad on your resume)
+            </p>
             {Array.from({ length: experienceCount }).map((_, expIndex) => (
               <div key={expIndex} className="my-2 flex flex-col gap-2 mb-7">
                 <label className="font-bold">{`Experience ${
@@ -341,11 +364,12 @@ function FormSection({
             )}
             <Button
               type="button"
-              className="mt-4 py-6"
+              className="mt-4 py-6 bg-green-600 hover:bg-green-700"
               onClick={saveSection}
               disabled={isSaving}
             >
               {isSaving ? "Saving..." : "Save Experience"}
+              <FaSave />
             </Button>
           </div>
         );
@@ -353,6 +377,10 @@ function FormSection({
         return (
           <div>
             <h2 className="font-bold text-2xl mb-2 text-primary">Education</h2>
+            <p className="font-medium text-gray-600 mb-5">
+              (Enter your education details here. At most 4 education details
+              can be added. More that that look bad on your resume)
+            </p>
             {Array.from({ length: educationCount }).map((_, eduIndex) => (
               <div key={eduIndex} className="my-2 flex flex-col gap-2 mb-7">
                 <label className="font-bold">{`Education ${
@@ -408,11 +436,12 @@ function FormSection({
                   AI Assist💫
                 </Button>
                 <Button
+                  className="bg-red-600"
                   type="button"
                   onClick={() => removeSection(eduIndex, "education")}
                 >
-                  <Trash2 className="mr-2 h-4 w-4 text-white bg-red-600" />{" "}
-                  Remove Education
+                  <Trash2 className="mr-2 h-4 w-4 text-white " /> Remove
+                  Education
                 </Button>
               </div>
             ))}
@@ -427,11 +456,12 @@ function FormSection({
             )}
             <Button
               type="button"
-              className="mt-4 py-6"
+              className="mt-4 py-6 bg-green-600 hover:bg-green-700"
               onClick={saveSection}
               disabled={isSaving}
             >
               {isSaving ? "Saving..." : "Save Education"}
+              <FaSave />
             </Button>
           </div>
         );
@@ -439,6 +469,10 @@ function FormSection({
         return (
           <div>
             <h2 className="font-bold text-2xl mb-2 text-primary">Projects</h2>
+            <p className="font-medium text-gray-600 mb-5">
+              (Enter your projects here. At most 4 projects can be added. More
+              that that look bad on your resume)
+            </p>
             {Array.from({ length: projectCount }).map((_, projIndex) => (
               <div key={projIndex} className="my-2 flex flex-col gap-2 mb-7">
                 <label className="font-bold">{`Project ${
@@ -496,11 +530,12 @@ function FormSection({
             )}
             <Button
               type="button"
-              className="mt-4 py-6"
+              className="mt-4 py-6 bg-green-600 hover:bg-green-700"
               onClick={saveSection}
               disabled={isSaving}
             >
               {isSaving ? "Saving..." : "Save Projects"}
+              <FaSave />
             </Button>
           </div>
         );
@@ -546,20 +581,23 @@ function FormSection({
         </Button>
       </div>
 
-      {currentSection === sections.length - 1 && (
+      {/* {currentSection === sections.length - 1 && (
         <Button type="submit" className="mt-6 py-6">
           Generate Resume
         </Button>
-      )}
+      )} */}
     </form>
   );
 }
 
-function countNonEmptyEntries(data: any[] | undefined, maxCount: number): number {
+function countNonEmptyEntries(
+  data: any[] | undefined,
+  maxCount: number
+): number {
   if (!data) return 1;
   let count = 0;
   for (let i = 0; i < maxCount; i++) {
-    if (data[i] && Object.values(data[i]).some(value => value !== "")) {
+    if (data[i] && Object.values(data[i]).some((value) => value !== "")) {
       count++;
     } else {
       break;
