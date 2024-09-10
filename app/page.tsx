@@ -8,7 +8,6 @@ import { SiGooglegemini } from "react-icons/si";
 import { FaSquareXTwitter, FaFire } from "react-icons/fa6";
 import "./DynamicHeading.css";
 
-
 interface FeatureCardProps {
   icon: ReactNode;
   title: string;
@@ -44,17 +43,29 @@ export default function Home() {
       {/* Header */}
       <header className="bg-white shadow-sm py-4 px-8 flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-3">
-          <Image src="/logo.svg" alt="Resume Roast Logo" width={40} height={40} />
-          <span className="text-2xl font-bold text-[#965f14]">Resume Roast</span>
+          <Image
+            src="/logo.svg"
+            alt="Resume Roast Logo"
+            width={40}
+            height={40}
+          />
+          <span className="text-2xl font-bold text-[#965f14]">
+            Resume Roast
+          </span>
         </Link>
         <nav className="flex items-center space-x-6">
-          <Link href="/dashboard" className="text-gray-700 hover:text-[#965f14] transition">
+          <Link
+            href="/dashboard"
+            className="text-gray-700 hover:text-[#965f14] transition"
+          >
             Dashboard
           </Link>
-          <Link href="/roast" className="text-gray-700 hover:text-[#965f14] transition">
+          <Link
+            href="/roast"
+            className="text-gray-700 hover:text-[#965f14] transition"
+          >
             Roast
           </Link>
-          
         </nav>
       </header>
 
@@ -73,7 +84,8 @@ export default function Home() {
                 Resume In Seconds
               </h1>
               <p className="text-xl mb-8 text-[#704c18]">
-                AI-powered resume creation, peer reviews, and ATS optimization all in one place.
+                AI-powered resume creation, peer reviews, and ATS optimization
+                all in one place.
               </p>
               <div className="flex space-x-4 mb-8">
                 <Link
@@ -90,7 +102,8 @@ export default function Home() {
                 </Link>
               </div>
               <p className="flex items-center text-gray-700 font-bold text-lg">
-                Powered by Google Gemini <FcGoogle className="ml-2 mr-1" /> <SiGooglegemini />
+                Powered by Google Gemini <FcGoogle className="ml-2 mr-1" />{" "}
+                <SiGooglegemini />
               </p>
             </div>
             <div className="md:w-1/2 bg-gradient-to-br from-[#965f14] to-[#7a4b12] p-8 md:p-12 text-white">
@@ -99,7 +112,8 @@ export default function Home() {
                 <h2 className="text-3xl font-bold">Resume Roasting</h2>
               </div>
               <p className="text-xl mb-6">
-                Get your resume roasted and let others roast it too! Our unique feature allows you to:
+                Get your resume roasted and let others roast it too! Our unique
+                feature allows you to:
               </p>
               <ul className="list-disc list-inside mb-8 space-y-2">
                 <li>Receive honest feedback from peers</li>
@@ -172,18 +186,72 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-[#965f14] text-white py-16">
+      <section className="bg-gradient-to-r from-[#965f14] to-[#b27a2d] text-white py-20">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Roast Your Resume?</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Join thousands of professionals who have improved their job prospects with Resume Roast.
+          <h2 className="text-4xl md:text-5xl font-bold mb-8 leading-tight">
+            Ready to Elevate Your Resume?
+          </h2>
+          <p className="text-xl mb-12 max-w-2xl mx-auto">
+            Join thousands of professionals who have transformed their job
+            prospects with Resume Roast.
           </p>
+
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 mb-12 max-w-3xl mx-auto shadow-lg">
+            <h3 className="text-2xl font-semibold mb-6 text-[#1a1818]">
+              Here's What You Get For $12.99 Lifetime Access
+            </h3>
+            <ul className="text-left space-y-4 mb-8">
+              <li className="flex items-center">
+                <span className="text-[#965f14] font-bold text-2xl mr-3">
+                  ✅
+                </span>
+                <span className="text-lg">
+                  AI Editor to create your resume in less than 5 minutes 🤖
+                </span>
+              </li>
+              <li className="flex items-center">
+                <span className="text-[#965f14] font-bold text-2xl mr-3">
+                  ✅
+                </span>
+                <span className="text-lg">
+                  Host up to 100 Resumes with custom shareable links ☁️
+                </span>
+              </li>
+              <li className="flex items-center">
+                <span className="text-[#965f14] font-bold text-2xl mr-3">
+                  ✅
+                </span>
+                <span className="text-lg">Unlimited resume roasting 🔥</span>
+              </li>
+              <li className="flex items-center">
+                <span className="text-[#965f14] font-bold text-2xl mr-3">
+                  ✅
+                </span>
+                <span className="text-lg">
+                  A huge community of students and professionals to help you get
+                  that job 👥
+                </span>
+              </li>
+            </ul>
+          </div>
+
           <Link
-            href="/signup"
-            className="bg-white text-[#965f14] hover:bg-gray-100 px-8 py-4 rounded-md text-lg font-semibold transition inline-block"
+            href="/dashboard"
+            className="bg-white text-[#965f14] hover:bg-gray-100 px-10 py-4 rounded-full text-lg font-bold transition inline-block shadow-lg hover:shadow-xl transform hover:-translate-y-1"
           >
-            Get Started Free
+            <div className="flex flex-col">
+              <p>Get Started</p>
+              <p>$12.99/ Lifetime</p>
+            </div>
           </Link>
+          <p className="text-sm text-gray-200 mt-5">
+            I know you're a student a probably broke like me, but $12.99 could
+            change your life, so go for it!
+          </p>
+          <p className="text-sm text-gray-200 mt-2">
+            This money would help me cover hosting, database, and AI costs
+            keeping the site running for you FOREVER😀
+          </p>
         </div>
       </section>
 

@@ -9,7 +9,8 @@ import { useUser } from "@clerk/nextjs";
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Coffee, ArrowLeft } from "lucide-react";
+import { Coffee, ArrowLeft, Trash2 } from "lucide-react";
+import { eq } from "drizzle-orm";
 
 interface Roast {
   userId: string;
@@ -33,6 +34,7 @@ function RoastResume() {
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [loadingResumeId, setLoadingResumeId] = useState<string | null>(null);
   const [isNavigatingBack, setIsNavigatingBack] = useState(false);
+  const [deletingResumeId, setDeletingResumeId] = useState<string | null>(null);
   const { user } = useUser();
   const router = useRouter();
 
@@ -51,7 +53,7 @@ function RoastResume() {
   }, []);
 
   const getResumeStatus = (roasts: Roast[] | null) => {
-    if (!roasts || roasts.length === 0) return "Not reviewed😐";
+    if (!roasts || roasts.length === 0) return "No Reviews😐";
     const avgScore =
       roasts.reduce((sum, roast) => sum + roast.score, 0) / roasts.length;
     if (avgScore < 4) return "Terrible☹️";
@@ -124,6 +126,46 @@ function RoastResume() {
     }, 2000);
   };
 
+  const handleDeleteResume = async (e: React.MouseEvent, resumeId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!user || !user.primaryEmailAddress) return;
+
+    setDeletingResumeId(resumeId);
+
+    try {
+      const deletedResume = await db
+        .delete(Resumes)
+        .where(eq(Resumes.uniqueId, resumeId))
+        .returning();
+
+      if (deletedResume.length === 0) {
+        console.error("Resume not found");
+        return;
+      }
+
+      if (
+        deletedResume[0].createdBy !== user.primaryEmailAddress.emailAddress
+      ) {
+        console.error("Unauthorized");
+        return;
+      }
+
+      // Remove the deleted resume from the state
+      setResumes((prevResumes) =>
+        prevResumes.filter((resume) => resume.uniqueId !== resumeId)
+      );
+      setFilteredResumes((prevResumes) =>
+        prevResumes.filter((resume) => resume.uniqueId !== resumeId)
+      );
+    } catch (error) {
+      console.error("Error deleting resume:", error);
+    } finally {
+      setDeletingResumeId(null);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-amber-50 relative">
       <div className="max-w-4xl mx-auto p-8">
@@ -187,9 +229,25 @@ function RoastResume() {
                   resume.roasts
                 )}`}
               >
-                <h2 className="text-xl font-semibold mb-2 text-brown-600">
-                  {resume.createdBy?.split("@")[0] || "Anonymous"}📄
-                </h2>
+                <div className="flex justify-between">
+                  <h2 className="text-xl font-semibold mb-2 text-brown-600">
+                    {resume.createdBy?.split("@")[0] || "Anonymous"}📄
+                  </h2>
+                  {resume.createdBy ===
+                    user?.primaryEmailAddress?.emailAddress && (
+                    <Button
+                      className="bg-transparent border-none shadow-none hover:bg-transparent border-none shadow-none"
+                      onClick={(e) => handleDeleteResume(e, resume.uniqueId)}
+                      disabled={deletingResumeId === resume.uniqueId}
+                    >
+                      {deletingResumeId === resume.uniqueId ? (
+                        <span className="loading loading-spinner loading-xs"></span>
+                      ) : (
+                        <Trash2 className="h-5 w-5 text-red-500 hover:text-red-600" />
+                      )}
+                    </Button>
+                  )}
+                </div>
                 <p className="text-sm text-gray-600 mb-2">
                   Created by: {resume.createdBy || "Anonymous"}
                 </p>
@@ -232,9 +290,7 @@ function RoastResume() {
           <Alert>
             <ArrowLeft className="h-4 w-4" />
             <AlertTitle>Dashboard</AlertTitle>
-            <AlertDescription>
-              Returning to your dashboard...
-            </AlertDescription>
+            <AlertDescription>Returning to your dashboard...</AlertDescription>
           </Alert>
         </div>
       )}

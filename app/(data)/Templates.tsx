@@ -135,22 +135,22 @@ export default [
   },
 
   // {
-  //   name: "Resume Designer⏱️",
-  //   desc: "A tool that enables you to create resumes to look like the company you're applying to. Stand out from the crowd with a resume that matches the company's style.",
+  //   name: "Cover Letter📃",
+  //   desc: "Craft a fantastic cover letter for your dream job",
   //   category: "Basic Resume",
   //   icon: "/designresume.png",
   //   aiPrompt:
-  //     "Give me 5 resume ideas in bullet wise format only based on a given niche and outline and give me result in rich text editor format",
-  //   slug: "resume-designer",
+  //     "Write me a cover letter for a given job description and my resume keywords and give me result in rich text editor format",
+  //   slug: "cover-letter",
   //   form: [
   //     {
-  //       label: "Enter your blog niche",
+  //       label: "Paste Job Description",
   //       field: "input",
   //       name: "niche",
   //       required: true,
   //     },
   //     {
-  //       label: "Enter blog outline",
+  //       label: "Enter a few keywords of your resume",
   //       field: "textarea",
   //       name: " outline",
   //     },

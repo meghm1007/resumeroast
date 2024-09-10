@@ -59,6 +59,9 @@ function TemplateListSection({ userSearchInput }: any) {
           <TemplateCard {...item} />
         </Link>
       ))}
+      <div>
+        
+      </div>
       {isLoading && (
         <div className="fixed bottom-4 right-4 w-64">
           <Alert>

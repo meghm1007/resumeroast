@@ -68,9 +68,8 @@ interface ResumeData {
   experience?: Experience[];
   education?: Education[];
   skills?: Skill[];
-  projects?: Project[];  // Add this line
+  projects?: Project[]; // Add this line
 }
-
 
 function CreateNewContent(props: PROPS) {
   const selectedTemplate: TEMPLATE | undefined = Templates?.find(
@@ -153,11 +152,17 @@ function CreateNewContent(props: PROPS) {
 
   return (
     <div className="p-10">
-      <Link href={"/dashboard"}>
-        <Button className="text-white bg-red-500">
-          <ArrowLeft /> Back
-        </Button>
-      </Link>
+      <div className="">
+        <Link href={"/dashboard"}>
+          <Button className="text-white bg-red-500">
+            <ArrowLeft /> Back
+          </Button>
+        </Link>
+        <p className="text-m text-gray-600 mt-5 mb-5">
+          You can view all the resumes you have created in the Roast section😀🍵{" "}
+          <br /> You can even see other people's resumes and roast them😎
+        </p>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-2">
         <div>
