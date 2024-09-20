@@ -7,6 +7,7 @@ import { FcGoogle } from "react-icons/fc";
 import { SiGooglegemini } from "react-icons/si";
 import { FaSquareXTwitter, FaFire } from "react-icons/fa6";
 import "./DynamicHeading.css";
+import { FaReddit } from "react-icons/fa6";
 
 interface FeatureCardProps {
   icon: ReactNode;
@@ -66,6 +67,13 @@ export default function Home() {
           >
             Roast
           </Link>
+          <a
+            href="https://www.reddit.com/r/resume_roasts/"
+            target="_blank"
+            className="text-gray-700 hover:text-[#965f14] transition"
+          >
+            <FaReddit className="text-orange-600 bg-white rounded-full font-bold text-2xl mr-3" />
+          </a>
         </nav>
       </header>
 
@@ -225,11 +233,10 @@ export default function Home() {
               </li>
               <li className="flex items-center">
                 <span className="text-[#965f14] font-bold text-2xl mr-3">
-                  ✅
+                  <FaReddit className="text-orange-600 bg-white rounded-full font-bold text-2xl mr-3" />
                 </span>
                 <span className="text-lg">
-                  A huge community of students and professionals to help you get
-                  that job 👥
+                  A huge community of Reddit students and professionals
                 </span>
               </li>
             </ul>
