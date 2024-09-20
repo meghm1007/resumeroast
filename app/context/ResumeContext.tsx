@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-
+import { Skills } from "../types/types";
 export interface ResumeData {
   personalInfo: {
     firstName: string;
@@ -23,7 +23,7 @@ export interface ResumeData {
     fieldOfStudy: string;
     graduationDate: string;
   }>;
-  skills: string[];
+  skills: Skills;
 }
 
 const initialResumeData: ResumeData = {

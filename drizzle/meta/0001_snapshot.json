@@ -1,0 +1,528 @@
+{
+  "id": "598e5eb3-a300-4015-bd28-af62398541d1",
+  "prevId": "374e8385-8ee5-4daa-8073-ca9ebc7f5d42",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.aiOutput": {
+      "name": "aiOutput",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "formData": {
+          "name": "formData",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "aiResponse": {
+          "name": "aiResponse",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "templateSlug": {
+          "name": "templateSlug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdBy": {
+          "name": "createdBy",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.resumes": {
+      "name": "resumes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uniqueId": {
+          "name": "uniqueId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdBy": {
+          "name": "createdBy",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "roasts": {
+          "name": "roasts",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'::jsonb"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.userResume": {
+      "name": "userResume",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uniqueId": {
+          "name": "uniqueId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdBy": {
+          "name": "createdBy",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "firstName": {
+          "name": "firstName",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lastName": {
+          "name": "lastName",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "designation": {
+          "name": "designation",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address": {
+          "name": "address",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "summary": {
+          "name": "summary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "designation1": {
+          "name": "designation1",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "companyName1": {
+          "name": "companyName1",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "city1": {
+          "name": "city1",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "state1": {
+          "name": "state1",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "startDate1": {
+          "name": "startDate1",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "endDate1": {
+          "name": "endDate1",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description1": {
+          "name": "description1",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "designation2": {
+          "name": "designation2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "companyName2": {
+          "name": "companyName2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "city2": {
+          "name": "city2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "state2": {
+          "name": "state2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "startDate2": {
+          "name": "startDate2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "endDate2": {
+          "name": "endDate2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description2": {
+          "name": "description2",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "designation3": {
+          "name": "designation3",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "companyName3": {
+          "name": "companyName3",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "city3": {
+          "name": "city3",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "state3": {
+          "name": "state3",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "startDate3": {
+          "name": "startDate3",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "endDate3": {
+          "name": "endDate3",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description3": {
+          "name": "description3",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "designation4": {
+          "name": "designation4",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "companyName4": {
+          "name": "companyName4",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "city4": {
+          "name": "city4",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "state4": {
+          "name": "state4",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "startDate4": {
+          "name": "startDate4",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "endDate4": {
+          "name": "endDate4",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description4": {
+          "name": "description4",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schoolName1": {
+          "name": "schoolName1",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "degree1": {
+          "name": "degree1",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "startDateEdu1": {
+          "name": "startDateEdu1",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "endDateEdu1": {
+          "name": "endDateEdu1",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "descriptionEdu1": {
+          "name": "descriptionEdu1",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schoolName2": {
+          "name": "schoolName2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "degree2": {
+          "name": "degree2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "startDateEdu2": {
+          "name": "startDateEdu2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "endDateEdu2": {
+          "name": "endDateEdu2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "descriptionEdu2": {
+          "name": "descriptionEdu2",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schoolName3": {
+          "name": "schoolName3",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "degree3": {
+          "name": "degree3",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "startDateEdu3": {
+          "name": "startDateEdu3",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "endDateEdu3": {
+          "name": "endDateEdu3",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "descriptionEdu3": {
+          "name": "descriptionEdu3",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schoolName4": {
+          "name": "schoolName4",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "degree4": {
+          "name": "degree4",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "startDateEdu4": {
+          "name": "startDateEdu4",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "endDateEdu4": {
+          "name": "endDateEdu4",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "descriptionEdu4": {
+          "name": "descriptionEdu4",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "projectName1": {
+          "name": "projectName1",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "projectDescription1": {
+          "name": "projectDescription1",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "projectName2": {
+          "name": "projectName2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "projectDescription2": {
+          "name": "projectDescription2",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "projectName3": {
+          "name": "projectName3",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "projectDescription3": {
+          "name": "projectDescription3",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "projectName4": {
+          "name": "projectName4",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "projectDescription4": {
+          "name": "projectDescription4",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "skills": {
+          "name": "skills",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'{\"codeConcepts\":[],\"technologiesFrameworks\":[]}'::jsonb"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

@@ -13,7 +13,7 @@ import { db } from "@/utils/db";
 import { AIOutput } from "@/utils/schema";
 import ResumePreview from "../_components/ResumePreview";
 import dummyResume from "@/app/(data)/dummyResume";
-
+import { Skills } from "@/utils/schema";
 interface PROPS {
   params: {
     "template-slug": string;
@@ -67,7 +67,7 @@ interface ResumeData {
   themeColor?: string;
   experience?: Experience[];
   education?: Education[];
-  skills?: Skill[];
+  skills?: Skills;
   projects?: Project[]; // Add this line
 }
 
@@ -82,7 +82,8 @@ function CreateNewContent(props: PROPS) {
   const [resumeData, setResumeData] = useState<ResumeData>({
     ...dummyResume,
     experience: dummyResume.experience || [{}],
-    projects: dummyResume.projects || [{}], // Ensure this line matches the updated ResumeData interface
+    projects: dummyResume.projects || [{}],
+    skills: dummyResume.skills || { codeConcepts: [], technologiesFrameworks: [] },
   });
 
   const { user } = useUser();

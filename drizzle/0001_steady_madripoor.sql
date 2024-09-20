@@ -1,0 +1,2 @@
+ALTER TABLE "userResume" ALTER COLUMN "skills" SET DATA TYPE jsonb;--> statement-breakpoint
+ALTER TABLE "userResume" ALTER COLUMN "skills" SET DEFAULT '{"codeConcepts":[],"technologiesFrameworks":[]}'::jsonb;

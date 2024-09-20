@@ -112,10 +112,13 @@ export default [
         name: "education",
       },
       {
-        label: "Skills (optional)",
-        field: "input",
-        aiButton: false,
-        name: " outline",
+        label: "Skills✨",
+        field: "textarea",
+        name: "Skills",
+        aiButton: false, // Assuming no AI assist for skills
+        required: false,
+        placeholder:
+          "Code/Concepts: Python, Java, Javascript, HTML, CSS, Node.js, ELM, C#, C++, MATLAB, OOPS\nTechnologies/Frameworks: openCV, Tensorflow, Tkinter, Pandas, Numpy, Firebase, Unity, Bootstrap",
       },
     ],
     aiPrompt:
@@ -134,26 +137,26 @@ export default [
       "These are the keywords of their projects given by the user. Generate me a 2-3 line description in bullet points of the project including the technologies used to make it, the problem it solved, and the impact it had. Include specific, quantifiable results (e.g., percentage improvements, revenue generated) and use strong action verbs. Ensure the description is ATS-friendly and present the result in rich text editor format, making it impressive for top-tier employers.",
   },
 
-  // {
-  //   name: "Cover Letter📃",
-  //   desc: "Craft a fantastic cover letter for your dream job",
-  //   category: "Basic Resume",
-  //   icon: "/designresume.png",
-  //   aiPrompt:
-  //     "Write me a cover letter for a given job description and my resume keywords and give me result in rich text editor format",
-  //   slug: "cover-letter",
-  //   form: [
-  //     {
-  //       label: "Paste Job Description",
-  //       field: "input",
-  //       name: "niche",
-  //       required: true,
-  //     },
-  //     {
-  //       label: "Enter a few keywords of your resume",
-  //       field: "textarea",
-  //       name: " outline",
-  //     },
-  //   ],
-  // },
+  {
+    name: "Cover Letter📃",
+    desc: "Craft a fantastic cover letter for your dream job",
+    category: "Basic Resume",
+    icon: "/designresume.png",
+    aiPrompt:
+      "Write me a cover letter for a given job description and my resume keywords and give me result in rich text editor format",
+    slug: "coverletter",
+    form: [
+      {
+        label: "Paste Job Description",
+        field: "input",
+        name: "niche",
+        required: true,
+      },
+      {
+        label: "Enter a few keywords of your resume",
+        field: "textarea",
+        name: " outline",
+      },
+    ],
+  },
 ];

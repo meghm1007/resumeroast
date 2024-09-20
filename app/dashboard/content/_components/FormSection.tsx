@@ -16,7 +16,7 @@ interface PROPS {
   resumeData: any;
 }
 
-const sections = ["PersonalInfo", "Experience", "Education", "Projects"];
+const sections = ["PersonalInfo", "Experience", "Education", "Projects", "Skills"];
 
 function FormSection({
   selectedTemplate,
@@ -143,6 +143,74 @@ function FormSection({
       });
     }
   };
+
+  const addSkills = () => {
+    onFormChange({
+      skills: {
+        codeConcepts: resumeData.skills?.codeConcepts || [],
+        technologiesFrameworks: resumeData.skills?.technologiesFrameworks || [],
+      },
+    });
+  };
+
+  const handleSkillsChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    const trimmedValues = value.split(",").map((item) => item.trim());
+
+    onFormChange({
+      skills: {
+        ...resumeData.skills,
+        [name]: trimmedValues,
+      },
+    });
+  };
+
+  const renderSkillsSection = () => (
+    <div>
+      <h2 className="font-bold text-2xl mb-2 text-primary">Skills</h2>
+      <p className="font-medium text-gray-600 mb-5">
+        Enter your skills in the specified format
+      </p>
+      <div className="grid grid-cols-1 gap-4">
+        <div>
+          <label className="text-sm">Code/Concepts</label>
+          <textarea
+            name="codeConcepts"
+            onChange={handleSkillsChange}
+            placeholder="Python, Java, Javascript, HTML, CSS, Node.js, ELM, C#, C++, MATLAB, OOPS"
+            className="w-full p-2 border rounded"
+            value={
+              resumeData.skills?.codeConcepts
+                ? resumeData.skills.codeConcepts.join(", ")
+                : ""
+            }
+          />
+        </div>
+        <div>
+          <label className="text-sm">Technologies/Frameworks</label>
+          <textarea
+            name="technologiesFrameworks"
+            onChange={handleSkillsChange}
+            placeholder="openCV, Tensorflow, Tkinter, Pandas, Numpy, Firebase, Unity, Bootstrap"
+            className="w-full p-2 border rounded"
+            value={
+              resumeData.skills?.technologiesFrameworks
+                ? resumeData.skills.technologiesFrameworks.join(", ")
+                : ""
+            }
+          />
+        </div>
+      </div>
+      <div className="flex justify-end mt-4">
+        <Button onClick={saveSection} disabled={isSaving}>
+          {isSaving ? "Saving..." : "Save Skills"}
+        </Button>
+      </div>
+    </div>
+  );
+
 
   const removeSection = (index: number, section: string) => {
     if (section === "experience") {
@@ -364,7 +432,7 @@ function FormSection({
             )}
             <Button
               type="button"
-              className="mt-4 py-6 bg-green-600 hover:bg-green-700"
+              className="mt-4 ml-5 py-6 bg-green-600 hover:bg-green-700"
               onClick={saveSection}
               disabled={isSaving}
             >
@@ -539,6 +607,8 @@ function FormSection({
             </Button>
           </div>
         );
+      case "Skills":
+        return renderSkillsSection();
       default:
         return null;
     }
@@ -603,7 +673,7 @@ function countNonEmptyEntries(
       break;
     }
   }
-  return Math.max(count, 1);
+  return count;
 }
 
 export default FormSection;

@@ -51,28 +51,31 @@ export default {
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
     },
   ],
-  skills: [
-    {
-      id: 1,
-      name: "Angular",
-      rating: 50,
-    },
-    {
-      id: 2,
-      name: "React",
-      rating: 90,
-    },
-    {
-      id: 3,
-      name: "Vue",
-      rating: 30,
-    },
-    {
-      id: 4,
-      name: "Node",
-      rating: 82,
-    },
-  ],
+  skills: {
+    codeConcepts: [
+      "Python",
+      "Java",
+      "Javascript",
+      "HTML",
+      "CSS",
+      "Node.js",
+      "ELM",
+      "C#",
+      "C++",
+      "MATLAB",
+      "OOPS",
+    ],
+    technologiesFrameworks: [
+      "openCV",
+      "Tensorflow",
+      "Tkinter",
+      "Pandas",
+      "Numpy",
+      "Firebase",
+      "Unity",
+      "Bootstrap",
+    ],
+  },
   projects: [
     // Add this field
     {

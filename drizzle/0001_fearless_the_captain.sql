@@ -1,0 +1,1 @@
+ALTER TABLE "userResume" ADD COLUMN "skills" jsonb DEFAULT '[]'::jsonb;

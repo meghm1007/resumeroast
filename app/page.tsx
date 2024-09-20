@@ -167,19 +167,19 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <FAQItem
               question="How does Resume Roast use AI to create resumes?"
-              answer="Resume Roast leverages Google Gemini AI to analyze your input and generate tailored resume content. It considers industry standards, job requirements, and best practices to create a professional and effective resume."
+              answer="Resume Roast leverages Google Gemini AI to analyze your input and generate tailored resume content. You just need to provide keywords and we will do the rest."
             />
             <FAQItem
               question="What is resume roasting, and how does it work?"
-              answer="Resume roasting is our unique peer review feature. Users can submit their resumes for feedback from other professionals. This process provides honest, constructive criticism to help improve your resume based on real-world perspectives."
+              answer="Resume roasting is our unique peer review feature. Users can submit their resumes for feedback from other professionals. This process provides honest, constructive criticism to help improve your resume based on real-world perspectives. You can also roast other's resumes to help them improve. This would help you get more visibility and get your resume in front of recruiters."
             />
             <FAQItem
-              question="Is my personal information safe when using Resume Roast?"
-              answer="Yes, we take data privacy seriously. All personal information is encrypted and stored securely. We never share your data with third parties without your explicit consent."
+              question="What is Cloud hosting?"
+              answer="You can choose to host your resume online on the cloud and share it with others with a single link"
             />
             <FAQItem
               question="Can I use Resume Roast for free?"
-              answer="Yes! We offer a free tier that allows you to create and roast a limited number of resumes. For unlimited access and advanced features, we also offer premium plans."
+              answer="Unfortunately no☹️. The AI and hosting costs are too high for us to provide a free tier. But we have a lifetime deal for a cheap rate of$12.99"
             />
           </div>
         </div>

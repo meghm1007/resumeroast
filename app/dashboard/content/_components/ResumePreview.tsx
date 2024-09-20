@@ -15,6 +15,11 @@ interface Experience {
   workSummary?: string;
 }
 
+interface Skills {
+  codeConcepts: string[];
+  technologiesFrameworks: string[];
+}
+
 interface Education {
   id?: number;
   universityName?: string;
@@ -49,7 +54,7 @@ interface ResumeData {
   experience?: Experience[];
   education?: Education[];
   projects?: Project[];
-  skills?: Skill[];
+  skills?: Skills;
 }
 
 interface ResumePreviewProps {
@@ -337,11 +342,11 @@ function ResumePreview({
                 {education?.universityName}
               </h2>
               <h2 className="text-xs flex justify-between">
-                {education?.degree}{" "}
-                {education?.major && `in ${education.major}`}{" "}
+                {education?.degree}
+                {education?.major && `in ${education.major}`}
                 <span>
-                  {education?.startDate || "Start Date"} -{" "}
-                  {education?.endDate || "End Date"}
+                  {education?.startDate || ""}
+                  {education?.endDate || ""}
                 </span>
               </h2>
               <div
@@ -387,6 +392,45 @@ function ResumePreview({
               />
             </div>
           ))}
+        </div>
+
+        {/* Skills */}
+        <div className="my-6">
+          <h2
+            className="text-center font-bold text-sm mb-2"
+            style={{
+              color: resumeInfo.themeColor,
+            }}
+          >
+            Skills
+          </h2>
+          <hr
+            style={{
+              borderColor: resumeInfo.themeColor,
+            }}
+          />
+          {resumeInfo.skills && (
+            <div className="my-5">
+              <h3
+                className="text-xs font-bold"
+                style={{ color: resumeInfo.themeColor }}
+              >
+                Code/Concepts
+              </h3>
+              <p className="text-xs">
+                {resumeInfo.skills.codeConcepts.join(", ") || "N/A"}
+              </p>
+              <h3
+                className="text-xs font-bold mt-3"
+                style={{ color: resumeInfo.themeColor }}
+              >
+                Technologies/Frameworks
+              </h3>
+              <p className="text-xs">
+                {resumeInfo.skills.technologiesFrameworks.join(", ") || "N/A"}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

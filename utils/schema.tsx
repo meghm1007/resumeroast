@@ -105,4 +105,22 @@ export const userResume = pgTable("userResume", {
   //projects 4
   projectName4: varchar("projectName4"),
   projectDescription4: text("projectDescription4"),
+  //skills
+  // Add skills fields
+  skills: jsonb("skills")
+    .$type<{
+      codeConcepts: string[];
+      technologiesFrameworks: string[];
+    }>()
+    .default({ codeConcepts: [], technologiesFrameworks: [] }),
+});
+export const CoverLetters = pgTable("coverLetters", {
+  id: serial("id").primaryKey(),
+  jobDescription: text("jobDescription").notNull(),
+  educationSummary: text("educationSummary"),
+  projectsSummary: text("projectsSummary"),
+  experienceSummary: text("experienceSummary"),
+  content: text("content"),
+  createdBy: varchar("createdBy"),
+  createdAt: varchar("createdAt"),
 });
