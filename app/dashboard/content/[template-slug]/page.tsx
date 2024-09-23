@@ -147,7 +147,7 @@ function CreateNewContent(props: PROPS) {
 
   return (
     <div className="p-10">
-      <div className="">
+      <div className="mb-10">
         <Link href={"/dashboard"}>
           <Button className="text-white bg-red-500">
             <ArrowLeft /> Back
@@ -159,10 +159,39 @@ function CreateNewContent(props: PROPS) {
         </p>
         <br />
 
-        <h2>Instructions</h2>
-        <p>Add keywords and then click on AI Assist to generate content</p>
-        <p>Use **text** to make text bold</p>
-        <p>Use *text* to make text italic</p>
+        <div className="flex flex-col gap-2 bg-gray-100 rounded-sm border-2 border-gray-300 p-5">
+          <h2 className="text-lg font-semibold">Instructions📃</h2>
+          <p>Add keywords and then click on AI Assist to generate content</p>
+          <p>
+            Use **text** to make text <span className="font-bold">bold</span>{" "}
+            and *text* to make text <span className="italic">italic</span>
+          </p>
+
+          <p>Use * at the beginning of a line to create a new bullet point</p>
+          <p>
+            Delete extra 'education' or 'experience' sections to format the
+            spacing correctly
+          </p>
+          <p>
+            Click on the <span className="text-green-500">Download as PDF</span>{" "}
+            button to download a pdf version of exactly what you see and click
+            on the <span className="text-orange-800">Let Others Roast It</span>{" "}
+            button to host it online and make it public
+          </p>
+          <p className="text-gray-500 italic">
+            If you have any other{" "}
+            <span className="font-bold text-black">questions</span> or have a{" "}
+            <span className="font-bold text-black">feature</span> request feel
+            free to post on our{" "}
+            <a
+              href="https://www.reddit.com/r/resume_roasts/"
+              target="_blank"
+              className="text-orange-600 underline"
+            >
+              Reddit Community (r/resume_roasts)
+            </a>
+          </p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-2">
