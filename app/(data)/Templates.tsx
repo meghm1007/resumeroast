@@ -115,10 +115,10 @@ export default [
         label: "Skills✨",
         field: "textarea",
         name: "Skills",
-        aiButton: false, // Assuming no AI assist for skills
-        required: false,
+        aiButton: true, // Assuming no AI assist for skills
+        required: true,
         placeholder:
-          "Code/Concepts: Python, Java, Javascript, HTML, CSS, Node.js, ELM, C#, C++, MATLAB, OOPS\nTechnologies/Frameworks: openCV, Tensorflow, Tkinter, Pandas, Numpy, Firebase, Unity, Bootstrap",
+          "Input your skills separated by commas, e.g., Python, Java, JavaScript, HTML, CSS, Node.js",
       },
     ],
     aiPrompt:

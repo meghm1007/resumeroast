@@ -51,31 +51,6 @@ export default {
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
     },
   ],
-  skills: {
-    codeConcepts: [
-      "Python",
-      "Java",
-      "Javascript",
-      "HTML",
-      "CSS",
-      "Node.js",
-      "ELM",
-      "C#",
-      "C++",
-      "MATLAB",
-      "OOPS",
-    ],
-    technologiesFrameworks: [
-      "openCV",
-      "Tensorflow",
-      "Tkinter",
-      "Pandas",
-      "Numpy",
-      "Firebase",
-      "Unity",
-      "Bootstrap",
-    ],
-  },
   projects: [
     // Add this field
     {
@@ -93,4 +68,5 @@ export default {
       endDate: "2021-12-31",
     },
   ],
+  skills: "Python, Java, JavaScript, HTML, CSS, Node.js",
 };

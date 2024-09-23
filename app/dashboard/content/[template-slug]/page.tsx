@@ -13,7 +13,7 @@ import { db } from "@/utils/db";
 import { AIOutput } from "@/utils/schema";
 import ResumePreview from "../_components/ResumePreview";
 import dummyResume from "@/app/(data)/dummyResume";
-import { Skills } from "@/utils/schema";
+
 interface PROPS {
   params: {
     "template-slug": string;
@@ -67,7 +67,7 @@ interface ResumeData {
   themeColor?: string;
   experience?: Experience[];
   education?: Education[];
-  skills?: Skills;
+  skills?: string;
   projects?: Project[]; // Add this line
 }
 
@@ -83,7 +83,7 @@ function CreateNewContent(props: PROPS) {
     ...dummyResume,
     experience: dummyResume.experience || [{}],
     projects: dummyResume.projects || [{}],
-    skills: dummyResume.skills || { codeConcepts: [], technologiesFrameworks: [] },
+    skills: "",
   });
 
   const { user } = useUser();

@@ -146,70 +146,42 @@ function FormSection({
 
   const addSkills = () => {
     onFormChange({
-      skills: {
-        codeConcepts: resumeData.skills?.codeConcepts || [],
-        technologiesFrameworks: resumeData.skills?.technologiesFrameworks || [],
-      },
+      skills: resumeData.skills || "",
     });
   };
 
-  const handleSkillsChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    const trimmedValues = value.split(",").map((item) => item.trim());
-
-    onFormChange({
-      skills: {
-        ...resumeData.skills,
-        [name]: trimmedValues,
-      },
-    });
+  const handleSkillsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { value } = e.target;
+    onFormChange({ skills: value });
   };
-
+  
   const renderSkillsSection = () => (
     <div>
       <h2 className="font-bold text-2xl mb-2 text-primary">Skills</h2>
       <p className="font-medium text-gray-600 mb-5">
-        Enter your skills in the specified format
+        Enter your skills separated by commas
       </p>
       <div className="grid grid-cols-1 gap-4">
         <div>
-          <label className="text-sm">Code/Concepts</label>
-          <textarea
-            name="codeConcepts"
+          <label className="text-sm">Skills</label>
+          <Textarea
+            name="skills"
             onChange={handleSkillsChange}
-            placeholder="Python, Java, Javascript, HTML, CSS, Node.js, ELM, C#, C++, MATLAB, OOPS"
+            placeholder="Python, Java, Javascript, HTML, CSS, Node.js, ELM, C#, C++, MATLAB, OOPS, openCV, Tensorflow, Tkinter, Pandas, Numpy, Firebase, Unity, Bootstrap"
             className="w-full p-2 border rounded"
-            value={
-              resumeData.skills?.codeConcepts
-                ? resumeData.skills.codeConcepts.join(", ")
-                : ""
-            }
-          />
-        </div>
-        <div>
-          <label className="text-sm">Technologies/Frameworks</label>
-          <textarea
-            name="technologiesFrameworks"
-            onChange={handleSkillsChange}
-            placeholder="openCV, Tensorflow, Tkinter, Pandas, Numpy, Firebase, Unity, Bootstrap"
-            className="w-full p-2 border rounded"
-            value={
-              resumeData.skills?.technologiesFrameworks
-                ? resumeData.skills.technologiesFrameworks.join(", ")
-                : ""
-            }
+            value={resumeData.skills || ""}
           />
         </div>
       </div>
       <div className="flex justify-end mt-4">
         <Button onClick={saveSection} disabled={isSaving}>
           {isSaving ? "Saving..." : "Save Skills"}
+          <FaSave className="ml-2" />
         </Button>
       </div>
     </div>
   );
+
 
 
   const removeSection = (index: number, section: string) => {

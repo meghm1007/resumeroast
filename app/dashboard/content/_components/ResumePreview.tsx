@@ -15,10 +15,7 @@ interface Experience {
   workSummary?: string;
 }
 
-interface Skills {
-  codeConcepts: string[];
-  technologiesFrameworks: string[];
-}
+
 
 interface Education {
   id?: number;
@@ -36,11 +33,7 @@ interface Project {
   description?: string;
 }
 
-interface Skill {
-  id?: number;
-  name?: string;
-  rating?: number;
-}
+
 
 interface ResumeData {
   firstName?: string;
@@ -54,7 +47,7 @@ interface ResumeData {
   experience?: Experience[];
   education?: Education[];
   projects?: Project[];
-  skills?: Skills;
+  skills?: string;
 }
 
 interface ResumePreviewProps {
@@ -93,6 +86,16 @@ function ResumePreview({
       try {
         // Download as PDF
         document.body.innerHTML = printContents;
+        const style = document.createElement("style");
+        style.innerHTML = `
+          @page {
+            margin: 0;
+          }
+          body {
+            margin: 1cm;
+          }
+        `;
+        document.head.appendChild(style);
         window.print();
         document.body.innerHTML = originalContents;
         window.location.reload();
@@ -317,6 +320,7 @@ function ResumePreview({
         </div>
 
         {/* Education */}
+        {/* Education */}
         <div className="my-6">
           <h2
             className="text-center font-bold text-sm mb-2"
@@ -341,14 +345,19 @@ function ResumePreview({
               >
                 {education?.universityName}
               </h2>
-              <h2 className="text-xs flex justify-between">
-                {education?.degree}
-                {education?.major && `in ${education.major}`}
+              <div className="text-xs flex justify-between">
                 <span>
-                  {education?.startDate || ""}
-                  {education?.endDate || ""}
+                  {education?.degree}
+                  {education?.major && ` in ${education.major}`}
                 </span>
-              </h2>
+                {(education?.startDate || education?.endDate) && (
+                  <span>
+                    {education?.startDate && education.startDate}
+                    {education?.startDate && education?.endDate && " - "}
+                    {education?.endDate && education.endDate}
+                  </span>
+                )}
+              </div>
               <div
                 className="text-xs my-2"
                 dangerouslySetInnerHTML={{
@@ -411,24 +420,7 @@ function ResumePreview({
           />
           {resumeInfo.skills && (
             <div className="my-5">
-              <h3
-                className="text-xs font-bold"
-                style={{ color: resumeInfo.themeColor }}
-              >
-                Code/Concepts
-              </h3>
-              <p className="text-xs">
-                {resumeInfo.skills.codeConcepts.join(", ") || "N/A"}
-              </p>
-              <h3
-                className="text-xs font-bold mt-3"
-                style={{ color: resumeInfo.themeColor }}
-              >
-                Technologies/Frameworks
-              </h3>
-              <p className="text-xs">
-                {resumeInfo.skills.technologiesFrameworks.join(", ") || "N/A"}
-              </p>
+              <p className="text-xs">{resumeInfo.skills}</p>
             </div>
           )}
         </div>

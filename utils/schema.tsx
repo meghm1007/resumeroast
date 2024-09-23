@@ -107,12 +107,7 @@ export const userResume = pgTable("userResume", {
   projectDescription4: text("projectDescription4"),
   //skills
   // Add skills fields
-  skills: jsonb("skills")
-    .$type<{
-      codeConcepts: string[];
-      technologiesFrameworks: string[];
-    }>()
-    .default({ codeConcepts: [], technologiesFrameworks: [] }),
+  skills: text("skills"),
 });
 export const CoverLetters = pgTable("coverLetters", {
   id: serial("id").primaryKey(),

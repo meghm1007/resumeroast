@@ -23,7 +23,7 @@ export interface ResumeData {
     fieldOfStudy: string;
     graduationDate: string;
   }>;
-  skills: Skills;
+  skills: string;
 }
 
 const initialResumeData: ResumeData = {
@@ -31,7 +31,7 @@ const initialResumeData: ResumeData = {
   summary: "",
   experience: [{ title: "", company: "", location: "", startDate: "", endDate: "", description: "" }],
   education: [{ school: "", degree: "", fieldOfStudy: "", graduationDate: "" }],
-  skills: [""],
+  skills: "",
 };
 
 export const ResumeContext = createContext<{

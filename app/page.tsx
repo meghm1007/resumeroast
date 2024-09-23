@@ -8,12 +8,40 @@ import { SiGooglegemini } from "react-icons/si";
 import { FaSquareXTwitter, FaFire } from "react-icons/fa6";
 import "./DynamicHeading.css";
 import { FaReddit } from "react-icons/fa6";
+import dynamic from 'next/dynamic';
 
-interface FeatureCardProps {
-  icon: ReactNode;
-  title: string;
-  description: string;
-}
+// Simple loading spinner component
+const LoadingSpinner = () => (
+  <div className="flex justify-center items-center">
+    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#965f14]"></div>
+  </div>
+);
+
+// FeatureCard component
+const FeatureCard = ({ icon, title, description }: { icon: ReactNode; title: string; description: string }) => (
+  <div className="bg-gray-50 p-6 rounded-lg shadow-md text-center">
+    <div className="flex justify-center mb-4">{icon}</div>
+    <h3 className="text-xl font-semibold mb-2 text-[#3e2c1c]">{title}</h3>
+    <p className="text-gray-600">{description}</p>
+  </div>
+);
+
+// FAQItem component
+const FAQItem = ({ question, answer }: { question: string; answer: string }) => (
+  <div className="bg-gray-50 p-6 rounded-lg shadow-md">
+    <h3 className="text-xl font-semibold mb-2 text-[#3e2c1c]">{question}</h3>
+    <p className="text-gray-600">{answer}</p>
+  </div>
+);
+
+// Dynamically import heavy components
+const DynamicFeatureCard = dynamic(() => Promise.resolve(FeatureCard), {
+  loading: () => <LoadingSpinner />,
+});
+
+const DynamicFAQItem = dynamic(() => Promise.resolve(FAQItem), {
+  loading: () => <LoadingSpinner />,
+});
 
 export default function Home() {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -57,12 +85,14 @@ export default function Home() {
         <nav className="flex items-center space-x-6">
           <Link
             href="/dashboard"
+            prefetch={true}
             className="text-gray-700 hover:text-[#965f14] transition"
           >
             Dashboard
           </Link>
           <Link
             href="/roast"
+            prefetch={true}
             className="text-gray-700 hover:text-[#965f14] transition"
           >
             Roast
@@ -147,17 +177,17 @@ export default function Home() {
             Why Choose Resume Roast?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <FeatureCard
+            <DynamicFeatureCard
               icon={<SiGooglegemini className="text-4xl text-[#965f14]" />}
               title="AI-Powered Creation"
               description="Leverage Google Gemini AI to craft professional resumes tailored to your industry."
             />
-            <FeatureCard
+            <DynamicFeatureCard
               icon={<FaFire className="text-4xl text-orange-500" />}
               title="Peer Roasting"
               description="Get honest feedback from professionals in your field to improve your resume."
             />
-            <FeatureCard
+            <DynamicFeatureCard
               icon={<GiCoffeeCup className="text-4xl text-[#965f14]" />}
               title="ATS Optimization"
               description="Ensure your resume passes Applicant Tracking Systems with our built-in optimization tools."
@@ -173,19 +203,19 @@ export default function Home() {
             Frequently Asked Questions
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <FAQItem
+            <DynamicFAQItem
               question="How does Resume Roast use AI to create resumes?"
               answer="Resume Roast leverages Google Gemini AI to analyze your input and generate tailored resume content. You just need to provide keywords and we will do the rest."
             />
-            <FAQItem
+            <DynamicFAQItem
               question="What is resume roasting, and how does it work?"
-              answer="Resume roasting is our unique peer review feature. Users can submit their resumes for feedback from other professionals. This process provides honest, constructive criticism to help improve your resume based on real-world perspectives. You can also roast other's resumes to help them improve. This would help you get more visibility and get your resume in front of recruiters."
+              answer="Resume roasting is our unique peer review feature. Users can submit their resumes for feedback from other professionals. This process provides honest, constructive criticism to help improve your resume based on real-world perspectives."
             />
-            <FAQItem
+            <DynamicFAQItem
               question="What is Cloud hosting?"
               answer="You can choose to host your resume online on the cloud and share it with others with a single link"
             />
-            <FAQItem
+            <DynamicFAQItem
               question="Can I use Resume Roast for free?"
               answer="Unfortunately no☹️. The AI and hosting costs are too high for us to provide a free tier. But we have a lifetime deal for a cheap rate of$12.99"
             />
@@ -277,30 +307,6 @@ export default function Home() {
           </a>
         </div>
       </footer>
-    </div>
-  );
-}
-
-function FeatureCard({ icon, title, description }: FeatureCardProps) {
-  return (
-    <div className="bg-gray-50 p-6 rounded-lg shadow-md text-center">
-      <div className="flex justify-center mb-4">{icon}</div>
-      <h3 className="text-xl font-semibold mb-2 text-[#3e2c1c]">{title}</h3>
-      <p className="text-gray-600">{description}</p>
-    </div>
-  );
-}
-
-interface FAQItemProps {
-  question: string;
-  answer: string;
-}
-
-function FAQItem({ question, answer }: FAQItemProps) {
-  return (
-    <div className="bg-gray-50 p-6 rounded-lg shadow-md">
-      <h3 className="text-xl font-semibold mb-2 text-[#3e2c1c]">{question}</h3>
-      <p className="text-gray-600">{answer}</p>
     </div>
   );
 }
