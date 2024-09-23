@@ -42,12 +42,6 @@ interface Education {
   description?: string;
 }
 
-interface Skill {
-  id?: number;
-  name?: string;
-  rating?: number;
-}
-
 interface Project {
   id?: number;
   title?: string;
@@ -163,6 +157,12 @@ function CreateNewContent(props: PROPS) {
           You can view all the resumes you have created in the Roast section😀🍵{" "}
           <br /> You can even see other people's resumes and roast them😎
         </p>
+        <br />
+
+        <h2>Instructions</h2>
+        <p>Add keywords and then click on AI Assist to generate content</p>
+        <p>Use **text** to make text bold</p>
+        <p>Use *text* to make text italic</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-2">

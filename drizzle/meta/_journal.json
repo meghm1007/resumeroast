@@ -15,6 +15,13 @@
       "when": 1726774789027,
       "tag": "0001_steady_madripoor",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1727110749850,
+      "tag": "0002_dizzy_ogun",
+      "breakpoints": true
     }
   ]
 }

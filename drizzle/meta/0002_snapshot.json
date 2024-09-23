@@ -1,6 +1,6 @@
 {
-  "id": "374e8385-8ee5-4daa-8073-ca9ebc7f5d42",
-  "prevId": "2d51cfa7-5391-459c-b5c9-28bf04a8a8a7",
+  "id": "68f3c192-c37e-41b5-9a77-2f942f8cf8b8",
+  "prevId": "374e8385-8ee5-4daa-8073-ca9ebc7f5d42",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -31,6 +31,64 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
+        },
+        "createdBy": {
+          "name": "createdBy",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.coverLetters": {
+      "name": "coverLetters",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "jobDescription": {
+          "name": "jobDescription",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "educationSummary": {
+          "name": "educationSummary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "projectsSummary": {
+          "name": "projectsSummary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "experienceSummary": {
+          "name": "experienceSummary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "createdBy": {
           "name": "createdBy",
@@ -505,10 +563,9 @@
         },
         "skills": {
           "name": "skills",
-          "type": "varchar",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "default": "''"
+          "notNull": false
         }
       },
       "indexes": {},

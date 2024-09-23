@@ -3,8 +3,7 @@ import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
 import { eq } from "drizzle-orm";
 import { userResume } from "./schema";
-import { CoverLetters } from "./schema"
-
+import { CoverLetters } from "./schema";
 
 const sql = neon(process.env.NEXT_PUBLIC_DRIZZLE_DB_URL!);
 export const db = drizzle(sql, { schema });
@@ -125,17 +124,16 @@ function mapSectionDataToSchema(data: any, section: string) {
         projectDescription4: data.projects?.[3]?.description || "",
       };
 
-      case "Skills":
-    return {
-      skills: {
-        codeConcepts: data.skills?.codeConcepts
-          ? data.skills.codeConcepts.split(",").map((skill: string) => skill.trim())
-          : [],
-        technologiesFrameworks: data.skills?.technologiesFrameworks
-          ? data.skills.technologiesFrameworks.split(",").map((tech: string) => tech.trim())
-          : [],
-      },
-    };
+    case "Skills":
+      return {
+        skills: data.skills
+          ? data.skills
+              .split(",")
+              .map((skill: string) => skill.trim())
+              .join(", ")
+          : "",
+      };
+
     default:
       return {};
   }
@@ -249,10 +247,7 @@ export async function getUserResumeData(email: string) {
         description: user.projectDescription4,
       },
     ],
-    skills: user.skills || {
-      codeConcepts: [],
-      technologiesFrameworks: [],
-    },
+    skills: user.skills || "",
   };
 }
 
