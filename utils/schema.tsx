@@ -1,5 +1,11 @@
-import { pgTable, serial, text, varchar, jsonb } from "drizzle-orm/pg-core";
-import { X } from "lucide-react";
+import { pgTable, serial, text, varchar, jsonb, integer } from "drizzle-orm/pg-core";
+
+export const User = pgTable("user", {
+  id: serial("id").primaryKey(),
+  email: varchar("email").notNull(),
+  name: varchar("name"),
+  credits: integer("credits").default(100),
+});
 
 export const AIOutput = pgTable("aiOutput", {
   id: serial("id").primaryKey(),
