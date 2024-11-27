@@ -127,7 +127,7 @@ export default function Home() {
               </p>
               <div className="flex space-x-4 mb-8">
                 <Link
-                  href="/signup"
+                  href="/dashboard"
                   className="bg-[#965f14] text-white hover:bg-[#7a4b12] px-6 py-3 rounded-md text-lg font-semibold transition"
                 >
                   Get Started Free

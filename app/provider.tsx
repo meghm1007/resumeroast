@@ -7,7 +7,8 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 function Provider({ children }: { children: React.ReactNode }) {
   const { user } = useUser();
-  const [userDetail, setUserDetail] = useState([]);
+  const [userDetail, setUserDetail] = useState<any>(null);
+
   useEffect(() => {
     user && VerifyUser();
   }, [user]);
@@ -17,13 +18,11 @@ function Provider({ children }: { children: React.ReactNode }) {
       user: user,
     });
     setUserDetail(dataResult.data.result);
-    console.log(dataResult);
   };
+
   return (
-    <UserDetailContext.Provider value={{ userDetail, setUserDetail }}>
-      <PayPalScriptProvider
-        options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID! }}
-      >
+    <UserDetailContext.Provider value={{ userDetail, setUserDetail, getUserDetail: VerifyUser }}>
+      <PayPalScriptProvider options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID! }}>
         {children}
       </PayPalScriptProvider>
     </UserDetailContext.Provider>

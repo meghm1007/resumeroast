@@ -1,13 +1,22 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { PayPalButtons } from "@paypal/react-paypal-js";
-import { Coins, CreditCard, Sparkles, Check } from "lucide-react";
-import React, { useContext, useState } from "react";
+import { Coins, CreditCard, Check } from "lucide-react";
+import React, { useContext, useState, useRef } from "react";
 import { CreateOrderData, CreateOrderActions } from "@paypal/paypal-js";
 import { db } from "@/utils/db";
 import { User } from "@/utils/schema";
 import { UserDetailContext } from "@/app/_context/UserDetailContext";
 import { useRouter } from "next/navigation";
+import { FaCcPaypal, FaCcVisa, FaCcMastercard, FaCcAmex } from "react-icons/fa";
+import { eq } from "drizzle-orm";
+
+interface CreditOption {
+  credits: number;
+  amount: number;
+  description: string;
+  popular?: boolean;
+}
 
 function BillingPage() {
   const creditOptions = [
@@ -39,44 +48,72 @@ function BillingPage() {
     },
   ];
 
-  const [selectedCredits, setSelectedCredits] = useState(creditOptions[1]); // Default to most popular option
-  const { userDetail, getUserDetail } = useContext(UserDetailContext);
+  const selectedCreditsRef = useRef(creditOptions[1]);
+  const [selectedCredits, setSelectedCredits] = useState<CreditOption>(
+    creditOptions[1]
+  );
+  const { userDetail, setUserDetail } = useContext(UserDetailContext);
   const router = useRouter();
   const onPaymentSuccess = async () => {
     console.log("payment success");
-    const result = await db
-      .update(User)
-      .set({
-        credits: userDetail?.credits + selectedCredits?.credits,
-      })
-      .returning({ id: User.id });
 
-    if (result) {
-      setUserDetail((prev: any) => ({
-        ...prev,
-        credits: userDetail?.credits + selectedCredits?.credits,
-      }));
-      router.push("/dashboard");
+    // Early return if required values are missing
+    if (!userDetail?.id || !selectedCreditsRef.current?.credits) {
+      console.error("Missing required information:", {
+        userId: userDetail?.id,
+        selectedCredits: selectedCreditsRef.current?.credits,
+      });
+      return;
     }
 
-    //update the credits in the database
+    try {
+      const result = await db
+        .update(User)
+        .set({
+          credits:
+            (userDetail.credits || 0) + selectedCreditsRef.current.credits,
+        })
+        .where(eq(User.id, userDetail.id))
+        .returning();
+
+      console.log("Update result:", result);
+
+      if (result && result.length > 0) {
+        setUserDetail((prev: any) => ({
+          ...prev,
+          credits: (prev.credits || 0) + selectedCreditsRef.current.credits,
+        }));
+        router.push("/dashboard");
+      } else {
+        console.error("No rows were updated");
+      }
+    } catch (error) {
+      console.error("Error updating credits:", error);
+    }
   };
 
   const handleCreateOrder = (
     data: CreateOrderData,
     actions: CreateOrderActions
   ) => {
+    console.log("Creating order with amount:", selectedCredits.amount);
     return actions.order.create({
       intent: "CAPTURE",
       purchase_units: [
         {
           amount: {
-            value: Math.round(selectedCredits.amount).toString(),
+            value: selectedCredits.amount.toString(),
             currency_code: "USD",
           },
         },
       ],
     });
+  };
+
+  const handleCreditSelection = (option: CreditOption) => {
+    console.log("Selected credit option:", option);
+    setSelectedCredits(option);
+    selectedCreditsRef.current = option;
   };
 
   return (
@@ -98,7 +135,7 @@ function BillingPage() {
                   ? "border-primary bg-primary/5 shadow-sm"
                   : "border-gray-200 hover:border-primary/50"
               }`}
-            onClick={() => setSelectedCredits(option)}
+            onClick={() => handleCreditSelection(option)}
           >
             {option.popular && (
               <span className="absolute -top-3 right-4 bg-primary text-white text-sm px-3 py-1 rounded-full">
@@ -140,18 +177,53 @@ function BillingPage() {
 
       <div className="mt-20">
         {selectedCredits?.amount && (
-          <PayPalButtons
-            onApprove={async () => await onPaymentSuccess()}
-            onCancel={() => console.log("payment cancelled")}
-            onError={(err) => console.log(err)}
-            style={{ layout: "horizontal" }}
-            createOrder={handleCreateOrder}
-          />
+          <>
+            <div className="text-center mb-6">
+              <p className="text-gray-600 mb-3">
+                Secure payment powered by PayPal
+              </p>
+              <div className="flex justify-center items-center gap-4 text-gray-400">
+                <FaCcPaypal className="w-8 h-8" />
+                <FaCcVisa className="w-8 h-8" />
+                <FaCcMastercard className="w-8 h-8" />
+                <FaCcAmex className="w-8 h-8" />
+              </div>
+            </div>
+            <PayPalButtons
+              onApprove={async () => await onPaymentSuccess()}
+              onCancel={() => console.log("payment cancelled")}
+              onError={(err) => console.log(err)}
+              style={{ layout: "horizontal" }}
+              createOrder={(data, actions) => {
+                console.log(
+                  "Selected amount:",
+                  selectedCreditsRef.current.amount
+                );
+                return actions.order.create({
+                  intent: "CAPTURE",
+                  purchase_units: [
+                    {
+                      amount: {
+                        value: selectedCreditsRef.current.amount.toString(),
+                        currency_code: "USD",
+                      },
+                    },
+                  ],
+                });
+              }}
+            />
+          </>
         )}
       </div>
 
-      <div className="mt-6 text-center text-sm text-gray-500">
-        Credits never expire and can be used for any AI-powered feature
+      <div className="mt-6">
+        <div className="text-center text-sm text-gray-500 space-y-2">
+          <p>Credits never expire and can be used for any AI-powered feature</p>
+          <div className="flex items-center justify-center gap-2 text-xs">
+            <CreditCard className="w-4 h-4" />
+            <span>256-bit SSL Encrypted Payment</span>
+          </div>
+        </div>
       </div>
     </div>
   );
