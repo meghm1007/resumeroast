@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/nextjs";
 import { chatSession } from "@/utils/AIModel";
+import { User } from "@/utils/schema";
+import { UserDetailContext } from "@/app/_context/UserDetailContext";
+import { db } from "@/utils/db";
+import toast from 'react-hot-toast';
 
 interface CoverLetterProps {
   onCoverLetterGenerated: (content: string) => void;
@@ -16,14 +20,45 @@ function CoverLetterSection({ onCoverLetterGenerated }: CoverLetterProps) {
   const [experienceSummary, setExperienceSummary] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
 
+  const { userDetail, setUserDetail } = useContext(UserDetailContext);
+
+  const updateUserCredit = async () => {
+    if (!userDetail?.credits) {
+      return;
+    }
+
+    const result = await db
+      .update(User)
+      .set({
+        credits: userDetail.credits - 1,
+      })
+      .returning({ id: User.id });
+
+    if (result) {
+      setUserDetail({ ...userDetail, credits: userDetail.credits - 1 });
+      return result[0].id;
+    }
+  };
+
   const handleGenerate = async () => {
     if (!jobDescription) {
-      alert("Please enter the job description.");
+      toast.error("Please enter the job description.");
+      return;
+    }
+
+    if (!userDetail?.credits || userDetail.credits <= 0) {
+      toast.error("Not enough credits! Please purchase more credits.");
       return;
     }
 
     setIsGenerating(true);
     try {
+      const updated = await updateUserCredit();
+      if (!updated) {
+        toast.error("Failed to update credits");
+        return;
+      }
+
       const prompt = `
         Based on the following job description and my summaries, generate a professional cover letter.
 
@@ -42,8 +77,10 @@ function CoverLetterSection({ onCoverLetterGenerated }: CoverLetterProps) {
       const result = await chatSession.sendMessage(prompt);
       const aiResponse = await result.response.text();
       onCoverLetterGenerated(aiResponse);
+      toast.success("Cover letter generated successfully!");
     } catch (error) {
       console.error("Error generating cover letter:", error);
+      toast.error("Error generating cover letter. Please try again.");
     } finally {
       setIsGenerating(false);
     }
@@ -54,7 +91,9 @@ function CoverLetterSection({ onCoverLetterGenerated }: CoverLetterProps) {
       <h2 className="text-2xl font-bold mb-4">Cover Letter Details</h2>
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-2">Job Description</label>
+          <label className="block text-sm font-medium mb-2">
+            Job Description
+          </label>
           <Textarea
             value={jobDescription}
             onChange={(e) => setJobDescription(e.target.value)}
@@ -64,7 +103,9 @@ function CoverLetterSection({ onCoverLetterGenerated }: CoverLetterProps) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-2">Education Summary</label>
+          <label className="block text-sm font-medium mb-2">
+            Education Summary
+          </label>
           <Textarea
             value={educationSummary}
             onChange={(e) => setEducationSummary(e.target.value)}
@@ -74,7 +115,9 @@ function CoverLetterSection({ onCoverLetterGenerated }: CoverLetterProps) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-2">Projects Summary</label>
+          <label className="block text-sm font-medium mb-2">
+            Projects Summary
+          </label>
           <Textarea
             value={projectsSummary}
             onChange={(e) => setProjectsSummary(e.target.value)}
@@ -84,7 +127,9 @@ function CoverLetterSection({ onCoverLetterGenerated }: CoverLetterProps) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-2">Experience Summary</label>
+          <label className="block text-sm font-medium mb-2">
+            Experience Summary
+          </label>
           <Textarea
             value={experienceSummary}
             onChange={(e) => setExperienceSummary(e.target.value)}
@@ -95,7 +140,11 @@ function CoverLetterSection({ onCoverLetterGenerated }: CoverLetterProps) {
         </div>
       </div>
       <div className="mt-6">
-        <Button onClick={handleGenerate} disabled={isGenerating} className="w-full">
+        <Button
+          onClick={handleGenerate}
+          disabled={isGenerating}
+          className="w-full"
+        >
           {isGenerating ? "Generating..." : "Generate Cover Letter"}
         </Button>
       </div>

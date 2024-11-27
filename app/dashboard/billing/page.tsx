@@ -10,6 +10,7 @@ import { UserDetailContext } from "@/app/_context/UserDetailContext";
 import { useRouter } from "next/navigation";
 import { FaCcPaypal, FaCcVisa, FaCcMastercard, FaCcAmex } from "react-icons/fa";
 import { eq } from "drizzle-orm";
+import toast from "react-hot-toast";
 
 interface CreditOption {
   credits: number;
@@ -83,6 +84,9 @@ function BillingPage() {
           ...prev,
           credits: (prev.credits || 0) + selectedCreditsRef.current.credits,
         }));
+        toast.success(
+          "Purchase Successful! Refresh your page to see the changes"
+        );
         router.push("/dashboard");
       } else {
         console.error("No rows were updated");

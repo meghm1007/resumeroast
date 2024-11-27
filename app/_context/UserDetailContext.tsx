@@ -3,7 +3,7 @@ import { createContext } from "react";
 interface UserDetailContextType {
   userDetail: {
     credits: number;
-    [key: string]: any;  // for other potential properties
+    [key: string]: any; // for other potential properties
   } | null;
   setUserDetail: React.Dispatch<React.SetStateAction<any>>;
   getUserDetail?: () => void;
@@ -13,5 +13,5 @@ interface UserDetailContextType {
 export const UserDetailContext = createContext<UserDetailContextType>({
   userDetail: null,
   setUserDetail: () => {},
-  getUserDetail: () => {}
+  getUserDetail: () => {},
 });

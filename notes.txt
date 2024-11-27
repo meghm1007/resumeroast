@@ -1,6 +1,3 @@
-- pdf bug✅
-- paywall
-- fast page routing
-- skills section, education extra line bug
-
--ATS resume checker
+-cover letter save to database
+-display cover letters
+-credits should decrease as the users use the AI generate button
