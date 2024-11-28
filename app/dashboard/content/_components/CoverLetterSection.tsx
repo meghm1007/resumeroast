@@ -6,7 +6,8 @@ import { chatSession } from "@/utils/AIModel";
 import { User } from "@/utils/schema";
 import { UserDetailContext } from "@/app/_context/UserDetailContext";
 import { db } from "@/utils/db";
-import toast from 'react-hot-toast';
+import { CoverLetters } from "@/utils/schema";
+import toast from "react-hot-toast";
 
 interface CoverLetterProps {
   onCoverLetterGenerated: (content: string) => void;
@@ -76,8 +77,24 @@ function CoverLetterSection({ onCoverLetterGenerated }: CoverLetterProps) {
       `;
       const result = await chatSession.sendMessage(prompt);
       const aiResponse = await result.response.text();
-      onCoverLetterGenerated(aiResponse);
-      toast.success("Cover letter generated successfully!");
+
+      const savedCoverLetter = await db
+        .insert(CoverLetters)
+        .values({
+          jobDescription,
+          educationSummary,
+          projectsSummary,
+          experienceSummary,
+          content: aiResponse,
+          createdBy: userDetail.id,
+          createdAt: new Date().toISOString(),
+        })
+        .returning();
+
+      if (savedCoverLetter) {
+        onCoverLetterGenerated(aiResponse);
+        toast.success("Cover letter generated and saved successfully!");
+      }
     } catch (error) {
       console.error("Error generating cover letter:", error);
       toast.error("Error generating cover letter. Please try again.");

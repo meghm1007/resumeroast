@@ -1,6 +1,12 @@
 "use client";
 
-import { FileClock, Home, Settings, WalletCards } from "lucide-react";
+import {
+  FileChartLine,
+  FileClock,
+  Home,
+  Settings,
+  WalletCards,
+} from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -17,6 +23,11 @@ function SideNav() {
       name: "Home",
       icon: Home,
       path: "/dashboard",
+    },
+    {
+      name: "My Documents",
+      icon: FileChartLine,
+      path: "/dashboard/documents",
     },
     {
       name: "Billing",
@@ -52,10 +63,10 @@ function SideNav() {
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    setLoadingAction('logo');
+    setLoadingAction("logo");
     setTimeout(() => {
       setLoadingAction(null);
-      router.push('/');
+      router.push("/");
     }, 9000);
   };
 
