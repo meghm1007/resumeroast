@@ -1,4 +1,2 @@
--cover letter save to database
--display cover letters
--your resumes/ cover letter section in the dashboard
 -credits should decrease as the users use the AI generate button
+-credits should decrease for uploading your resume to the cloud

@@ -7,6 +7,10 @@ import { ArrowLeft, ArrowRight, Loader2Icon, Trash2 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { saveResumeSection, getUserResumeData } from "@/utils/db";
 import { FaSave } from "react-icons/fa";
+import { db } from "@/utils/db";
+import { User } from "@/utils/schema";
+import { eq } from "drizzle-orm";
+import toast from 'react-hot-toast';
 
 interface PROPS {
   selectedTemplate?: TEMPLATE;
@@ -16,7 +20,13 @@ interface PROPS {
   resumeData: any;
 }
 
-const sections = ["PersonalInfo", "Experience", "Education", "Projects", "Skills"];
+const sections = [
+  "PersonalInfo",
+  "Experience",
+  "Education",
+  "Projects",
+  "Skills",
+];
 
 function FormSection({
   selectedTemplate,
@@ -90,25 +100,56 @@ function FormSection({
     }
   };
 
-  const handleAIButtonClick = (fieldName: string, prompt?: string) => {
-    let fieldData = resumeData[fieldName];
-    if (fieldName.startsWith("experience-")) {
-      const index = parseInt(fieldName.split("-")[1], 10);
-      fieldData = resumeData.experience?.[index] || {};
-    } else if (fieldName.startsWith("education-")) {
-      const index = parseInt(fieldName.split("-")[1], 10);
-      fieldData = resumeData.education?.[index] || {};
-    } else if (fieldName.startsWith("project-")) {
-      const index = parseInt(fieldName.split("-")[1], 10);
-      fieldData = resumeData.projects?.[index] || {};
+  const handleAIButtonClick = async (fieldName: string, prompt?: string) => {
+    if (!user?.primaryEmailAddress?.emailAddress) {
+      toast.error("Please login to use AI features");
+      return;
     }
 
-    const keywords = Object.values(fieldData).filter(Boolean).join(", ");
+    try {
+      const userData = await db
+        .select({ credits: User.credits })
+        .from(User)
+        .where(eq(User.email, user.primaryEmailAddress.emailAddress));
 
-    if (prompt) {
-      userFormInput({ keywords }, prompt, fieldName);
-    } else {
-      userFormInput({ keywords }, selectedTemplate?.aiPrompt || "", fieldName);
+      if (!userData?.[0]?.credits || userData[0].credits < 5) {
+        toast.error("Not enough credits! You need 5 credits to use AI assist.");
+        return;
+      }
+
+      await db
+        .update(User)
+        .set({ credits: userData[0].credits - 5 })
+        .where(eq(User.email, user.primaryEmailAddress.emailAddress));
+
+      toast.success(`Used 5 credits. ${userData[0].credits - 5} credits remaining.`);
+
+      let fieldData = resumeData[fieldName];
+      if (fieldName.startsWith("experience-")) {
+        const index = parseInt(fieldName.split("-")[1], 10);
+        fieldData = resumeData.experience?.[index] || {};
+      } else if (fieldName.startsWith("education-")) {
+        const index = parseInt(fieldName.split("-")[1], 10);
+        fieldData = resumeData.education?.[index] || {};
+      } else if (fieldName.startsWith("project-")) {
+        const index = parseInt(fieldName.split("-")[1], 10);
+        fieldData = resumeData.projects?.[index] || {};
+      }
+
+      const keywords = Object.values(fieldData).filter(Boolean).join(", ");
+
+      if (prompt) {
+        userFormInput({ keywords }, prompt, fieldName);
+      } else {
+        userFormInput(
+          { keywords },
+          selectedTemplate?.aiPrompt || "",
+          fieldName
+        );
+      }
+    } catch (error) {
+      console.error("Error processing AI request:", error);
+      toast.error("Error processing your request. Please try again.");
     }
   };
 
@@ -154,7 +195,7 @@ function FormSection({
     const { value } = e.target;
     onFormChange({ skills: value });
   };
-  
+
   const renderSkillsSection = () => (
     <div>
       <h2 className="font-bold text-2xl mb-2 text-primary">Skills</h2>
@@ -181,8 +222,6 @@ function FormSection({
       </div>
     </div>
   );
-
-
 
   const removeSection = (index: number, section: string) => {
     if (section === "experience") {

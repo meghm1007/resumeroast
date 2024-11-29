@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { GiCoffeeCup } from "react-icons/gi";
 import { FaFileDownload } from "react-icons/fa";
+import toast from "react-hot-toast";
+import { db } from "@/utils/db";
+import { User } from "@/utils/schema";
+import { eq } from "drizzle-orm";
+import { useUser } from "@clerk/nextjs";
 
 interface Experience {
   id?: number;
@@ -14,8 +19,6 @@ interface Experience {
   currentlyWorking?: boolean;
   workSummary?: string;
 }
-
-
 
 interface Education {
   id?: number;
@@ -32,8 +35,6 @@ interface Project {
   title?: string;
   description?: string;
 }
-
-
 
 interface ResumeData {
   firstName?: string;
@@ -61,6 +62,7 @@ function ResumePreview({
   onResumeInfoChange,
   selectedTemplate,
 }: ResumePreviewProps) {
+  const { user } = useUser();
   const [themeColor, setThemeColor] = useState(
     resumeInfo.themeColor || "#000000"
   );
@@ -109,15 +111,32 @@ function ResumePreview({
 
   const handleSaveResumeToDatabase = async () => {
     const printContents = document.getElementById("resume")?.innerHTML;
-    const originalContents = document.body.innerHTML;
 
-    const userName = `${resumeInfo.firstName}${resumeInfo.lastName}`
-      .toLowerCase()
-      .replace(/\s+/g, "");
-    const uniqueId = `${userName}-${Date.now()}`;
+    if (!user?.primaryEmailAddress?.emailAddress) {
+      toast.error("Please login to share your resume");
+      return;
+    }
 
-    if (printContents) {
-      try {
+    try {
+      // Check user credits
+      const userData = await db
+        .select({ credits: User.credits })
+        .from(User)
+        .where(eq(User.email, user.primaryEmailAddress.emailAddress));
+
+      if (!userData?.[0]?.credits || userData[0].credits < 5) {
+        toast.error(
+          "Not enough credits! You need 5 credits to share your resume."
+        );
+        return;
+      }
+
+      const userName = `${resumeInfo.firstName}${resumeInfo.lastName}`
+        .toLowerCase()
+        .replace(/\s+/g, "");
+      const uniqueId = `${userName}-${Date.now()}`;
+
+      if (printContents) {
         // Save the resume content to the database
         const response = await fetch("/api/resumes", {
           method: "POST",
@@ -134,13 +153,24 @@ function ResumePreview({
           throw new Error("Failed to save resume");
         }
 
+        // Deduct credits after successful save
+        await db
+          .update(User)
+          .set({ credits: userData[0].credits - 5 })
+          .where(eq(User.email, user.primaryEmailAddress.emailAddress));
+
+        toast.success(
+          `Resume shared! ${userData[0].credits - 5} credits remaining.`
+        );
+
         // Open the resume in a new tab
         window.open(`/roast/${uniqueId}`, "_blank");
-      } catch (error) {
-        console.error("Error saving resume:", error);
+      } else {
+        toast.error("Resume content not found");
       }
-    } else {
-      console.error("Resume element not found");
+    } catch (error) {
+      console.error("Error saving resume:", error);
+      toast.error("Error sharing your resume. Please try again.");
     }
   };
 

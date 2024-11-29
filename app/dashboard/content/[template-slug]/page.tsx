@@ -178,6 +178,12 @@ function CreateNewContent(props: PROPS) {
             on the <span className="text-orange-800">Let Others Roast It</span>{" "}
             button to host it online and make it public
           </p>
+          <p>
+            <span className="font-bold text-red-500">5 credits</span> are
+            deducted for each AI assist and{" "}
+            <span className="font-bold text-red-500">10 credits</span> are
+            deducted for each upload
+          </p>
           <p className="text-gray-500 italic">
             If you have any other{" "}
             <span className="font-bold text-black">questions</span> or have a{" "}
