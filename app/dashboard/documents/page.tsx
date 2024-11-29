@@ -4,6 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import { db } from "@/utils/db";
 import { CoverLetters, userResume } from "@/utils/schema";
 import { eq } from "drizzle-orm";
+import Link from "next/link";
 
 // Define the type for our cover letter
 interface CoverLetter {
@@ -80,7 +81,11 @@ export default function MyDocuments() {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {coverLetters.map((letter) => (
-            <div key={letter.id} className="border rounded-lg p-4 shadow-sm">
+            <Link
+              href={`/dashboard/view?type=coverletter&id=${letter.id}`}
+              key={letter.id}
+              className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+            >
               <h2 className="font-semibold mb-2">Job Description:</h2>
               <p className="text-sm text-gray-600 mb-4">
                 {letter.jobDescription.substring(0, 150)}...
@@ -88,7 +93,7 @@ export default function MyDocuments() {
               <div className="text-sm text-gray-500">
                 Created: {new Date(letter.createdAt || "").toLocaleDateString()}
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}
@@ -100,7 +105,11 @@ export default function MyDocuments() {
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {resumes.map((resume) => (
-              <div key={resume.id} className="border rounded-lg p-4 shadow-sm">
+              <Link
+                href={`/dashboard/view?type=resume&id=${resume.uniqueId}`}
+                key={resume.id}
+                className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+              >
                 <h2 className="font-semibold mb-2">
                   {resume.firstName} {resume.lastName}
                 </h2>
@@ -111,7 +120,7 @@ export default function MyDocuments() {
                   Created:{" "}
                   {new Date(resume.createdAt || "").toLocaleDateString()}
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
