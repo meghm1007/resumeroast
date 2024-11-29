@@ -8,6 +8,7 @@ import { UserDetailContext } from "@/app/_context/UserDetailContext";
 import { db } from "@/utils/db";
 import { CoverLetters } from "@/utils/schema";
 import toast from "react-hot-toast";
+import { eq } from "drizzle-orm";
 
 interface CoverLetterProps {
   onCoverLetterGenerated: (content: string) => void;
@@ -33,6 +34,7 @@ function CoverLetterSection({ onCoverLetterGenerated }: CoverLetterProps) {
       .set({
         credits: userDetail.credits - 1,
       })
+      .where(eq(User.id, userDetail.id))
       .returning({ id: User.id });
 
     if (result) {
