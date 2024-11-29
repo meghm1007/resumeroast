@@ -55,7 +55,7 @@ function SideNav() {
       setTimeout(() => {
         setLoadingAction(null);
         router.push(menuPath);
-      }, 2000);
+      }, 1);
     } else {
       router.push(menuPath);
     }
@@ -67,7 +67,7 @@ function SideNav() {
     setTimeout(() => {
       setLoadingAction(null);
       router.push("/");
-    }, 9000);
+    }, 1);
   };
 
   return (
@@ -106,20 +106,7 @@ function SideNav() {
               <Image src="/logo.svg" alt="Home" width={20} height={20} />
             </div>
             <div>
-              <AlertTitle className="text-sm font-medium">
-                {loadingAction === "billing"
-                  ? "Loading Billing"
-                  : loadingAction === "settings"
-                  ? "Loading Settings"
-                  : "Returning Home"}
-              </AlertTitle>
-              <AlertDescription className="text-xs">
-                {loadingAction === "billing"
-                  ? "Preparing your billing information..."
-                  : loadingAction === "settings"
-                  ? "Preparing your settings page..."
-                  : "Taking you back to the home page..."}
-              </AlertDescription>
+              
             </div>
           </Alert>
         </div>

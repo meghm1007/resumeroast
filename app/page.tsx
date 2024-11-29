@@ -41,13 +41,35 @@ const FAQItem = ({
   answer,
 }: {
   question: string;
-  answer: string;
-}) => (
-  <div className="bg-gray-50 p-6 rounded-lg shadow-md">
-    <h3 className="text-xl font-semibold mb-2 text-[#3e2c1c]">{question}</h3>
-    <p className="text-gray-600">{answer}</p>
-  </div>
-);
+  answer: string | ReactNode;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="bg-gray-50 p-6 rounded-lg shadow-md transition-all duration-200">
+      <button
+        className="w-full text-left flex justify-between items-center"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <h3 className="text-xl font-semibold text-[#3e2c1c]">{question}</h3>
+        <span
+          className={`transform transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        >
+          ▼
+        </span>
+      </button>
+      <div
+        className={`mt-2 text-gray-600 overflow-hidden transition-all duration-200 ${
+          isOpen ? "max-h-96" : "max-h-0"
+        }`}
+      >
+        {answer}
+      </div>
+    </div>
+  );
+};
 
 // Dynamically import heavy components
 const DynamicFeatureCard = dynamic(() => Promise.resolve(FeatureCard), {
@@ -76,8 +98,8 @@ export default function Home() {
       setTimeout(() => {
         setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
         setFadeClass("fade-in");
-      }, 500);
-    }, 3000);
+      }, 1000);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [words.length]);
@@ -217,22 +239,146 @@ export default function Home() {
           <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-[#3e2c1c]">
             Frequently Asked Questions
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <DynamicFAQItem
-              question="How does Resume Roast use AI to create resumes?"
-              answer="Resume Roast leverages Google Gemini AI to analyze your input and generate tailored resume content. You just need to provide keywords and we will do the rest."
+          <div className="grid grid-cols-1 gap-4 max-w-3xl mx-auto">
+            <FAQItem
+              question="How does the credit system work?"
+              answer={
+                <div className="space-y-2">
+                  <p>
+                    Our credit system is designed to be flexible and
+                    transparent:
+                  </p>
+                  <ul className="list-disc list-inside ml-4 space-y-1">
+                    <li>5 credits per AI writing assist</li>
+                    <li>20 credits per resume database hosting</li>
+                    <li>Credits never expire</li>
+                    <li>Bundle packages offer up to 25% savings</li>
+                  </ul>
+                </div>
+              }
             />
-            <DynamicFAQItem
-              question="What is resume roasting, and how does it work?"
-              answer="Resume roasting is our unique peer review feature. Users can submit their resumes for feedback from other professionals. This process provides honest, constructive criticism to help improve your resume based on real-world perspectives."
+            <FAQItem
+              question="What makes Resume Roast's AI different from ChatGPT?"
+              answer={
+                <div className="space-y-2">
+                  <p>
+                    Resume Roast uses Google's Gemini AI, specifically trained
+                    on:
+                  </p>
+                  <ul className="list-disc list-inside ml-4 space-y-1">
+                    <li>
+                      Thousands of successful resumes across various industries
+                    </li>
+                    <li>
+                      Current ATS (Applicant Tracking System) requirements
+                    </li>
+                    <li>
+                      Industry-specific keywords and formatting best practices
+                    </li>
+                    <li>Real hiring manager preferences and feedback</li>
+                  </ul>
+                </div>
+              }
             />
-            <DynamicFAQItem
-              question="What is Cloud hosting?"
-              answer="You can choose to host your resume online on the cloud and share it with others with a single link"
+            <FAQItem
+              question="What is resume roasting, and how does it help?"
+              answer={
+                <div className="space-y-2">
+                  <p>
+                    Resume roasting is our community-driven review system where:
+                  </p>
+                  <ul className="list-disc list-inside ml-4 space-y-1">
+                    <li>
+                      Real professionals provide honest, actionable feedback
+                    </li>
+                    <li>Get insights from people in your target industry</li>
+                    <li>Identify blind spots in your resume</li>
+                    <li>Learn from others' resumes and feedback</li>
+                    <li>This feature is completely free and unlimited!</li>
+                  </ul>
+                </div>
+              }
             />
-            <DynamicFAQItem
-              question="Can I use Resume Roast for free?"
-              answer="Unfortunately no☹️. The AI and hosting costs are too high for us to provide a free tier. But we have a lifetime deal for a cheap rate of$12.99"
+            <FAQItem
+              question="What's included in the cloud hosting feature?"
+              answer={
+                <div className="space-y-2">
+                  <p>
+                    Our premium cloud hosting service (20 credits) includes:
+                  </p>
+                  <ul className="list-disc list-inside ml-4 space-y-1">
+                    <li>Permanent, shareable link to your resume</li>
+                    <li>Real-time view tracking and analytics</li>
+                    <li>Multiple format support (PDF, ATS-friendly)</li>
+                    <li>Automatic backup and version history</li>
+                    <li>Mobile-responsive design</li>
+                  </ul>
+                </div>
+              }
+            />
+            <FAQItem
+              question="How many credits do I need?"
+              answer={
+                <div className="space-y-2">
+                  <p>Credit needs vary based on your job search intensity:</p>
+                  <ul className="list-disc list-inside ml-4 space-y-1">
+                    <li>
+                      Light Usage (50 credits): Perfect for single job
+                      applications or resume updates
+                    </li>
+                    <li>
+                      Active Job Search (150 credits): Ideal for creating
+                      multiple versions and hosting several resumes
+                    </li>
+                    <li>
+                      Career Builder (500 credits): Best for long-term career
+                      management and frequent updates
+                    </li>
+                  </ul>
+                  <p className="mt-2">
+                    Remember: You can always purchase more credits as needed,
+                    and they never expire!
+                  </p>
+                </div>
+              }
+            />
+            <FAQItem
+              question="What makes Resume Roast worth the investment?"
+              answer={
+                <div className="space-y-2">
+                  <p>Resume Roast offers unique value through:</p>
+                  <ul className="list-disc list-inside ml-4 space-y-1">
+                    <li>Professional-grade AI powered by Google Gemini</li>
+                    <li>Unlimited community feedback</li>
+                    <li>ATS optimization tools</li>
+                    <li>Professional cloud hosting</li>
+                    <li>Active Reddit community support</li>
+                  </ul>
+                  <p className="mt-2">
+                    Consider this: A single successful job application could
+                    mean thousands in additional salary. Our service costs less
+                    than a coffee shop visit but could significantly impact your
+                    career trajectory.
+                  </p>
+                </div>
+              }
+            />
+            <FAQItem
+              question="Any more questions?🤔"
+              answer={
+                <div className="space-y-2">
+                  <p>
+                    Reach out to me on X{" "}
+                    <a
+                      href="https://x.com/itsthemeg"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      @itsthemeg
+                    </a>
+                  </p>
+                </div>
+              }
             />
           </div>
         </div>
@@ -251,7 +397,7 @@ export default function Home() {
 
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 mb-12 max-w-3xl mx-auto shadow-lg">
             <h3 className="text-2xl font-semibold mb-6 text-[#1a1818]">
-              Here's What You Get For $12.99 Lifetime Access
+              Get Started with Resume Credits
             </h3>
             <ul className="text-left space-y-4 mb-8">
               <li className="flex items-center">
@@ -259,7 +405,7 @@ export default function Home() {
                   ✅
                 </span>
                 <span className="text-lg">
-                  AI Editor to create your resume in less than 5 minutes 🤖
+                  100 Free Credits To Get Started 🤖
                 </span>
               </li>
               <li className="flex items-center">
@@ -267,21 +413,23 @@ export default function Home() {
                   ✅
                 </span>
                 <span className="text-lg">
-                  Host up to 100 Resumes with custom shareable links ☁️
+                  Cloud hosting included with every resume ☁️
                 </span>
               </li>
               <li className="flex items-center">
                 <span className="text-[#965f14] font-bold text-2xl mr-3">
                   ✅
                 </span>
-                <span className="text-lg">Unlimited resume roasting 🔥</span>
+                <span className="text-lg">
+                  Unlimited resume roasting feedback 🔥
+                </span>
               </li>
               <li className="flex items-center">
                 <span className="text-[#965f14] font-bold text-2xl mr-3">
                   <FaReddit className="text-orange-600 bg-white rounded-full font-bold text-2xl mr-3" />
                 </span>
                 <span className="text-lg">
-                  A huge community of Reddit students and professionals
+                  Access to our Reddit community of students and professionals
                 </span>
               </li>
             </ul>
@@ -293,16 +441,14 @@ export default function Home() {
           >
             <div className="flex flex-col">
               <p>Get Started</p>
-              <p>$12.99/ Lifetime</p>
             </div>
           </Link>
           <p className="text-sm text-gray-200 mt-5">
-            I know you're a student a probably broke like me, but $12.99 could
-            change your life, so go for it!
+            Invest in your future - one resume at a time!
           </p>
           <p className="text-sm text-gray-200 mt-2">
-            This money would help me cover hosting, database, and AI costs
-            keeping the site running for you FOREVER😀
+            Your support helps cover our hosting, database, and AI costs to keep
+            providing you with the best resume tools.
           </p>
         </div>
       </section>

@@ -66,10 +66,28 @@ function ResumePreview({
   const [themeColor, setThemeColor] = useState(
     resumeInfo.themeColor || "#000000"
   );
+  const [userCredits, setUserCredits] = useState<number | null>(null);
 
   useEffect(() => {
     setThemeColor(resumeInfo.themeColor || "#000000");
   }, [resumeInfo.themeColor]);
+
+  useEffect(() => {
+    const fetchUserCredits = async () => {
+      if (user?.primaryEmailAddress?.emailAddress) {
+        try {
+          const userData = await db
+            .select({ credits: User.credits })
+            .from(User)
+            .where(eq(User.email, user.primaryEmailAddress.emailAddress));
+          setUserCredits(userData?.[0]?.credits || 0);
+        } catch (error) {
+          console.error("Error fetching credits:", error);
+        }
+      }
+    };
+    fetchUserCredits();
+  }, [user]);
 
   const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newColor = event.target.value;
@@ -124,11 +142,18 @@ function ResumePreview({
         .from(User)
         .where(eq(User.email, user.primaryEmailAddress.emailAddress));
 
-      if (!userData?.[0]?.credits || userData[0].credits < 5) {
-        toast.error(
-          "Not enough credits! You need 5 credits to share your resume."
-        );
+      const currentCredits = userData?.[0]?.credits || 0;
+
+      if (currentCredits < 20) {
+        toast.error("Not enough credits! You need 20 credits to share your resume.");
+        setUserCredits(currentCredits);
         return;
+      }
+
+      if (currentCredits === 20) {
+        toast.error("Warning: This is your last resume share!", {
+          duration: 4000
+        });
       }
 
       const userName = `${resumeInfo.firstName}${resumeInfo.lastName}`
@@ -156,17 +181,18 @@ function ResumePreview({
         // Deduct credits after successful save
         await db
           .update(User)
-          .set({ credits: userData[0].credits - 5 })
+          .set({ credits: currentCredits - 20 })
           .where(eq(User.email, user.primaryEmailAddress.emailAddress));
 
+        // Update local state
+        setUserCredits(currentCredits - 20);
+
         toast.success(
-          `Resume shared! ${userData[0].credits - 5} credits remaining.`
+          `Resume shared! ${currentCredits - 20} credits remaining.`
         );
 
         // Open the resume in a new tab
         window.open(`/roast/${uniqueId}`, "_blank");
-      } else {
-        toast.error("Resume content not found");
       }
     } catch (error) {
       console.error("Error saving resume:", error);
@@ -214,7 +240,8 @@ function ResumePreview({
         <div className="flex justify-center my-4">
           <button
             onClick={handleSaveResumeToDatabase}
-            className="px-4 py-2 bg-amber-600 text-white rounded"
+            disabled={!userCredits || userCredits < 20}
+            className={`px-4 py-2 ${!userCredits || userCredits < 20 ? 'bg-gray-400' : 'bg-amber-600'} text-white rounded`}
           >
             <span className="flex grid-cols-2 items-center">
               Let Others Roast It

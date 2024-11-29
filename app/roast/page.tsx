@@ -114,7 +114,7 @@ function RoastResume() {
     setTimeout(() => {
       setLoadingResumeId(null);
       router.push(`/roast/${resumeId}`);
-    }, 3000);
+    }, 1);
   };
 
   const handleBackClick = (e: React.MouseEvent) => {
@@ -123,7 +123,7 @@ function RoastResume() {
     setTimeout(() => {
       setIsNavigatingBack(false);
       router.push("/dashboard");
-    }, 2000);
+    }, 1);
   };
 
   const handleDeleteResume = async (e: React.MouseEvent, resumeId: string) => {
@@ -285,15 +285,7 @@ function RoastResume() {
           </Alert>
         </div>
       )}
-      {isNavigatingBack && (
-        <div className="fixed bottom-4 right-4 w-64">
-          <Alert>
-            <ArrowLeft className="h-4 w-4" />
-            <AlertTitle>Dashboard</AlertTitle>
-            <AlertDescription>Returning to your dashboard...</AlertDescription>
-          </Alert>
-        </div>
-      )}
+      
     </div>
   );
 }

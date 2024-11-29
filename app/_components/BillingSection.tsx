@@ -3,39 +3,37 @@ import Link from "next/link";
 const BillingSection = () => {
   const creditOptions = [
     {
-      credits: 100,
-      price: 10,
-      description: "Perfect for small projects",
+      credits: 50,
+      price: 4.99,
+      description: "Perfect for quick resume touchups and single-job applications",
       features: [
-        "Generate 20 Cover Letters",
-        "AI Resume Review",
-        "Basic Support",
+        "10 AI writing assists (50 credits)",
+        "or 2 resume database hostings (40 credits)",
+        "Mix and match as needed",
+        "Credits never expire",
       ],
       bgColor: "bg-white",
     },
     {
-      credits: 250,
-      price: 20,
-      description: "Most popular for medium projects",
+      credits: 150,
+      price: 12.99,
+      description: "Most popular for active job seekers",
       features: [
-        "Generate 50 Cover Letters",
-        "AI Resume Review",
-        "Priority Support",
-        "Resume Analytics",
+        "30 AI writing assists (150 credits)",
+        "or 7 resume database hostings (140 credits)",
+        "15% savings vs. starter pack",
       ],
       popular: true,
       bgColor: "bg-blue-50",
     },
     {
       credits: 500,
-      price: 35,
-      description: "Best value for larger projects",
+      price: 39.99,
+      description: "Best value for career builders and frequent updaters",
       features: [
-        "Generate 100 Cover Letters",
-        "AI Resume Review",
-        "24/7 Premium Support",
-        "Advanced Analytics",
-        "Custom Templates",
+        "100 AI writing assists (500 credits)",
+        "or 25 resume database hostings (500 credits)",
+        "25% savings vs. starter pack",
       ],
       bgColor: "bg-white",
     },
@@ -105,7 +103,7 @@ const BillingSection = () => {
         <div className="grid md:grid-cols-3 gap-8">
           {creditOptions.map((option) => (
             <Link
-              href="/billing"
+              href="/dashboard/billing"
               key={option.credits}
               className={`${
                 option.bgColor

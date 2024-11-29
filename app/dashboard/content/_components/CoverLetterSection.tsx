@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/nextjs";
@@ -23,6 +23,30 @@ function CoverLetterSection({ onCoverLetterGenerated }: CoverLetterProps) {
   const [isGenerating, setIsGenerating] = useState(false);
 
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
+
+  useEffect(() => {
+    if (userDetail?.credits && userDetail.credits <= 5) {
+      toast.custom(
+        <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4">
+          <div className="flex items-center">
+            <div className="py-1">
+              <svg className="w-6 h-6 mr-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
+              </svg>
+            </div>
+            <div>
+              <p className="font-bold">Low Credits Warning</p>
+              <p>You have {userDetail.credits} credits remaining. Consider purchasing more credits to continue using our services.</p>
+            </div>
+          </div>
+        </div>,
+        {
+          duration: 5000,
+          position: 'top-center',
+        }
+      );
+    }
+  }, [userDetail?.credits]);
 
   const updateUserCredit = async () => {
     if (!userDetail?.credits) {
@@ -161,10 +185,16 @@ function CoverLetterSection({ onCoverLetterGenerated }: CoverLetterProps) {
       <div className="mt-6">
         <Button
           onClick={handleGenerate}
-          disabled={isGenerating}
+          disabled={isGenerating || !userDetail?.credits || userDetail.credits < 5}
           className="w-full"
         >
-          {isGenerating ? "Generating..." : "Generate Cover Letter"}
+          {isGenerating ? (
+            "Generating..."
+          ) : !userDetail?.credits || userDetail.credits < 5 ? (
+            "Insufficient Credits (5 Required)"
+          ) : (
+            `Generate Cover Letter (${userDetail.credits} credits remaining)`
+          )}
         </Button>
       </div>
     </div>

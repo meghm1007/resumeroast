@@ -31,7 +31,7 @@ export interface FORM {
 function TemplateListSection({ userSearchInput }: any) {
   const [templateList, setTemplateList] = useState(Templates);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   useEffect(() => {
     if (userSearchInput) {
       const filterData = Templates.filter((item) =>
@@ -49,27 +49,27 @@ function TemplateListSection({ userSearchInput }: any) {
     setTimeout(() => {
       setIsLoading(false);
       (e.target as HTMLElement).click();
-    }, 3000);
+    }, 1);
   };
 
   return (
     <div className="m-10 mb-20 flex relative">
       {templateList.map((item: TEMPLATE, index: number) => (
-        <Link key={index} href={`/template/${item.slug}`} onClick={handleTemplateClick}>
+        <Link
+          key={index}
+          href={`/template/${item.slug}`}
+          onClick={handleTemplateClick}
+        >
           <TemplateCard {...item} />
         </Link>
       ))}
-      <div>
-        
-      </div>
+      <div></div>
       {isLoading && (
         <div className="fixed bottom-4 right-4 w-64">
           <Alert>
             <FileText className="h-4 w-4" />
             <AlertTitle>Loading Template</AlertTitle>
-            <AlertDescription>
-              Preparing your template...
-            </AlertDescription>
+            <AlertDescription>Preparing your template...</AlertDescription>
           </Alert>
         </div>
       )}

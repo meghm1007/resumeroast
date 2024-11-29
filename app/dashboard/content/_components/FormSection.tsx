@@ -10,7 +10,7 @@ import { FaSave } from "react-icons/fa";
 import { db } from "@/utils/db";
 import { User } from "@/utils/schema";
 import { eq } from "drizzle-orm";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 
 interface PROPS {
   selectedTemplate?: TEMPLATE;
@@ -42,6 +42,7 @@ function FormSection({
   const [projectCount, setProjectCount] = useState(1);
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [userCredits, setUserCredits] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -66,6 +67,23 @@ function FormSection({
     };
 
     fetchUserData();
+  }, [user]);
+
+  useEffect(() => {
+    const fetchUserCredits = async () => {
+      if (user?.primaryEmailAddress?.emailAddress) {
+        try {
+          const userData = await db
+            .select({ credits: User.credits })
+            .from(User)
+            .where(eq(User.email, user.primaryEmailAddress.emailAddress));
+          setUserCredits(userData?.[0]?.credits || 0);
+        } catch (error) {
+          console.error("Error fetching credits:", error);
+        }
+      }
+    };
+    fetchUserCredits();
   }, [user]);
 
   const handleInputChange = (
@@ -112,17 +130,30 @@ function FormSection({
         .from(User)
         .where(eq(User.email, user.primaryEmailAddress.emailAddress));
 
-      if (!userData?.[0]?.credits || userData[0].credits < 5) {
+      const currentCredits = userData?.[0]?.credits || 0;
+      
+      if (currentCredits < 5) {
         toast.error("Not enough credits! You need 5 credits to use AI assist.");
+        setUserCredits(currentCredits);
         return;
+      }
+
+      if (currentCredits === 5) {
+        toast.error("Warning: This is your last AI assist credit!", {
+          duration: 4000
+        });
       }
 
       await db
         .update(User)
-        .set({ credits: userData[0].credits - 5 })
+        .set({ credits: currentCredits - 5 })
         .where(eq(User.email, user.primaryEmailAddress.emailAddress));
 
-      toast.success(`Used 5 credits. ${userData[0].credits - 5} credits remaining.`);
+      setUserCredits(currentCredits - 5);
+      
+      toast.success(`Used 5 credits. ${currentCredits - 5} credits remaining.`, {
+        duration: 3000
+      });
 
       let fieldData = resumeData[fieldName];
       if (fieldName.startsWith("experience-")) {
@@ -322,7 +353,7 @@ function FormSection({
             />
             <div className="flex flex-col gap-4">
               <Button
-                disabled={loadingFields["summary"]}
+                disabled={loadingFields["summary"] || !userCredits || userCredits < 5}
                 type="button"
                 className="py-6"
                 onClick={() =>
