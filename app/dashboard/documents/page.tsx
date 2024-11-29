@@ -74,6 +74,15 @@ export default function MyDocuments() {
 
   return (
     <div className="p-6">
+      <h1 className="text-4xl font-bold mb-6">My Documents</h1>
+      <p className="text-gray-500 mb-6">
+        Your latest cover letters and resumes are shown here. Changes in your
+        cover letter and resume replace the previous version. Be sure to save
+        your resume by clicking on{" "}
+        <span className="font-bold">Let Others Roast It!</span> which stores
+        your resume on the cloud and makes it visible to everyone on the
+        internet
+      </p>
       <h1 className="text-2xl font-bold mb-6">My Cover Letters</h1>
 
       {coverLetters.length === 0 ? (

@@ -8,7 +8,8 @@ import { SiGooglegemini } from "react-icons/si";
 import { FaSquareXTwitter, FaFire } from "react-icons/fa6";
 import "./DynamicHeading.css";
 import { FaReddit } from "react-icons/fa6";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
+import BillingSection from "./_components/BillingSection";
 
 // Simple loading spinner component
 const LoadingSpinner = () => (
@@ -18,7 +19,15 @@ const LoadingSpinner = () => (
 );
 
 // FeatureCard component
-const FeatureCard = ({ icon, title, description }: { icon: ReactNode; title: string; description: string }) => (
+const FeatureCard = ({
+  icon,
+  title,
+  description,
+}: {
+  icon: ReactNode;
+  title: string;
+  description: string;
+}) => (
   <div className="bg-gray-50 p-6 rounded-lg shadow-md text-center">
     <div className="flex justify-center mb-4">{icon}</div>
     <h3 className="text-xl font-semibold mb-2 text-[#3e2c1c]">{title}</h3>
@@ -27,7 +36,13 @@ const FeatureCard = ({ icon, title, description }: { icon: ReactNode; title: str
 );
 
 // FAQItem component
-const FAQItem = ({ question, answer }: { question: string; answer: string }) => (
+const FAQItem = ({
+  question,
+  answer,
+}: {
+  question: string;
+  answer: string;
+}) => (
   <div className="bg-gray-50 p-6 rounded-lg shadow-md">
     <h3 className="text-xl font-semibold mb-2 text-[#3e2c1c]">{question}</h3>
     <p className="text-gray-600">{answer}</p>
@@ -291,7 +306,7 @@ export default function Home() {
           </p>
         </div>
       </section>
-
+      <BillingSection />
       {/* Footer */}
       <footer className="bg-gray-800 text-white py-8 text-center">
         <div className="flex justify-center items-center">
