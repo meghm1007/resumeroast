@@ -22,30 +22,20 @@ interface CreditOption {
 function BillingPage() {
   const creditOptions = [
     {
-      credits: 100,
-      amount: 10,
-      description: "Perfect for small projects",
+      credits: 50,
+      amount: 4.99,
+      description: "Perfect for single job applications",
     },
     {
-      credits: 250,
-      amount: 20,
-      description: "Most popular for medium projects",
+      credits: 150,
+      amount: 12.99,
+      description: "Most popular for active job seekers",
       popular: true,
     },
     {
       credits: 500,
-      amount: 35,
-      description: "Best value for larger projects",
-    },
-    {
-      credits: 1000,
-      amount: 60,
-      description: "Ideal for professional use",
-    },
-    {
-      credits: 2000,
-      amount: 100,
-      description: "Enterprise-grade capacity",
+      amount: 39.99,
+      description: "Best value for career builders and frequent updaters",
     },
   ];
 

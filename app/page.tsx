@@ -2,14 +2,21 @@
 import { useState, useEffect, ReactNode } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { GiCoffeeCup } from "react-icons/gi";
+import { GiCoffeeCup, GiExplosiveMaterials } from "react-icons/gi";
 import { FcGoogle } from "react-icons/fc";
 import { SiGooglegemini } from "react-icons/si";
-import { FaSquareXTwitter, FaFire } from "react-icons/fa6";
+import {
+  FaSquareXTwitter,
+  FaFire,
+  FaCloud,
+  FaLink,
+  FaLetterboxd,
+} from "react-icons/fa6";
 import "./DynamicHeading.css";
 import { FaReddit } from "react-icons/fa6";
 import dynamic from "next/dynamic";
 import BillingSection from "./_components/BillingSection";
+import { FaMailBulk } from "react-icons/fa";
 
 // Simple loading spinner component
 const LoadingSpinner = () => (
@@ -110,7 +117,7 @@ export default function Home() {
       <header className="bg-white shadow-sm py-4 px-8 flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-3">
           <Image
-            src="/logo.svg"
+            src="/logo3.ico"
             alt="Resume Roast Logo"
             width={40}
             height={40}
@@ -217,7 +224,7 @@ export default function Home() {
             <DynamicFeatureCard
               icon={<SiGooglegemini className="text-4xl text-[#965f14]" />}
               title="AI-Powered Creation"
-              description="Leverage Google Gemini AI to craft professional resumes tailored to your industry."
+              description="Leverage Google Gemini AI to craft professional ATS optimized resumes tailored to your industry."
             />
             <DynamicFeatureCard
               icon={<FaFire className="text-4xl text-orange-500" />}
@@ -225,9 +232,26 @@ export default function Home() {
               description="Get honest feedback from professionals in your field to improve your resume."
             />
             <DynamicFeatureCard
-              icon={<GiCoffeeCup className="text-4xl text-[#965f14]" />}
-              title="ATS Optimization"
-              description="Ensure your resume passes Applicant Tracking Systems with our built-in optimization tools."
+              icon={<FaMailBulk className="text-4xl text-[#965f14]" />}
+              title="Cover Letter Generation"
+              description="Generate a cover letter to accompany your resume specifically tailored to the job you're applying for."
+            />
+            <DynamicFeatureCard
+              icon={
+                <FaReddit className="text-4xl text-orange-600 bg-white rounded-full font-bold text-2xl mr-3" />
+              }
+              title="Reddit Community"
+              description="Join our active Reddit community to get help, share your resumes, and get feedback from others."
+            />
+            <DynamicFeatureCard
+              icon={<FaCloud className="text-4xl text-[#96b4ff]" />}
+              title="Cloud Hosting"
+              description="Host your resume on our cloud servers and share it with others."
+            />
+            <DynamicFeatureCard
+              icon={<FaLink className="text-4xl text-[#965f14]" />}
+              title="Link Sharing"
+              description="Share your resume with a link and let others view it. Your resume literally becomes a website."
             />
           </div>
         </div>
@@ -308,10 +332,7 @@ export default function Home() {
                   </p>
                   <ul className="list-disc list-inside ml-4 space-y-1">
                     <li>Permanent, shareable link to your resume</li>
-                    <li>Real-time view tracking and analytics</li>
                     <li>Multiple format support (PDF, ATS-friendly)</li>
-                    <li>Automatic backup and version history</li>
-                    <li>Mobile-responsive design</li>
                   </ul>
                 </div>
               }

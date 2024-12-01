@@ -157,6 +157,12 @@ function CreateNewContent(props: PROPS) {
           You can view all the resumes you have created in the Roast section😀🍵{" "}
           <br /> You can even see other people's resumes and roast them😎
         </p>
+
+        <p className="text-gray-500 italic">
+          POV: Your latest changes are shown here. Due to high database costs
+          you can't seperately save multiple resumes, but you can download the
+          current resume as a pdf and upload it again to start a new resume.
+        </p>
         <br />
 
         <div className="flex flex-col gap-2 bg-gray-100 rounded-sm border-2 border-gray-300 p-5">
