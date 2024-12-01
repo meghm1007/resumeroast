@@ -19,7 +19,13 @@ function CoverLetterPage() {
   return (
     <div className="p-10 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Generate Cover Letter</h1>
-      
+      <p className="text-sm text-gray-500 mb-4">
+        Generate a cover letter based on the job description and your resume.
+        Either input keywords about your work or directly export it from your
+        resume. Each cover letter will cost{" "}
+        <span className="font-bold">5 credits</span>.
+      </p>
+
       {/* Cover Letter Generation Section */}
       <CoverLetterSection onCoverLetterGenerated={handleCoverLetterGenerated} />
 
@@ -41,7 +47,9 @@ function CoverLetterPage() {
           <Button variant="outline">Back to Dashboard</Button>
         </Link>
         {coverLetterContent && (
-          <Button onClick={() => alert("Cover letter saved!")}>Save Cover Letter</Button>
+          <Button onClick={() => alert("Cover letter saved!")}>
+            Save Cover Letter
+          </Button>
         )}
       </div>
     </div>

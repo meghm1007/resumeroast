@@ -1,2 +1,8 @@
--credits should decrease as the users use the AI generate button
--credits should decrease for uploading your resume to the cloud
+-enable the users to create multiple resumes ---- (multiple cover letter issue sorted)
+(charge credits for that as well)
+
+-fix hydration errors
+
+-logo
+
+-fix design
